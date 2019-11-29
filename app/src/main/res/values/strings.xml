@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">FeedBackMaster</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="profile">PROFILE</string>
+    <string name="cellphone">Cellphone</string>
+    <string name="validate_number">Validate Number</string>
+    <string name="male">male</string>
+    <string name="female">female</string>
+    <string name="age_group">age group</string>
 </resources>
