@@ -6,4 +6,9 @@
     <string name="male">male</string>
     <string name="female">female</string>
     <string name="age_group">age group</string>
+    <string name="submit">submit</string>
+    <string name="_70000000">70000000</string>
+    <string name="todo">TODO</string>
+    <string name="_25_30">25-30</string>
+    <string name="next">next</string>
 </resources>
