@@ -7,6 +7,7 @@
     style="@style/setup_profile"
     tools:showIn="@layout/activity_main">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/card_content"
         android:layout_width="match_parent"
