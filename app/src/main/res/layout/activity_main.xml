@@ -13,12 +13,7 @@
         android:gravity="center|center_vertical"
         android:orientation="vertical">
 
-        <include layout="@layout/question" />
-        <include layout="@layout/rating_stars" />
-        <include layout="@layout/short_answer" />
-        <include layout="@layout/multiple_choice_one_answer_container" />
-        <include layout="@layout/true_or_false" />
-        <include layout="@layout/multiple_choice_many_answers" />
+        <include layout="@layout/multiple_choice" />
     </LinearLayout>
 
 </ScrollView>

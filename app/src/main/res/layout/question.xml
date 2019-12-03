@@ -25,7 +25,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></com.google.android.material.textview.MaterialTextView>
+            app:layout_constraintTop_toTopOf="parent">
+        </com.google.android.material.textview.MaterialTextView>
 
         <LinearLayout
             android:id="@+id/populate_question"
@@ -36,12 +37,13 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/question"></LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/question">
+        </LinearLayout>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/question_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="65dp"
+            android:layout_height="35dp"
             android:layout_marginBottom="16dp"
             android:text="1/9"
             android:textSize="24sp"
@@ -54,13 +56,13 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/materialButton"
-            android:layout_width="67dp"
+            android:layout_width="120dp"
             android:layout_height="36dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
             android:layout_marginBottom="16dp"
             android:text="@string/next"
-            android:textSize="24sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/populate_question"
@@ -68,8 +70,8 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/clock"
-            android:layout_width="64dp"
-            android:layout_height="30dp"
+            android:layout_width="88dp"
+            android:layout_height="32dp"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginBottom="16dp"
