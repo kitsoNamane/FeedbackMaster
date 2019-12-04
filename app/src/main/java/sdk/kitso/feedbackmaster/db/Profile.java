@@ -1,4 +1,4 @@
-package sdk.kitso.feedbackmaster;
+package sdk.kitso.feedbackmaster.db;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -16,7 +16,11 @@ public class Profile {
     private String gender;
 
     @ColumnInfo(name = "age_group")
-    private String age;
+    private int age;
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public void setPhone(int phone) {
         this.phone = phone;
@@ -26,12 +30,12 @@ public class Profile {
         this.gender = gender;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
-    int getPhone() {
-        return this.phone;
+    String getPhone() {
+        return Integer.toString(this.phone);
     }
 
     String getGender() {
@@ -39,6 +43,6 @@ public class Profile {
     }
 
     String getAge() {
-        return this.age;
+        return Integer.toString(this.age);
     }
 }

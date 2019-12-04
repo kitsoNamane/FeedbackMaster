@@ -1,28 +1,25 @@
 package sdk.kitso.feedbackmaster;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import sdk.kitso.feedbackmaster.db.SurveyDB;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.textview.MaterialTextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,18 +30,31 @@ public class MainActivity extends AppCompatActivity {
     View view_profile;
     LayoutInflater layoutInflater;
     ListView listView;
-
+    public static SurveyDB surveyDB;
+    public static FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        linearLayout = findViewById(R.id.scroll_layout);
+        //linearLayout = findViewById(R.id.scroll_layout);
+        surveyDB = Room.databaseBuilder(getApplicationContext(), SurveyDB.class, "userdb")
+                .allowMainThreadQueries().build();
 
-        String[] ANSWERS = new String[] {"Answer 1", "Answer 2", "Answer 3", "Answer 4"};
-        ArrayList<String> answers = new ArrayList<String>();
+        if(findViewById(R.id.survey_list) != null) {
+            if(savedInstanceState != null) {
+                return;
+            }
+            fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            SurveysFragment surveysFragment = new SurveysFragment();
+            surveysFragment.setArguments(getIntent().getExtras());
+            fragmentTransaction.add(R.id.survey_list, surveysFragment, null).commit();
+        }
+        /**String[] ANSWERS = new String[] {"Answer 1", "Answer 2", "Answer 3", "Answer 4"};
+        //ArrayList<String> answers = new ArrayList<String>();
         answers.addAll( Arrays.asList(ANSWERS));
-        setup_answers(answers, AbsListView.CHOICE_MODE_SINGLE);
+        //setup_answers(answers, AbsListView.CHOICE_MODE_SINGLE);
 
         layoutInflater = getLayoutInflater();
         setup_profile = user_profile(linearLayout, layoutInflater, R.layout.setup_profile);
@@ -52,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         disable_profile(view_profile);
         linearLayout.addView(setup_profile);
         linearLayout.addView(view_profile);
+     */
+
     }
 
     public void setup_answers(ArrayList<String> answers, int CHOICE_MODE) {

@@ -12,4 +12,9 @@
     <string name="_25_30">25-30</string>
     <string name="next">next</string>
     <string name="type_answer">type answer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="truth">true</string>
+    <string name="lie">false</string>
 </resources>
