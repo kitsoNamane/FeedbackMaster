@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
-import androidx.room.RoomDatabase;
 import sdk.kitso.feedbackmaster.db.SurveyDB;
+import sdk.kitso.feedbackmaster.survey.SurveysFragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     LinearLayout linearLayout;

@@ -1,4 +1,4 @@
-package sdk.kitso.feedbackmaster;
+package sdk.kitso.feedbackmaster.survey;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.Survey;
 
 public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyViewHolder> {

@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".SurveysFragment">
+    tools:context=".survey.SurveysFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/survey_list"

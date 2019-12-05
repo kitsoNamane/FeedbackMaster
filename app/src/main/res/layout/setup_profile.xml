@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/profile_card"
     app:cardCornerRadius="10dp"
-    style="@style/setup_profile"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
     tools:showIn="@layout/activity_main">
 
 
