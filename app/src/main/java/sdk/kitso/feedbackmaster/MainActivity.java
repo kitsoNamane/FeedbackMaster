@@ -3,6 +3,10 @@ package sdk.kitso.feedbackmaster;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
 import sdk.kitso.feedbackmaster.db.SurveyDB;
 import sdk.kitso.feedbackmaster.survey.SurveysFragment;
@@ -19,6 +23,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -30,39 +36,32 @@ public class MainActivity extends AppCompatActivity {
     LayoutInflater layoutInflater;
     ListView listView;
     public static SurveyDB surveyDB;
-    public static FragmentManager fragmentManager;
+    NavController navController;
+    AppBarConfiguration appBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //linearLayout = findViewById(R.id.scroll_layout);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
         surveyDB = Room.databaseBuilder(getApplicationContext(), SurveyDB.class, "userdb")
                 .allowMainThreadQueries().build();
+        setSupportActionBar(toolbar);
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_survey, R.id.navigation_profile)
+                .build();
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
+    }
 
-        if(findViewById(R.id.survey_list) != null) {
-            if(savedInstanceState != null) {
-                return;
-            }
-            fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            SurveysFragment surveysFragment = new SurveysFragment();
-            surveysFragment.setArguments(getIntent().getExtras());
-            fragmentTransaction.add(R.id.survey_list, surveysFragment, null).commit();
-        }
-        /**String[] ANSWERS = new String[] {"Answer 1", "Answer 2", "Answer 3", "Answer 4"};
-        //ArrayList<String> answers = new ArrayList<String>();
-        answers.addAll( Arrays.asList(ANSWERS));
-        //setup_answers(answers, AbsListView.CHOICE_MODE_SINGLE);
-
-        layoutInflater = getLayoutInflater();
-        setup_profile = user_profile(linearLayout, layoutInflater, R.layout.setup_profile);
-        view_profile = user_profile(linearLayout, layoutInflater, R.layout.setup_profile);
-        disable_profile(view_profile);
-        linearLayout.addView(setup_profile);
-        linearLayout.addView(view_profile);
-     */
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        return NavigationUI.navigateUp(navController, appBarConfiguration);
     }
 
     public void setup_answers(ArrayList<String> answers, int CHOICE_MODE) {
