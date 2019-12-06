@@ -1,0 +1,29 @@
+{
+  "1": {
+    "company": "infiniti inc",
+    "surveys": ["customer satisfaction"],
+    "branches": ["gaborone", "francistown"],
+    "department": []
+  },
+
+  "2": {
+    "company": "sdk digital",
+    "surveys": ["customer satisfaction", "department review"],
+    "branches": ["gaborone"],
+    "department": ["sales", "marketing", "dev"]
+  },
+
+  "3": {
+    "company": "SMaRT Lab",
+    "surveys": ["customer satisfaction", "research review", "department review"],
+    "branches": ["gaborone", "francistown", "palapye"],
+    "department": ["research", "dev", "education"]
+  },
+
+  "4": {
+    "company": "abstractClass",
+    "surveys": ["student satisfaction", "questionaire", "educational review"],
+    "branches": ["gaborone", "francistown", "maun", "palapye"],
+    "department": ["sales", "dev"]
+  }
+}

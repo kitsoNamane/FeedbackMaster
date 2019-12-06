@@ -1,6 +1,13 @@
 package sdk.kitso.feedbackmaster;
 
+import android.util.JsonReader;
+
 import com.github.javafaker.Faker;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.ParseException;
 
 import sdk.kitso.feedbackmaster.db.Profile;
 import sdk.kitso.feedbackmaster.db.Survey;
@@ -35,4 +42,15 @@ public class MockData {
         }
     }
 
+    /**
+    public void getSurveys() {
+        JsonReader parser = new JsonReader();
+        try{
+            Object obj = parser.parse(new FileReader("suerveys.json"));
+        } catch (FileNotFoundException e) {e.printStackTrace();}
+        catch(IOException e) {e.printStackTrace();}
+        catch(ParseException e) {e.printStackTrace();}
+        catch(Exception e) {e.printStackTrace();}
+    }
+     */
 }

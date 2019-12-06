@@ -1,0 +1,386 @@
+{
+  "infiniti inc": {
+    "customer satisfaction": {
+      "questions": {
+        "1": {
+               "question":"On a scale of 1 to 10, 1 being bad and 10 being excellent, how would you rate our service?",
+               "type": "rating"
+               },
+        "2": {
+               "question": "how are you today?",
+               "type": "short answer"
+               },
+        "3": {
+               "question": "are you alive?",
+               "type": "true or false"
+               },
+        "4": {
+               "question": "how much did we add value to your organisation?",
+               "type": "multiple choice single",
+               "options": ["none", "a little", "a log", "cannot quantify"]
+               },
+        "5": {
+               "question": "how much did we add value to your organisation?",
+               "type": "multiple choice many",
+               "options": ["none", "a little", "a log", "cannot quantify"]
+               },
+        "6": {
+               "question": "are you alive?",
+               "type": "true or false"
+               },
+        "7": {
+               "question": "how much did we add value to your organisation?",
+               "type": "multiple choice single",
+               "options": ["none", "a little", "a log", "cannot quantify"]
+               },
+        "8": {
+        "question": "how much did we add value to your organisation?",
+        "type": "multiple choice many",
+        "options": ["none", "a little", "a log", "cannot quantify"]
+      }
+      }
+    }
+  },
+  "sdk digital": {
+    "customer satisfaction": {
+      "questions": {
+        "1": {
+          "question":"On a scale of 1 to 10, 1 being bad and 10 being excellent, how would you rate our service?",
+          "type": "rating"
+        },
+        "2": {
+          "question": "how are you today?",
+          "type": "short answer"
+        },
+        "3": {
+          "question": "are you alive?",
+          "type": "true or false"
+        },
+        "4": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice single",
+          "options": ["none", "a little", "a log", "cannot quantify"]
+        },
+        "5": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice many",
+          "options": ["none", "a little", "a log", "cannot quantify"]
+        },
+        "6": {
+          "question": "are you alive?",
+          "type": "true or false"
+        },
+        "7": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice single",
+          "options": ["none", "a little", "a log", "cannot quantify"]
+        },
+        "8": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice many",
+          "options": ["none", "a little", "a log", "cannot quantify"]
+        }
+      }
+    },
+    "department review": {
+      "questions": {
+        "1": {
+          "question": "On a scale of 1 to 10, 1 being bad and 10 being excellent, how would you rate our service?",
+          "type": "rating"
+        },
+        "2": {
+          "question": "how are you today?",
+          "type": "short answer"
+        },
+        "3": {
+          "question": "are you alive?",
+          "type": "true or false"
+        },
+        "4": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice single",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        },
+        "5": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice many",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        }
+      }
+    }
+  },
+  "abstractClass": {
+    "questionaire": {
+      "questions": {
+        "1": {
+          "question": "On a scale of 1 to 10, 1 being bad and 10 being excellent, how would you rate our service?",
+          "type": "rating"
+        },
+        "2": {
+          "question": "how are you today?",
+          "type": "short answer"
+        },
+        "3": {
+          "question": "are you alive?",
+          "type": "true or false"
+        },
+        "4": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice single",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        },
+        "5": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice many",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        },
+        "6": {
+          "question": "On a scale of 1 to 10, 1 being bad and 10 being excellent, how would you rate our service?",
+          "type": "rating"
+        },
+        "7": {
+          "question": "how are you today?",
+          "type": "short answer"
+        },
+        "8": {
+          "question": "are you alive?",
+          "type": "true or false"
+        },
+        "9": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice single",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        }
+      }
+    },
+    "educational review": {
+      "questions": {
+        "1": {
+          "question": "On a scale of 1 to 10, 1 being bad and 10 being excellent, how would you rate our service?",
+          "type": "rating"
+        },
+        "2": {
+          "question": "how are you today?",
+          "type": "short answer"
+        },
+        "3": {
+          "question": "are you alive?",
+          "type": "true or false"
+        },
+        "4": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice single",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        },
+        "5": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice many",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        }
+      }
+    },
+    "student satisfaction": {
+      "questions": {
+        "1": {
+          "question": "On a scale of 1 to 10, 1 being bad and 10 being excellent, how would you rate our service?",
+          "type": "rating"
+        },
+        "2": {
+          "question": "how are you today?",
+          "type": "short answer"
+        },
+        "3": {
+          "question": "are you alive?",
+          "type": "true or false"
+        },
+        "4": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice single",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        },
+        "5": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice many",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        }
+      }
+    }
+  },
+  "SMaRT Lab": {
+    "research review": {
+      "questions": {
+        "1": {
+          "question": "On a scale of 1 to 10, 1 being bad and 10 being excellent, how would you rate our service?",
+          "type": "rating"
+        },
+        "2": {
+          "question": "how are you today?",
+          "type": "short answer"
+        },
+        "3": {
+          "question": "are you alive?",
+          "type": "true or false"
+        },
+        "4": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice single",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        },
+        "5": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice many",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        },
+        "6": {
+          "question": "On a scale of 1 to 10, 1 being bad and 10 being excellent, how would you rate our service?",
+          "type": "rating"
+        },
+        "7": {
+          "question": "how are you today?",
+          "type": "short answer"
+        },
+        "8": {
+          "question": "are you alive?",
+          "type": "true or false"
+        },
+        "9": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice single",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        }
+      }
+    },
+    "department review": {
+      "questions": {
+        "1": {
+          "question": "On a scale of 1 to 10, 1 being bad and 10 being excellent, how would you rate our service?",
+          "type": "rating"
+        },
+        "2": {
+          "question": "how are you today?",
+          "type": "short answer"
+        },
+        "3": {
+          "question": "are you alive?",
+          "type": "true or false"
+        },
+        "4": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice single",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        },
+        "5": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice many",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        }
+      }
+    },
+    "customer satisfaction": {
+      "questions": {
+        "1": {
+          "question": "On a scale of 1 to 10, 1 being bad and 10 being excellent, how would you rate our service?",
+          "type": "rating"
+        },
+        "2": {
+          "question": "how are you today?",
+          "type": "short answer"
+        },
+        "3": {
+          "question": "are you alive?",
+          "type": "true or false"
+        },
+        "4": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice single",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        },
+        "5": {
+          "question": "how much did we add value to your organisation?",
+          "type": "multiple choice many",
+          "options": [
+            "none",
+            "a little",
+            "a log",
+            "cannot quantify"
+          ]
+        }
+      }
+    }
+  }
+}
