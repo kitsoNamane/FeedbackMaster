@@ -3,6 +3,8 @@ package sdk.kitso.feedbackmaster.survey;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.MainActivity;
@@ -14,8 +16,14 @@ import sdk.kitso.feedbackmaster.db.Profile;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.Toast;
+
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
+
+import static android.widget.Toast.LENGTH_LONG;
 
 
 /**
@@ -26,12 +34,12 @@ import java.util.List;
  * Use the {@link SurveysFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SurveysFragment extends Fragment {
+public class SurveysFragment extends Fragment implements View.OnClickListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private RecyclerView surveyList;
+    public static RecyclerView surveyList;
     private RecyclerView.LayoutManager layoutManager;
     private SurveyAdapter adapter;
 
@@ -43,7 +51,8 @@ public class SurveysFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    //private OnFragmentInteractionListener mListener;
+
+
 
     public SurveysFragment() {
         // Required empty public constructor
@@ -94,6 +103,15 @@ public class SurveysFragment extends Fragment {
         layoutManager = new LinearLayoutManager(view.getContext());
         surveyList.setLayoutManager(layoutManager);
         surveyList.setAdapter(adapter);
+        SelectionTracker selectionTracker = new SelectionTracker.Builder(
+                "my_selection",
+                surveyList,
+                new SurveyAdapter.KeyProvider(surveyList.getAdapter()),
+                new SurveyAdapter.DetailsLookUp(surveyList),
+                StorageStrategy.createLongStorage())
+                .withSelectionPredicate(new SurveyAdapter.Predicate())
+                .build();
+        adapter.setSelectionTracker(selectionTracker);
         return view;
     }
 
@@ -135,4 +153,9 @@ public class SurveysFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
      */
+
+    @Override
+    public void onClick(View view) {
+
+    }
 }
