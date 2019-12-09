@@ -34,7 +34,7 @@ import static android.widget.Toast.LENGTH_LONG;
  * Use the {@link SurveysFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SurveysFragment extends Fragment implements View.OnClickListener{
+public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyItemClickedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -90,7 +90,7 @@ public class SurveysFragment extends Fragment implements View.OnClickListener{
             mock.generateSurveys(100);
         }
         List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
-        adapter = new SurveyAdapter(surveys);
+        adapter = new SurveyAdapter(surveys, this);
     }
 
     @Override
@@ -103,16 +103,17 @@ public class SurveysFragment extends Fragment implements View.OnClickListener{
         layoutManager = new LinearLayoutManager(view.getContext());
         surveyList.setLayoutManager(layoutManager);
         surveyList.setAdapter(adapter);
-        SelectionTracker selectionTracker = new SelectionTracker.Builder(
-                "my_selection",
-                surveyList,
-                new SurveyAdapter.KeyProvider(surveyList.getAdapter()),
-                new SurveyAdapter.DetailsLookUp(surveyList),
-                StorageStrategy.createLongStorage())
-                .withSelectionPredicate(new SurveyAdapter.Predicate())
-                .build();
-        adapter.setSelectionTracker(selectionTracker);
         return view;
+    }
+
+    @Override
+    public void onItemClicked(Survey survey) {
+        survey.setChecked(!survey.getChecked());
+        if(survey.getChecked()) {
+            Toast.makeText(this.getContext(), "Card Checked:" + survey.getCompany(), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this.getContext(), "Card Not Checked" + survey.getSurvey(), Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -153,9 +154,4 @@ public class SurveysFragment extends Fragment implements View.OnClickListener{
         void onFragmentInteraction(Uri uri);
     }
      */
-
-    @Override
-    public void onClick(View view) {
-
-    }
 }
