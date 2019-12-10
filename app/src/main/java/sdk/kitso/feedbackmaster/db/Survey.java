@@ -2,7 +2,6 @@ package sdk.kitso.feedbackmaster.db;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "surveys")
@@ -16,6 +15,9 @@ public class Survey {
     @ColumnInfo(name="survey_title")
     private String survey;
 
+    @ColumnInfo(name="is_checked")
+    private boolean checked = false;
+
     public void setId(int id) {
         this.id = id;
     }
@@ -28,17 +30,29 @@ public class Survey {
         this.survey = survey;
     }
 
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
     public String getCompany() {
         return this.company;
         //return "SDK Digital Labs";
     }
 
+
     public String getSurvey() {
         return this.survey;
-        //return "Company Questionaire";
     }
 
     public int getId() {
         return this.id;
     }
+
+    public boolean getChecked() {
+        return this.checked;
+    }
 }
+
+
+
+

@@ -1,29 +1,26 @@
 package sdk.kitso.feedbackmaster.survey;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.google.android.material.checkbox.MaterialCheckBox;
+
+import java.util.List;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.selection.SelectionTracker;
-import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.MockData;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.db.Survey;
+import sdk.kitso.feedbackmaster.db.Branch;
+import sdk.kitso.feedbackmaster.db.Department;
 import sdk.kitso.feedbackmaster.db.Profile;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.Toast;
-
-import com.google.android.material.card.MaterialCardView;
-
-import java.util.List;
-
-import static android.widget.Toast.LENGTH_LONG;
+import sdk.kitso.feedbackmaster.db.Survey;
+import sdk.kitso.feedbackmaster.db.SurveyAndAllBranches;
+import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
 
 
 /**
@@ -34,16 +31,18 @@ import static android.widget.Toast.LENGTH_LONG;
  * Use the {@link SurveysFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SurveysFragment extends Fragment implements View.OnClickListener{
+public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyItemClickedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    public static RecyclerView surveyList;
+    public static RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private SurveyAdapter adapter;
 
     private Survey survey;
+    private Branch branch;
+    private Department dept;
     private Profile profile;
     private MockData mock;
 
@@ -85,12 +84,14 @@ public class SurveysFragment extends Fragment implements View.OnClickListener{
         }
         survey = new Survey();
         profile = new Profile();
-        mock = new MockData(profile, survey);
+        branch = new Branch();
+        dept = new Department();
+        mock = new MockData(profile, survey, branch, dept);
         if(MainActivity.surveyDB.surveyDao().getSurveys().size() <= 0) {
             mock.generateSurveys(100);
         }
         List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
-        adapter = new SurveyAdapter(surveys);
+        adapter = new SurveyAdapter(surveys, this);
     }
 
     @Override
@@ -98,25 +99,52 @@ public class SurveysFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_surveys, container, false);
-        surveyList = view.findViewById(R.id.survey_list);
-        surveyList.setHasFixedSize(true);
+        recyclerView = view.findViewById(R.id.survey_list);
+        recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(view.getContext());
-        surveyList.setLayoutManager(layoutManager);
-        surveyList.setAdapter(adapter);
-        SelectionTracker selectionTracker = new SelectionTracker.Builder(
-                "my_selection",
-                surveyList,
-                new SurveyAdapter.KeyProvider(surveyList.getAdapter()),
-                new SurveyAdapter.DetailsLookUp(surveyList),
-                StorageStrategy.createLongStorage())
-                .withSelectionPredicate(new SurveyAdapter.Predicate())
-                .build();
-        adapter.setSelectionTracker(selectionTracker);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
         return view;
     }
 
+    @Override
+    public void onItemClicked(View view, Survey survey) {
+        SurveyAdapter.SurveyViewHolder holder = (SurveyAdapter.SurveyViewHolder) recyclerView.findContainingViewHolder(view);
+        survey.setChecked(!survey.getChecked());
+        holder.cardView.setChecked(survey.getChecked());
+        if(holder.cardView.isChecked()==true && holder.departments.getChildCount() <= 2) {
+            List<SurveyAndAllBranches> branches = MainActivity.surveyDB.surveyDao().getBranches(survey.getId());
+            List<SurveyAndAllDepartments> depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
+            for(int i = 0; i < branches.size(); i++) {
+                for(int j = 0; j < branches.get(i).getBranches().size(); j++) {
+                    MaterialCheckBox checkBox = new MaterialCheckBox(view.getContext());
+                    checkBox.setText(branches.get(i).getBranches().get(j).getBranch());
+                    holder.branches.addView(checkBox);
+                }
+            }
+            for(int i = 0; i < depts.size(); i++) {
+                for(int j = 0; j < depts.get(i).getDepartments().size(); j++) {
+                    MaterialCheckBox checkBox = new MaterialCheckBox(view.getContext());
+                    checkBox.setText(depts.get(i).getDepartments().get(j).getDept());
+                    holder.departments.addView(checkBox);
+                }
+            }
+        }
+        if(holder.cardView.isChecked()) {
+            setVisibility(holder, View.VISIBLE);
+        } else {
+            setVisibility(holder, View.GONE);
+        }
+
+    }
+
+    public void setVisibility(SurveyAdapter.SurveyViewHolder holder, int VISIBILITY) {
+        holder.branches.setVisibility(VISIBILITY);
+        holder.departments.setVisibility(VISIBILITY);
+        holder.start.setVisibility(VISIBILITY);
+    }
     /**
-    // TODO: Rename method, update argument and hook method into UI event
+     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -153,9 +181,4 @@ public class SurveysFragment extends Fragment implements View.OnClickListener{
         void onFragmentInteraction(Uri uri);
     }
      */
-
-    @Override
-    public void onClick(View view) {
-
-    }
 }
