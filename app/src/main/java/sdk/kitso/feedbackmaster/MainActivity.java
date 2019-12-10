@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(text);
                 Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile_navigation"
+    app:startDestination="@id/setPhoneFragment">
+
+    <fragment
+        android:id="@+id/setPhoneFragment"
+        android:name="sdk.kitso.feedbackmaster.profile.SetPhoneFragment"
+        android:label="fragment_set_phone"
+        tools:layout="@layout/fragment_set_phone" />
+    <fragment
+        android:id="@+id/ageAndGenderFragment"
+        android:name="sdk.kitso.feedbackmaster.profile.AgeAndGenderFragment"
+        android:label="fragment_age_and_gender"
+        tools:layout="@layout/fragment_age_and_gender" />
+</navigation>

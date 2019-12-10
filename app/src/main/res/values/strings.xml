@@ -20,4 +20,6 @@
     <string name="select_branch">select branch</string>
     <string name="select_department">select department</string>
     <string name="start_survey">start survey</string>
+    <string name="enter_your_phone_number">enter your phone number</string>
+    <string name="how_old_are_you">how old are you?</string>
 </resources>

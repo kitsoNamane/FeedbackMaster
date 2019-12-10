@@ -4,6 +4,7 @@ import java.util.List;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 @Dao
@@ -16,6 +17,12 @@ public interface SurveyDao {
 
     @Insert
     void addDepartment(Department dept);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void addProfile(Profile profile);
+
+    @Query("select * from profile where id = :profile_id")
+    public List<Profile> getProfile(int profile_id);
 
     @Query("select * from surveys")
     public List<Survey> getSurveys();
