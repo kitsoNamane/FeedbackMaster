@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -45,9 +44,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
         holder.bind(survey, onSurveyItemClickedListener);
         if(survey.getChecked() == true && holder.cardView.isChecked() == true) {
             setVisibility(holder, View.VISIBLE);
-            Toast.makeText(holder.cardView.getContext(), "I'm still checked!! "+survey.getCompany(), Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(holder.cardView.getContext(), "I'm not checked!! "+survey.getCompany(), Toast.LENGTH_LONG).show();
             holder.cardView.setChecked(survey.getChecked());
             setVisibility(holder, View.GONE);
         }

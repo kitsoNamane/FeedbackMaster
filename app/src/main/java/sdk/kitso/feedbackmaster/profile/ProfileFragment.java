@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -29,6 +31,11 @@ public class ProfileFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    TextInputEditText viewPhone;
+    TextInputEditText viewAge;
+    RadioGroup viewGender;
+    RadioButton male;
+    RadioButton female;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -75,19 +82,44 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        TextInputEditText viewPhone = view.findViewById(R.id.phone_view);
-        TextInputEditText viewAge = view.findViewById(R.id.age_view);
-        RadioGroup viewGender = view.findViewById(R.id.gender_view);
+        viewPhone = view.findViewById(R.id.phone_view);
+        viewAge = view.findViewById(R.id.age_view);
+        viewGender = view.findViewById(R.id.gender_view);
+        male = viewGender.findViewById(R.id.male_view);
+        female = viewGender.findViewById(R.id.female_view);
 
         viewPhone.setText(Integer.toString(profile.getPhone()));
         viewAge.setText(Integer.toString(profile.getAge()));
         FloatingActionButton editProfile = view.findViewById(R.id.edit_profile);
+
+        //Disable All Input until edit requested
+
+        Toast.makeText(this.getContext(), profile.getGender(), Toast.LENGTH_LONG).show();
+        if(profile.getGender() == "male") {
+            male.setChecked(true);
+        } else {
+            female.setChecked(true);
+        }
+
+        toggleInput(false);
+        //! Testing for now,
         if(profile.getProfile() == false) {
             viewPhone.setError("validate your number",
                     view.getResources()
                         .getDrawable(R.drawable.ic_warning_orange_700_36dp));
+        } else {
+            viewPhone.setError("",
+                    view.getResources()
+                            .getDrawable(R.drawable.ic_verified_user_black_24dp));
         }
         return view;
+    }
+
+    public void toggleInput(boolean enabledState) {
+        viewPhone.setEnabled(enabledState);
+        viewAge.setEnabled(enabledState);
+        male.setEnabled(enabledState);
+        female.setEnabled(enabledState);
     }
 
     /** TODO: Rename method, update argument and hook method into UI event
