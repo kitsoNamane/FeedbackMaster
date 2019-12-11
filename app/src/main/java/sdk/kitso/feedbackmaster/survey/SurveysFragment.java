@@ -4,8 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.material.checkbox.MaterialCheckBox;
+import android.widget.RadioButton;
 
 import java.util.List;
 
@@ -115,17 +114,23 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         if(holder.cardView.isChecked()==true && holder.departments.getChildCount() <= 2) {
             List<SurveyAndAllBranches> branches = MainActivity.surveyDB.surveyDao().getBranches(survey.getId());
             List<SurveyAndAllDepartments> depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
+            // Currently O(X^2) complexity
+            // find way to speed it up to O(X) complexity
             for(int i = 0; i < branches.size(); i++) {
                 for(int j = 0; j < branches.get(i).getBranches().size(); j++) {
-                    MaterialCheckBox checkBox = new MaterialCheckBox(view.getContext());
+                    RadioButton checkBox = new RadioButton(view.getContext());
                     checkBox.setText(branches.get(i).getBranches().get(j).getBranch());
+                    checkBox.setTextSize(Float.parseFloat("16"));
+                    checkBox.setPadding(10, 20, 10, 20);
                     holder.branches.addView(checkBox);
                 }
             }
             for(int i = 0; i < depts.size(); i++) {
                 for(int j = 0; j < depts.get(i).getDepartments().size(); j++) {
-                    MaterialCheckBox checkBox = new MaterialCheckBox(view.getContext());
+                    RadioButton checkBox = new RadioButton(view.getContext());
                     checkBox.setText(depts.get(i).getDepartments().get(j).getDept());
+                    checkBox.setTextSize(Float.parseFloat("16"));
+                    checkBox.setPadding(10, 20, 10, 20);
                     holder.departments.addView(checkBox);
                 }
             }

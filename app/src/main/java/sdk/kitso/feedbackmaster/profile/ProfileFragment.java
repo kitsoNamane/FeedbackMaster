@@ -4,9 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.fragment.app.Fragment;
+import sdk.kitso.feedbackmaster.Globals;
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.db.Profile;
 
 
 /**
@@ -26,6 +33,8 @@ public class ProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    Profile profile;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -58,6 +67,7 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
     }
 
     @Override
@@ -65,6 +75,18 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        TextInputEditText viewPhone = view.findViewById(R.id.phone_view);
+        TextInputEditText viewAge = view.findViewById(R.id.age_view);
+        RadioGroup viewGender = view.findViewById(R.id.gender_view);
+
+        viewPhone.setText(Integer.toString(profile.getPhone()));
+        viewAge.setText(Integer.toString(profile.getAge()));
+        FloatingActionButton editProfile = view.findViewById(R.id.edit_profile);
+        if(profile.getProfile() == false) {
+            viewPhone.setError("validate your number",
+                    view.getResources()
+                        .getDrawable(R.drawable.ic_warning_orange_700_36dp));
+        }
         return view;
     }
 

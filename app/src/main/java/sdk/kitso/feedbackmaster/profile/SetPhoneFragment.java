@@ -1,9 +1,14 @@
 package sdk.kitso.feedbackmaster.profile;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.R;
@@ -64,9 +69,44 @@ public class SetPhoneFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_set_phone, container, false);
+        final TextInputEditText phoneInput = view.findViewById(R.id.phone_input);
+        MaterialButton gotoAgeAndGender = view.findViewById(R.id.goto_age_and_gender);
+        gotoAgeAndGender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // validate input
+                if(signup(phoneInput)) {
+                    ProfileSetup.navController.navigate(R.id.ageAndGenderFragment);
+                }
+            }
+        });
         return view;
     }
 
+    public boolean signup(TextInputEditText textInputEditText) {
+        String phone = textInputEditText.getText().toString().trim();
+        if(!phone.isEmpty()==true && phone.length()==8) {
+            try {
+                ProfileSetup.profile.setPhone(new Integer(phone));
+            } catch (Exception e) {
+                textInputEditText.setError("Number Invalid");
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        textInputEditText.setError("Number Required");
+        return false;
+    }
+
+    public void hideSoftKeyboard(View view) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager)
+                    view.getContext().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            //imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
     /**
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

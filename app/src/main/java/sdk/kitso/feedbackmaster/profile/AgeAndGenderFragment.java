@@ -1,11 +1,18 @@
 package sdk.kitso.feedbackmaster.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.radiobutton.MaterialRadioButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.fragment.app.Fragment;
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 
 /**
@@ -63,7 +70,69 @@ public class AgeAndGenderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_age_and_gender, container, false);
+        View view = inflater.inflate(R.layout.fragment_age_and_gender, container, false);
+        final TextInputEditText ageInput = view.findViewById(R.id.age_input);
+        final RadioGroup gender = view.findViewById(R.id.gender_input);
+        MaterialButton gotoMainActivity = view.findViewById(R.id.goto_main);
+        gotoMainActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(signup(ageInput, gender)) {
+                    Intent intent = new Intent(v.getContext(), MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        return view;
+    }
+
+    public boolean signup(TextInputEditText textInputEditText, RadioGroup radioGroup) {
+        String age = textInputEditText.getText().toString().trim();
+        boolean isAgeValid = false;
+        boolean isGenderValid = false;
+        final MaterialRadioButton male = radioGroup.findViewById(R.id.male_radio);
+        final MaterialRadioButton female = radioGroup.findViewById(R.id.female_radio);
+        if(!age.isEmpty()) {
+            try {
+                ProfileSetup.profile.setAge(new Integer(age));
+            } catch (Exception e) {
+                textInputEditText.setError("Age Invalid");
+                e.printStackTrace();
+            }
+            isAgeValid = true;
+        } else {
+            textInputEditText.setError("Age Required");
+        }
+
+        if(!(radioGroup.getCheckedRadioButtonId() == -1)) {
+            male.setError(null);
+            female.setError(null);
+            MaterialRadioButton genderId = (MaterialRadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+            String gender = genderId.getText().toString();
+            try{
+                ProfileSetup.profile.setGender(gender);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            isGenderValid = true;
+        } else {
+            male.setError("");
+            female.setError("");
+            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    male.setError(null);
+                    female.setError(null);
+                }
+            });
+        }
+
+        if(isAgeValid == true && isGenderValid == true) {
+            ProfileSetup.profile.setProfile(true);
+            ProfileSetup.surveyDB.surveyDao().addProfile(ProfileSetup.profile);
+        }
+        // Binary End-Gate guarantees that we'll get the right results nomatter the combinations
+        return isAgeValid && isGenderValid;
     }
 
     /**

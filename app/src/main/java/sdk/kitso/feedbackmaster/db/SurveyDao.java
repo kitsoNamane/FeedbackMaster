@@ -18,11 +18,12 @@ public interface SurveyDao {
     @Insert
     void addDepartment(Department dept);
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addProfile(Profile profile);
 
     @Query("select * from profile where id = :profile_id")
-    public List<Profile> getProfile(int profile_id);
+    public Profile getProfile(int profile_id);
 
     @Query("select * from surveys")
     public List<Survey> getSurveys();
