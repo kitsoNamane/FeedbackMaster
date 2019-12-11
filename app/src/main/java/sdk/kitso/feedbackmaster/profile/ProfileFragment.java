@@ -92,7 +92,6 @@ public class ProfileFragment extends Fragment {
         viewAge.setText(Integer.toString(profile.getAge()));
         FloatingActionButton editProfile = view.findViewById(R.id.edit_profile);
 
-        //Disable All Input until edit requested
 
         Toast.makeText(this.getContext(), profile.getGender(), Toast.LENGTH_LONG).show();
         if(profile.getGender() == "male") {
@@ -101,17 +100,18 @@ public class ProfileFragment extends Fragment {
             female.setChecked(true);
         }
 
-        toggleInput(false);
         //! Testing for now,
         if(profile.getProfile() == false) {
-            viewPhone.setError("validate your number",
+            viewPhone.setError(null,
                     view.getResources()
                         .getDrawable(R.drawable.ic_warning_orange_700_36dp));
         } else {
-            viewPhone.setError("",
+            viewPhone.setError(null,
                     view.getResources()
                             .getDrawable(R.drawable.ic_verified_user_black_24dp));
         }
+        //Disable All Input until edit requested
+        toggleInput(false);
         return view;
     }
 
