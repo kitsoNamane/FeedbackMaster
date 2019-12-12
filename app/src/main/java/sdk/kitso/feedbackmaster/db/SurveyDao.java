@@ -18,6 +18,11 @@ public interface SurveyDao {
     @Insert
     void addDepartment(Department dept);
 
+    @Insert
+    void addQuestion(Question question);
+
+    @Insert
+    void addOption(MultipleChoiceOption option);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addProfile(Profile profile);
@@ -33,5 +38,11 @@ public interface SurveyDao {
 
     @Query("SELECT * from surveys where id = :surveyId")
     public List<SurveyAndAllDepartments> getDepartments(int surveyId);
+
+    @Query("SELECT * from surveys where id = :surveyId")
+    public List<SurveyAndAllQuestions> getQuestions(int surveyId);
+
+    @Query("SELECT * from surveys where id = :questionId")
+    public List<QuestionsAndAllOptions> getOptions(int questionId);
 }
 

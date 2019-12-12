@@ -2,9 +2,13 @@ package sdk.kitso.feedbackmaster;
 
 import com.github.javafaker.Faker;
 
+import java.util.Random;
+
 import sdk.kitso.feedbackmaster.db.Branch;
 import sdk.kitso.feedbackmaster.db.Department;
+import sdk.kitso.feedbackmaster.db.MultipleChoiceOption;
 import sdk.kitso.feedbackmaster.db.Profile;
+import sdk.kitso.feedbackmaster.db.Question;
 import sdk.kitso.feedbackmaster.db.Survey;
 
 
@@ -14,13 +18,19 @@ public class MockData {
     Branch branch;
     Department dept;
     Profile profile;
+    Question question;
+    MultipleChoiceOption option;
+    Random qtype;
 
-    public MockData(Profile profile, Survey survey, Branch branch, Department dept) {
+    public MockData() {
         this.faker = new Faker();
-        this.profile = profile;
-        this.survey = survey;
-        this.dept = dept;
-        this.branch = branch;
+        this.profile = new Profile();
+        this.survey = new Survey();
+        this.dept = new Department();
+        this.branch = new Branch();
+        this.question = new Question();
+        this.option = new MultipleChoiceOption();
+        this.qtype = new Random();
     }
 
     public void generateProfile() {
@@ -48,8 +58,29 @@ public class MockData {
         }
     }
 
+    public void generateQuestions(int max) {
+        int type = Globals.RATING_STARS;
+        for(int i = 0; i <= max; i++) {
+            question.setId(i);
+            question.setQuestion(faker.lorem().sentence(15));
+            question.setType(type);
+            type = qtype.nextInt(6);
+            if(type != Globals.MULTIPLE_CHOICE || type != Globals.MULTIPLE_CHOICES) {
+                MainActivity.surveyDB.surveyDao().addQuestion(question);
+                continue;
+            }
+            for(int j = 1; j < 11; j++) {
+                option.setId(j);
+                option.setQuestionId(i);
+                option.setOption(faker.lorem().sentence());
+                MainActivity.surveyDB.surveyDao().addOption(option);
+            }
+            MainActivity.surveyDB.surveyDao().addQuestion(question);
+        }
+    }
+
     /**
-    public void getSurveys() {
+     public void getSurveys() {
         JsonReader parser = new JsonReader();
         try{
             Object obj = parser.parse(new FileReader("suerveys.json"));

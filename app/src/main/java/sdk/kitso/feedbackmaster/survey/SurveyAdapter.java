@@ -84,13 +84,21 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
         public void bind(final Survey survey, final OnSurveyItemClickedListener onSurveyItemClickedListener) {
             this.company.setText(survey.getCompany());
             this.survey.setText(survey.getSurvey());
-            this.cardView.setId(survey.getId());
+            //this.cardView.setId(survey.getId());
             this.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onSurveyItemClickedListener.onItemClicked(cardView, survey);
                 }
             });
+
+            this.start.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onSurveyItemClickedListener.onItemClicked(start, survey);
+                }
+            });
+
         }
     }
 
