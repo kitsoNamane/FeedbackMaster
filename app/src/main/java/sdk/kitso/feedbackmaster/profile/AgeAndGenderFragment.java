@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.fragment.app.Fragment;
@@ -32,6 +33,13 @@ public class AgeAndGenderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TextInputEditText ageInput;
+    private RadioGroup gender;
+    private RadioButton male;
+    private RadioButton female;
+    private RadioButton genderId;
+    private String genderState;
+
 
     //private OnFragmentInteractionListener mListener;
 
@@ -71,8 +79,10 @@ public class AgeAndGenderFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_age_and_gender, container, false);
-        final TextInputEditText ageInput = view.findViewById(R.id.age_input);
-        final RadioGroup gender = view.findViewById(R.id.gender_input);
+        ageInput = view.findViewById(R.id.age_input);
+        gender = view.findViewById(R.id.gender_input);
+        male = gender.findViewById(R.id.male_radio);
+        female = gender.findViewById(R.id.female_radio);
         MaterialButton gotoMainActivity = view.findViewById(R.id.goto_main);
         gotoMainActivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,8 +100,6 @@ public class AgeAndGenderFragment extends Fragment {
         String age = textInputEditText.getText().toString().trim();
         boolean isAgeValid = false;
         boolean isGenderValid = false;
-        final MaterialRadioButton male = radioGroup.findViewById(R.id.male_radio);
-        final MaterialRadioButton female = radioGroup.findViewById(R.id.female_radio);
         if(!age.isEmpty()) {
             try {
                 ProfileSetup.profile.setAge(new Integer(age));
@@ -107,10 +115,11 @@ public class AgeAndGenderFragment extends Fragment {
         if(!(radioGroup.getCheckedRadioButtonId() == -1)) {
             male.setError(null);
             female.setError(null);
-            MaterialRadioButton genderId = (MaterialRadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
-            String gender = genderId.getText().toString();
+            genderId = (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+            genderState = genderId.getText().toString();
             try{
-                ProfileSetup.profile.setGender(gender);
+                Toast.makeText(this.getContext(), "Gender :"+genderState, Toast.LENGTH_LONG).show();
+                ProfileSetup.profile.setGender(genderState);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -85,6 +86,7 @@ public class SetPhoneFragment extends Fragment {
 
     public boolean signup(TextInputEditText textInputEditText) {
         String phone = textInputEditText.getText().toString().trim();
+        Toast.makeText(this.getContext(), "Phone :"+phone+" "+Integer.toString(phone.length()), Toast.LENGTH_LONG).show();
         if(!phone.isEmpty()==true && phone.length()==8) {
             try {
                 ProfileSetup.profile.setPhone(new Integer(phone));

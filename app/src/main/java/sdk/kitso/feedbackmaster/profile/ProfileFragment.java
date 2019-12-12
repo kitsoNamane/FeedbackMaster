@@ -93,8 +93,7 @@ public class ProfileFragment extends Fragment {
         FloatingActionButton editProfile = view.findViewById(R.id.edit_profile);
 
 
-        Toast.makeText(this.getContext(), profile.getGender(), Toast.LENGTH_LONG).show();
-        if(profile.getGender() == "male") {
+        if(profile.getGender().equals("male")) {
             male.setChecked(true);
         } else {
             female.setChecked(true);
@@ -112,6 +111,7 @@ public class ProfileFragment extends Fragment {
         }
         //Disable All Input until edit requested
         toggleInput(false);
+        Toast.makeText(this.getContext(), profile.getGender(), Toast.LENGTH_LONG).show();
         return view;
     }
 
