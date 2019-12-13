@@ -13,7 +13,7 @@
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="5dp"
     app:cardElevation="3dp"
     app:cardMaxElevation="6dp">
 
@@ -131,6 +131,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/start_survey"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_marginStart="16dp"
@@ -142,6 +143,7 @@
             android:text="@string/start_survey"
             android:textSize="18sp"
             android:visibility="visible"
+            app:cornerRadius="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

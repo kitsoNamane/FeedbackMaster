@@ -8,22 +8,13 @@
         <item name="bottomNavigationStyle">
             @style/Widget.MaterialComponents.BottomNavigationView
         </item>
+        <item name="materialCardViewStyle">
+            @style/Widget.MaterialComponents.CardView
+        </item>
     </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">#EEEEEE</item>
     </style>
-    <!--
-    <style name="setup_profile">
-        <item name="android:layout_width">339dp</item>
-        <item name="android:layout_height">385dp</item>
-        <item name="android:layout_marginStart">32dp</item>
-        <item name="android:layout_marginLeft">32dp</item>
-        <item name="android:layout_marginTop">60dp</item>
-        <item name="android:layout_marginEnd">32dp</item>
-        <item name="android:layout_marginRight">32dp</item>
-        <item name="android:layout_marginBottom">462dp</item>
-    </style>
-    -->
 </resources>
