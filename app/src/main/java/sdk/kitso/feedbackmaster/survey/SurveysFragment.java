@@ -10,6 +10,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.MainActivity;
@@ -81,6 +82,9 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         mock = new MockData();
         if(MainActivity.surveyDB.surveyDao().getSurveys().size() <= 0) {
             mock.generateSurveys(100);
+        }
+
+        if(MainActivity.surveyDB.surveyDao().getQuestions(0).size() <= 0) {
             mock.generateQuestions(100);
         }
         List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
@@ -117,7 +121,7 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
                         checkBox = new RadioButton(view.getContext());
                         checkBox.setText(branches.get(i).getBranches().get(j).getBranch());
                         checkBox.setTextSize(Float.parseFloat("16"));
-                        checkBox.setPadding(10, 20, 10, 20);
+                        checkBox.setPadding(10, 10, 10, 10);
                         holder.branches.addView(checkBox);
                     }
                 }
@@ -126,7 +130,7 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
                         checkBox = new RadioButton(view.getContext());
                         checkBox.setText(depts.get(i).getDepartments().get(j).getDept());
                         checkBox.setTextSize(Float.parseFloat("16"));
-                        checkBox.setPadding(10, 20, 10, 20);
+                        checkBox.setPadding(10, 10, 10, 10);
                         holder.departments.addView(checkBox);
                     }
                 }
@@ -138,8 +142,8 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
             }
             break;
         case(R.id.start_survey):
-            //SurveysFragmentDirections actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());
-            //Navigation.findNavController(view).navigate(actionSurvey);
+            SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());
+            Navigation.findNavController(view).navigate(actionSurvey);
             Toast.makeText(this.getContext(), "Go to Question", Toast.LENGTH_LONG).show();
             break;
         default:

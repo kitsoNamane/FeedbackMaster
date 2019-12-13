@@ -25,10 +25,10 @@
         android:id="@+id/questionFragment"
         android:name="sdk.kitso.feedbackmaster.survey.QuestionFragment"
         android:label="fragment_question">
+        tools:layout="@layout/fragment_question"
         <argument
             android:name="surveyId"
             app:argType="integer"
-            android:defaultValue="1"
-            tools:layout="@layout/fragment_question"/>
+        />
     </fragment>
 </navigation>

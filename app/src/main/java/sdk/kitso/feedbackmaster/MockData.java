@@ -13,14 +13,14 @@ import sdk.kitso.feedbackmaster.db.Survey;
 
 
 public class MockData {
-    Faker faker;
-    Survey survey;
-    Branch branch;
-    Department dept;
-    Profile profile;
-    Question question;
-    MultipleChoiceOption option;
-    Random qtype;
+    private Faker faker;
+    private Survey survey;
+    private Branch branch;
+    private Department dept;
+    private Profile profile;
+    private Question question;
+    private MultipleChoiceOption option;
+    private Random qtype;
 
     public MockData() {
         this.faker = new Faker();
