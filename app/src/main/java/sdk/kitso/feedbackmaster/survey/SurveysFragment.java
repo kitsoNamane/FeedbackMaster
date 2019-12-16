@@ -100,44 +100,11 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         switch (view.getId()) {
         case(R.id.survey_card):
             holder = (SurveyAdapter.SurveyViewHolder) recyclerView.findContainingViewHolder(view);
-            /**survey.setChecked(!survey.getChecked());
-            holder.cardView.setChecked(survey.getChecked());
-            if (holder.cardView.isChecked() == true && holder.departments.getChildCount() <= 2) {
-                branches = MainActivity.surveyDB.surveyDao().getBranches(survey.getId());
-                depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
-                // Currently O(X^2) complexity
-                // find way to speed it up to O(X) complexity
-                for (int i = 0; i < branches.size(); i++) {
-                    for (int j = 0; j < branches.get(i).getBranches().size(); j++) {
-                        checkBox = new RadioButton(view.getContext());
-                        checkBox.setText(branches.get(i).getBranches().get(j).getBranch());
-                        checkBox.setTextSize(Float.parseFloat("16"));
-                        checkBox.setPadding(10, 10, 10, 10);
-                        holder.branches.addView(checkBox);
-                    }
-                }
-                for (int i = 0; i < depts.size(); i++) {
-                    for (int j = 0; j < depts.get(i).getDepartments().size(); j++) {
-                        checkBox = new RadioButton(view.getContext());
-                        checkBox.setText(depts.get(i).getDepartments().get(j).getDept());
-                        checkBox.setTextSize(Float.parseFloat("16"));
-                        checkBox.setPadding(10, 10, 10, 10);
-                        holder.departments.addView(checkBox);
-                    }
-                }
-            }
-            if (holder.cardView.isChecked()) {
-                setVisibility(holder, View.VISIBLE);
-            } else {
-                setVisibility(holder, View.GONE);
-            }
-             */
             adapter.bindDynamicContent(holder, survey);
             break;
         case(R.id.start_survey):
             SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());
             Navigation.findNavController(view).navigate(actionSurvey);
-            Toast.makeText(this.getContext(), "Go to Question", Toast.LENGTH_LONG).show();
             break;
         default:
             Toast.makeText(this.getContext(), "ButtonId :"+Integer.toString(R.id.start_survey)
@@ -147,11 +114,6 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         }
     }
 
-    public void setVisibility(SurveyAdapter.SurveyViewHolder myholder, int VISIBILITY) {
-        myholder.branches.setVisibility(VISIBILITY);
-        myholder.departments.setVisibility(VISIBILITY);
-        myholder.start.setVisibility(VISIBILITY);
-    }
     /**
      // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

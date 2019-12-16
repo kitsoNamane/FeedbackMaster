@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.question.QuestionController;
 
 
 /**
@@ -22,6 +24,7 @@ public class QuestionFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    QuestionController questionController;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -58,6 +61,7 @@ public class QuestionFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        questionController = QuestionController.getInstance(0);
     }
 
     @Override
@@ -65,7 +69,19 @@ public class QuestionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_question, container, false);
-
+        //MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
+        //BottomNavigationView navView = view.findViewById(R.id.nav_view);
+        //View decorView = this.getWindow().getDecorView();
+        // Hide both the navigation bar and the status bar.
+        // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+        // a general rule, you should design your app to hide the status bar whenever you
+        // hide the navigation bar.
+        //int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        //        | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        //decorView.setSystemUiVisibility(uiOptions);
+        Toast.makeText(this.getContext(), "Question :"+questionController.getQuestion(questionController.nextQuestion()), Toast.LENGTH_LONG).show();
+        //toolbar.setVisibility(View.GONE);
+        // navView.setVisibility(View.GONE);
         return view;
     }
 

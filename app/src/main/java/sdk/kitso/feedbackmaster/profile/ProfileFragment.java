@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -92,6 +91,13 @@ public class ProfileFragment extends Fragment {
         viewAge.setText(Integer.toString(profile.getAge()));
         FloatingActionButton editProfile = view.findViewById(R.id.edit_profile);
 
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleInput(true);
+            }
+        });
+
 
         if(profile.getGender().equals("male")) {
             male.setChecked(true);
@@ -111,7 +117,6 @@ public class ProfileFragment extends Fragment {
         }
         //Disable All Input until edit requested
         toggleInput(false);
-        Toast.makeText(this.getContext(), profile.getGender(), Toast.LENGTH_LONG).show();
         return view;
     }
 

@@ -2,6 +2,7 @@ package sdk.kitso.feedbackmaster;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,9 +13,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
@@ -42,11 +46,36 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        final BottomNavigationView navView = findViewById(R.id.nav_view);
+
+        navView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+                // Do nothing
+            }
+        });
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
+                switch (navDestination.getId()) {
+                    // use the ID of the navigation graph not the ID of the Question fragment
+                    case R.id.questionFragment:
+                        Toast.makeText(MainActivity.this, "I'M AT Questions", Toast.LENGTH_LONG).show();
+                        navView.setVisibility(View.GONE);
+                        toolbar.setVisibility(View.GONE);
+                        break;
+                    default:
+                        navView.setVisibility(View.VISIBLE);
+                        toolbar.setVisibility(View.VISIBLE);
+                        Toast.makeText(MainActivity.this, "I'M NOT AT Questions", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         NavigationUI.setupActionBarWithNavController(this, navController);
         NavigationUI.setupWithNavController(navView, navController);
     }

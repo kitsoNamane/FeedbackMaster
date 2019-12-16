@@ -28,9 +28,6 @@
         style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:itemIconTint="@drawable/bottom_navigation_colors"
-        app:itemTextColor="@drawable/bottom_navigation_colors"
-        android:background="?android:attr/windowBackground"
         app:menu="@menu/bottom_nav_menu" />
 
 </LinearLayout>

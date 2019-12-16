@@ -17,4 +17,9 @@
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">#EEEEEE</item>
     </style>
+
+    <style name="QuestionTheme"  parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>
