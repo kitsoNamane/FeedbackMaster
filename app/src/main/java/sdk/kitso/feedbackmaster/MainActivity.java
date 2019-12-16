@@ -2,10 +2,8 @@ package sdk.kitso.feedbackmaster;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
 import sdk.kitso.feedbackmaster.db.Profile;
@@ -26,14 +23,9 @@ import sdk.kitso.feedbackmaster.db.SurveyDB;
 import sdk.kitso.feedbackmaster.profile.ProfileSetup;
 
 public class MainActivity extends AppCompatActivity {
-    LinearLayout linearLayout;
-    View setup_profile;
-    View view_profile;
-    LayoutInflater layoutInflater;
     ListView listView;
     public static SurveyDB surveyDB;
     NavController navController;
-    AppBarConfiguration appBarConfiguration;
     Profile profile;
     Intent intent;
 
@@ -41,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //linearLayout = findViewById(R.id.scroll_layout);
         surveyDB = Room.databaseBuilder(getApplicationContext(), SurveyDB.class, "userdb")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
@@ -54,11 +45,6 @@ public class MainActivity extends AppCompatActivity {
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        //appBarConfiguration = new AppBarConfiguration.Builder(
-        //        R.id.navigation_survey, R.id.navigation_profile)
-        //        .build();
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController);

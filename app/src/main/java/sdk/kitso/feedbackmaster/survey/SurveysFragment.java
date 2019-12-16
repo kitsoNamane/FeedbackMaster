@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import java.util.List;
@@ -17,8 +16,6 @@ import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.MockData;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.Survey;
-import sdk.kitso.feedbackmaster.db.SurveyAndAllBranches;
-import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
 
 
 /**
@@ -37,14 +34,8 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
     public static RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private SurveyAdapter adapter;
-
     private MockData mock;
-
-    List<SurveyAndAllBranches> branches;
-    List<SurveyAndAllDepartments> depts;
     SurveyAdapter.SurveyViewHolder holder;
-
-    RadioButton checkBox;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -109,7 +100,7 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         switch (view.getId()) {
         case(R.id.survey_card):
             holder = (SurveyAdapter.SurveyViewHolder) recyclerView.findContainingViewHolder(view);
-            survey.setChecked(!survey.getChecked());
+            /**survey.setChecked(!survey.getChecked());
             holder.cardView.setChecked(survey.getChecked());
             if (holder.cardView.isChecked() == true && holder.departments.getChildCount() <= 2) {
                 branches = MainActivity.surveyDB.surveyDao().getBranches(survey.getId());
@@ -140,6 +131,8 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
             } else {
                 setVisibility(holder, View.GONE);
             }
+             */
+            adapter.bindDynamicContent(holder, survey);
             break;
         case(R.id.start_survey):
             SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());
