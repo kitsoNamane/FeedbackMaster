@@ -76,7 +76,7 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         }
 
         if(MainActivity.surveyDB.surveyDao().getQuestions(0).size() <= 0) {
-            mock.generateQuestions(100);
+            mock.generateQuestions();
         }
         List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
         adapter = new SurveyAdapter(surveys, this);

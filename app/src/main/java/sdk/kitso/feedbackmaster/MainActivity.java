@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         navView.setVisibility(View.GONE);
                         toolbar.setVisibility(View.GONE);
                         break;
+                        // TODO: Add another Destination for survey finished with prompt to return the user home
                     default:
                         navView.setVisibility(View.VISIBLE);
                         toolbar.setVisibility(View.VISIBLE);

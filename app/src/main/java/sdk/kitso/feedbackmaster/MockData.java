@@ -2,6 +2,7 @@ package sdk.kitso.feedbackmaster;
 
 import com.github.javafaker.Faker;
 
+import java.util.List;
 import java.util.Random;
 
 import sdk.kitso.feedbackmaster.db.Branch;
@@ -15,6 +16,7 @@ import sdk.kitso.feedbackmaster.db.Survey;
 public class MockData {
     private Faker faker;
     private Survey survey;
+    private List<Survey> surveys;
     private Branch branch;
     private Department dept;
     private Profile profile;
@@ -43,6 +45,7 @@ public class MockData {
     }
 
     public void generateSurveys(int max) {
+        int type;
         for(int i = 0; i <= max; i++) {
             survey.setId(i);
             survey.setCompany(faker.company().name());
@@ -58,18 +61,44 @@ public class MockData {
         }
     }
 
+    public void generateQuestions() {
+        int type;
+        if(surveys == null) {
+            surveys = MainActivity.surveyDB.surveyDao().getSurveys();
+        }
+
+        for(Survey s: surveys) {
+            for(int i = 1; i < 11; i++) {
+                question.setQuestion(faker.lorem().sentence(15));
+                question.setSurveyId(s.getId());
+                type = qtype.nextInt(6);
+                question.setType(type);
+                if(type != Globals.MULTIPLE_CHOICE || type != Globals.MULTIPLE_CHOICES) {
+                    MainActivity.surveyDB.surveyDao().addQuestion(question);
+                    continue;
+                }
+                for(int j = 1; j < 6; j++) {
+                    option.setId(j);
+                    option.setQuestionId(i);
+                    option.setOption(faker.lorem().sentence());
+                    MainActivity.surveyDB.surveyDao().addOption(option);
+                }
+                MainActivity.surveyDB.surveyDao().addQuestion(question);
+            }
+        }
+    }
+
     public void generateQuestions(int max) {
-        int type = Globals.RATING_STARS;
+        int type;
         for(int i = 0; i <= max; i++) {
-            question.setId(i);
             question.setQuestion(faker.lorem().sentence(15));
-            question.setType(type);
             type = qtype.nextInt(6);
+            question.setType(type);
             if(type != Globals.MULTIPLE_CHOICE || type != Globals.MULTIPLE_CHOICES) {
                 MainActivity.surveyDB.surveyDao().addQuestion(question);
                 continue;
             }
-            for(int j = 1; j < 11; j++) {
+            for(int j = 1; j < 6; j++) {
                 option.setId(j);
                 option.setQuestionId(i);
                 option.setOption(faker.lorem().sentence());

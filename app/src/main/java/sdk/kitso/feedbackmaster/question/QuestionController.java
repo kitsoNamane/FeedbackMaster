@@ -1,9 +1,8 @@
 package sdk.kitso.feedbackmaster.question;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
-import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.db.MultipleChoiceOption;
 import sdk.kitso.feedbackmaster.db.Question;
@@ -12,9 +11,9 @@ import sdk.kitso.feedbackmaster.db.Question;
 public class QuestionController {
     private int maxQuestions;
     private static QuestionController instance;
-    private Question currentQuestion;
+    public Question currentQuestion;
     private List<Question> questions;
-    private Iterator<Question> questionsIterator;
+    private ListIterator<Question> questionsIterator;
     private List<MultipleChoiceOption> options;
 
     private QuestionController(int surveyId) {
@@ -23,7 +22,7 @@ public class QuestionController {
                 .getQuestions(surveyId)
                 .iterator().next().questions;
         this.maxQuestions = this.questions.size();
-        this.questionsIterator = this.questions.iterator();
+        this.questionsIterator = this.questions.listIterator();
     }
 
     public static QuestionController getInstance(int surveyId) {
@@ -33,6 +32,7 @@ public class QuestionController {
         return instance;
     }
 
+    /**
     public int nextQuestion() {
         if(this.questionsIterator.hasNext()) {
             this.currentQuestion = this.questionsIterator.next();
@@ -43,6 +43,7 @@ public class QuestionController {
         }
         return -1;
     }
+     */
 
     public List<MultipleChoiceOption> nextOption() {
         if(this.options == null || this.options.size() <= 0) {
@@ -51,6 +52,33 @@ public class QuestionController {
         return this.options;
     }
 
+    public Question nextQuestion(int questionId) {
+        return questions.get(questionId);
+    }
+
+    public Question nextQuestion() {
+        if(this.questionsIterator.hasNext()) {
+            this.currentQuestion = this.questionsIterator.next();
+            this.options = MainActivity.surveyDB.surveyDao()
+                    .getOptions(this.currentQuestion.getId())
+                    .iterator().next().options;
+            return this.currentQuestion;
+        }
+        return this.currentQuestion;
+    }
+
+    public Question previousQuestion() {
+        if(this.questionsIterator.hasPrevious()) {
+            this.currentQuestion = this.questionsIterator.previous();
+            this.options = MainActivity.surveyDB.surveyDao()
+                    .getOptions(this.currentQuestion.getId())
+                    .iterator().next().options;
+            return this.currentQuestion;
+        }
+        return this.currentQuestion;
+    }
+
+    /**
     public String getQuestion(int questionType) {
         switch (questionType) {
             case Globals.RATING_STARS:
@@ -70,4 +98,5 @@ public class QuestionController {
                 return "Rating Stars";
         }
     }
+     */
 }

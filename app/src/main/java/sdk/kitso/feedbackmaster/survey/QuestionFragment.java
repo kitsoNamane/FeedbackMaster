@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.material.textview.MaterialTextView;
+
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.question.QuestionController;
@@ -25,6 +27,8 @@ public class QuestionFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     QuestionController questionController;
+    QuestionFragmentArgs questionFragmentArgs;
+    MaterialTextView questionTitle;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -61,7 +65,10 @@ public class QuestionFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        questionController = QuestionController.getInstance(0);
+        // Get value passed to this fragment using safeargs
+        questionFragmentArgs = QuestionFragmentArgs.fromBundle(getArguments());
+        questionController = QuestionController.getInstance(questionFragmentArgs.getSurveyId());
+
     }
 
     @Override
@@ -69,6 +76,9 @@ public class QuestionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_question, container, false);
+        questionTitle = view.findViewById(R.id.question_title);
+        String title = questionController.nextQuestion().getQuestion();
+        questionTitle.setText(title);
         //MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         //BottomNavigationView navView = view.findViewById(R.id.nav_view);
         //View decorView = this.getWindow().getDecorView();
@@ -79,7 +89,7 @@ public class QuestionFragment extends Fragment {
         //int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         //        | View.SYSTEM_UI_FLAG_FULLSCREEN;
         //decorView.setSystemUiVisibility(uiOptions);
-        Toast.makeText(this.getContext(), "Question :"+questionController.getQuestion(questionController.nextQuestion()), Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getContext(), "Question : "+questionController.currentQuestion.getId(), Toast.LENGTH_LONG).show();
         //toolbar.setVisibility(View.GONE);
         // navView.setVisibility(View.GONE);
         return view;
