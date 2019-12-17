@@ -12,9 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.MockData;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.db.QuestionDB;
 import sdk.kitso.feedbackmaster.db.Survey;
 
 
@@ -35,6 +37,7 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
     private RecyclerView.LayoutManager layoutManager;
     private SurveyAdapter adapter;
     private MockData mock;
+    public static QuestionDB questionDB;
     SurveyAdapter.SurveyViewHolder holder;
 
     // TODO: Rename and change types of parameters
@@ -66,18 +69,21 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        questionDB = Room.databaseBuilder(this.getContext().getApplicationContext(), QuestionDB.class, "questions")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries().build();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        mock = new MockData();
+        mock = new MockData(this.getContext());
         if(MainActivity.surveyDB.surveyDao().getSurveys().size() <= 0) {
             mock.generateSurveys(100);
         }
 
-        if(MainActivity.surveyDB.surveyDao().getQuestions(0).size() <= 0) {
-            mock.generateQuestions();
-        }
+        //if(questionDB.questionDao().getQuestions(0).size() <= 0) {
+        //    mock.generateQuestions();
+        //}
         List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
         adapter = new SurveyAdapter(surveys, this);
     }
@@ -104,6 +110,7 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
             break;
         case(R.id.start_survey):
             SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());
+            Toast.makeText(this.getContext(), "SurveyId :"+survey.getId(), Toast.LENGTH_LONG).show();
             Navigation.findNavController(view).navigate(actionSurvey);
             break;
         default:

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class MultipleChoiceOption {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     public int questionId;

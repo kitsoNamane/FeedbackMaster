@@ -12,7 +12,7 @@ public class Branch {
 
     public String name;
 
-    public void setBrach(String name, int surveyId) {
+    public void setBranch(String name, int surveyId) {
         this.name = name;
         this.surveyId = surveyId;
     }

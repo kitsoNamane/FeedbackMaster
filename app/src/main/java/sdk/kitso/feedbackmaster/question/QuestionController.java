@@ -1,11 +1,10 @@
 package sdk.kitso.feedbackmaster.question;
 
 import java.util.List;
-import java.util.ListIterator;
 
-import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.db.MultipleChoiceOption;
 import sdk.kitso.feedbackmaster.db.Question;
+import sdk.kitso.feedbackmaster.survey.SurveysFragment;
 
 // Make it a Singleton: If it's already created re-use the instantiated one
 public class QuestionController {
@@ -13,37 +12,27 @@ public class QuestionController {
     private static QuestionController instance;
     public Question currentQuestion;
     private List<Question> questions;
-    private ListIterator<Question> questionsIterator;
-    private List<MultipleChoiceOption> options;
+    public int listIterator;
+    public List<MultipleChoiceOption> options;
 
-    private QuestionController(int surveyId) {
+    private QuestionController() {
         currentQuestion = new Question();
-        this.questions = MainActivity.surveyDB.surveyDao()
-                .getQuestions(surveyId)
-                .iterator().next().questions;
-        this.maxQuestions = this.questions.size();
-        this.questionsIterator = this.questions.listIterator();
     }
 
-    public static QuestionController getInstance(int surveyId) {
+    public void setQuestions(int surveyId) {
+        this.questions = SurveysFragment.questionDB.questionDao()
+                .getQuestions(surveyId);
+        //Log.i("Size : "+this.questions.size()+" SurveyId : "+surveyId, "Help");
+        this.maxQuestions = this.questions.size();
+        this.listIterator = -1;
+    }
+
+    public static QuestionController getInstance() {
         if(instance == null) {
-            instance = new QuestionController(surveyId);
+            instance = new QuestionController();
         }
         return instance;
     }
-
-    /**
-    public int nextQuestion() {
-        if(this.questionsIterator.hasNext()) {
-            this.currentQuestion = this.questionsIterator.next();
-            this.options = MainActivity.surveyDB.surveyDao()
-                    .getOptions(this.currentQuestion.getId())
-                    .iterator().next().options;
-            return this.currentQuestion.getType();
-        }
-        return -1;
-    }
-     */
 
     public List<MultipleChoiceOption> nextOption() {
         if(this.options == null || this.options.size() <= 0) {
@@ -52,51 +41,29 @@ public class QuestionController {
         return this.options;
     }
 
-    public Question nextQuestion(int questionId) {
-        return questions.get(questionId);
-    }
-
     public Question nextQuestion() {
-        if(this.questionsIterator.hasNext()) {
-            this.currentQuestion = this.questionsIterator.next();
-            this.options = MainActivity.surveyDB.surveyDao()
+        this.listIterator += 1;
+        if(this.listIterator < this.maxQuestions) {
+            this.currentQuestion = this.questions.get(this.listIterator);
+            this.options = SurveysFragment.questionDB.questionDao()
                     .getOptions(this.currentQuestion.getId())
                     .iterator().next().options;
             return this.currentQuestion;
         }
+        this.listIterator -= 1;
         return this.currentQuestion;
     }
 
     public Question previousQuestion() {
-        if(this.questionsIterator.hasPrevious()) {
-            this.currentQuestion = this.questionsIterator.previous();
-            this.options = MainActivity.surveyDB.surveyDao()
+        this.listIterator -= 1;
+        if(this.listIterator >= 0) {
+            this.currentQuestion = this.questions.get(this.listIterator);
+            this.options = SurveysFragment.questionDB.questionDao()
                     .getOptions(this.currentQuestion.getId())
                     .iterator().next().options;
             return this.currentQuestion;
         }
+        this.listIterator += 1;
         return this.currentQuestion;
     }
-
-    /**
-    public String getQuestion(int questionType) {
-        switch (questionType) {
-            case Globals.RATING_STARS:
-                return "Rating Stars";
-            case Globals.MULTIPLE_CHOICE:
-                return "Multiple Choice";
-            case Globals.MULTIPLE_CHOICES:
-                return "Multiple Choices";
-            case Globals.TRUE_FALSE:
-                return "True or False";
-            case Globals.SHORT_ANSWER:
-                return "Short Answer";
-            case Globals.SCALE:
-                return "Scale";
-            default:
-                // Globals.RATING_STARS
-                return "Rating Stars";
-        }
-    }
-     */
 }

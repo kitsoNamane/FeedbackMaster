@@ -4,14 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -84,27 +81,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navController, (DrawerLayout) null);
-    }
-
-    public void setup_answers(ArrayList<String> answers, int CHOICE_MODE) {
-        /** ! ChOICE_MODE OPTIONS:
-         AbsListView.CHOICE_MODE_SINGLE
-         AbsListView.CHOICE_MODE_MULTIPLE
-        */
-        listView = findViewById(R.id.answer_list);
-        listView.setAdapter(new MyListAdapter(this, answers));
-        listView.setChoiceMode(CHOICE_MODE);
-        MyListAdapter.setListViewHeightBasedOnChildren(listView);
-        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String text = (String) listView.getItemAtPosition(position);
-                System.out.println(text);
-                Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
     }
 }

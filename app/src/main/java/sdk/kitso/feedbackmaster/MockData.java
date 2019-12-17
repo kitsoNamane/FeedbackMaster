@@ -1,5 +1,7 @@
 package sdk.kitso.feedbackmaster;
 
+import android.content.Context;
+
 import com.github.javafaker.Faker;
 
 import java.util.List;
@@ -11,6 +13,7 @@ import sdk.kitso.feedbackmaster.db.MultipleChoiceOption;
 import sdk.kitso.feedbackmaster.db.Profile;
 import sdk.kitso.feedbackmaster.db.Question;
 import sdk.kitso.feedbackmaster.db.Survey;
+import sdk.kitso.feedbackmaster.survey.SurveysFragment;
 
 
 public class MockData {
@@ -23,8 +26,10 @@ public class MockData {
     private Question question;
     private MultipleChoiceOption option;
     private Random qtype;
+    private Context context;
 
-    public MockData() {
+    public MockData(Context context) {
+        this.context = context;
         this.faker = new Faker();
         this.profile = new Profile();
         this.survey = new Survey();
@@ -52,71 +57,24 @@ public class MockData {
             survey.setSurvey(faker.commerce().productName());
 
             for(int j = 0; j < 3; j++) {
-                branch.setBrach(faker.address().cityName(), i);
+                branch.setBranch(faker.address().cityName(), i);
                 dept.setDepartment(faker.commerce().department(), i);
                 MainActivity.surveyDB.surveyDao().addBranch(branch);
                 MainActivity.surveyDB.surveyDao().addDepartment(dept);
             }
+            for (int k = 1; k < 11; k++) {
+                question.setQuestion(faker.lorem().sentence(15));
+                question.setSurveyId(i);
+                type = qtype.nextInt(6);
+                question.setType(type);
+                for (int j = 0; j < 6; j++) {
+                    option.setQuestionId(k);
+                    option.setOption(faker.lorem().sentence());
+                    SurveysFragment.questionDB.questionDao().addOption(option);
+                }
+                SurveysFragment.questionDB.questionDao().addQuestion(question);
+            }
             MainActivity.surveyDB.surveyDao().addSurvey(survey);
         }
     }
-
-    public void generateQuestions() {
-        int type;
-        if(surveys == null) {
-            surveys = MainActivity.surveyDB.surveyDao().getSurveys();
-        }
-
-        for(Survey s: surveys) {
-            for(int i = 1; i < 11; i++) {
-                question.setQuestion(faker.lorem().sentence(15));
-                question.setSurveyId(s.getId());
-                type = qtype.nextInt(6);
-                question.setType(type);
-                if(type != Globals.MULTIPLE_CHOICE || type != Globals.MULTIPLE_CHOICES) {
-                    MainActivity.surveyDB.surveyDao().addQuestion(question);
-                    continue;
-                }
-                for(int j = 1; j < 6; j++) {
-                    option.setId(j);
-                    option.setQuestionId(i);
-                    option.setOption(faker.lorem().sentence());
-                    MainActivity.surveyDB.surveyDao().addOption(option);
-                }
-                MainActivity.surveyDB.surveyDao().addQuestion(question);
-            }
-        }
-    }
-
-    public void generateQuestions(int max) {
-        int type;
-        for(int i = 0; i <= max; i++) {
-            question.setQuestion(faker.lorem().sentence(15));
-            type = qtype.nextInt(6);
-            question.setType(type);
-            if(type != Globals.MULTIPLE_CHOICE || type != Globals.MULTIPLE_CHOICES) {
-                MainActivity.surveyDB.surveyDao().addQuestion(question);
-                continue;
-            }
-            for(int j = 1; j < 6; j++) {
-                option.setId(j);
-                option.setQuestionId(i);
-                option.setOption(faker.lorem().sentence());
-                MainActivity.surveyDB.surveyDao().addOption(option);
-            }
-            MainActivity.surveyDB.surveyDao().addQuestion(question);
-        }
-    }
-
-    /**
-     public void getSurveys() {
-        JsonReader parser = new JsonReader();
-        try{
-            Object obj = parser.parse(new FileReader("suerveys.json"));
-        } catch (FileNotFoundException e) {e.printStackTrace();}
-        catch(IOException e) {e.printStackTrace();}
-        catch(ParseException e) {e.printStackTrace();}
-        catch(Exception e) {e.printStackTrace();}
-    }
-     */
 }

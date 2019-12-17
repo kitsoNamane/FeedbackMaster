@@ -4,9 +4,9 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import sdk.kitso.feedbackmaster.Globals;
 
-@Entity
+@Entity(tableName = "questions")
 public class Question {
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     public int surveyId;
@@ -36,14 +36,14 @@ public class Question {
     }
 
     public int getSurveyId() {
-        return surveyId;
+        return this.surveyId;
     }
 
     public String getQuestion() {
-        return question;
+        return this.question;
     }
 
     public int getType() {
-        return type;
+        return this.type;
     }
 }

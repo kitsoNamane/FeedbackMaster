@@ -2,14 +2,23 @@ package sdk.kitso.feedbackmaster.survey;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.textview.MaterialTextView;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.db.MultipleChoiceOption;
 import sdk.kitso.feedbackmaster.question.QuestionController;
 
 
@@ -28,7 +37,11 @@ public class QuestionFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     QuestionController questionController;
     QuestionFragmentArgs questionFragmentArgs;
+    BottomNavigationView questionNav;
+    FrameLayout questionView;
     MaterialTextView questionTitle;
+    MaterialButtonToggleGroup group;
+    View questionContent;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -67,7 +80,7 @@ public class QuestionFragment extends Fragment {
         }
         // Get value passed to this fragment using safeargs
         questionFragmentArgs = QuestionFragmentArgs.fromBundle(getArguments());
-        questionController = QuestionController.getInstance(questionFragmentArgs.getSurveyId());
+        questionController = QuestionController.getInstance();
 
     }
 
@@ -75,10 +88,46 @@ public class QuestionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_question, container, false);
+        final View view =  inflater.inflate(R.layout.fragment_question, container, false);
+        questionNav = view.findViewById(R.id.question_nav_view);
+        questionView = view.findViewById(R.id.question_showcase);
+        questionNav.setSelectedItemId(R.id.dummy);
+        questionController.setQuestions(questionFragmentArgs.getSurveyId());
         questionTitle = view.findViewById(R.id.question_title);
-        String title = questionController.nextQuestion().getQuestion();
-        questionTitle.setText(title);
+        questionTitle.setText(questionController.nextQuestion().getQuestion());
+
+        renderQuestion();
+
+        questionNav.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+                // Do nothing for now
+            }
+        });
+
+        questionNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.question_next:
+                        questionTitle.setText(questionController.nextQuestion().getQuestion());
+                        renderQuestion();
+                        Toast.makeText(view.getContext(), "Question ID : "+questionController.currentQuestion.getId(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.previous_question:
+                        questionTitle.setText(questionController.previousQuestion().getQuestion());
+                        renderQuestion();
+                        Toast.makeText(view.getContext(), "Question ID : "+questionController.currentQuestion.getId(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.dummy:
+                        break;
+                    default:
+                        // Do something
+                }
+                return false;
+            }
+        });
+
         //MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
         //BottomNavigationView navView = view.findViewById(R.id.nav_view);
         //View decorView = this.getWindow().getDecorView();
@@ -89,11 +138,69 @@ public class QuestionFragment extends Fragment {
         //int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         //        | View.SYSTEM_UI_FLAG_FULLSCREEN;
         //decorView.setSystemUiVisibility(uiOptions);
-        Toast.makeText(this.getContext(), "Question : "+questionController.currentQuestion.getId(), Toast.LENGTH_LONG).show();
         //toolbar.setVisibility(View.GONE);
         // navView.setVisibility(View.GONE);
         return view;
     }
+
+    public View setQuestionContent(@LayoutRes int i) {
+       return getLayoutInflater().inflate(i, questionView, false);
+    }
+
+    public void renderQuestion() {
+        switch(questionController.currentQuestion.getType()) {
+            case Globals.RATING_STARS:
+                questionContent = setQuestionContent(R.layout.rating_stars);
+                questionView.removeAllViews();
+                questionView.addView(questionContent);
+                break;
+            case Globals.MULTIPLE_CHOICE:
+                questionContent = setQuestionContent(R.layout.multiple_choice);
+                group = questionContent.findViewById(R.id.multiply_options);
+                group.setSingleSelection(true);
+                addOptions(group);
+                break;
+            case Globals.MULTIPLE_CHOICES:
+                questionContent = setQuestionContent(R.layout.multiple_choice);
+                group = questionContent.findViewById(R.id.multiply_options);
+                group.setSingleSelection(false);
+                addOptions(group);
+                break;
+            case Globals.TRUE_FALSE:
+                questionContent = setQuestionContent(R.layout.true_or_false);
+                questionView.removeAllViews();
+                questionView.addView(questionContent);
+                break;
+            case Globals.SHORT_ANSWER:
+                questionContent = setQuestionContent(R.layout.short_answer);
+                questionView.removeAllViews();
+                questionView.addView(questionContent);
+                break;
+            case Globals.SCALE:
+                questionContent = getLayoutInflater().inflate(R.layout.rating_stars, questionView, false);
+                questionView.removeAllViews();
+                questionView.addView(questionContent);
+                break;
+            default:
+                // multiple choice
+                questionContent = getLayoutInflater().inflate(R.layout.rating_stars, questionView, false);
+                questionView.addView(questionContent);
+                questionView.removeAllViews();
+                questionTitle.setText(questionController.nextQuestion().getQuestion());
+        }
+    }
+
+    public void addOptions(MaterialButtonToggleGroup myGroup) {
+        myGroup.removeAllViews();
+        for(MultipleChoiceOption option: questionController.options) {
+            MaterialButton newButton = new MaterialButton(this.getContext());
+            newButton.setText(option.getOption());
+            myGroup.addView(newButton);
+        }
+        questionView.removeAllViews();
+        questionView.addView(questionContent);
+    }
+
 
     /**
     // TODO: Rename method, update argument and hook method into UI event

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -90,6 +89,7 @@ public class AgeAndGenderFragment extends Fragment {
                 if(signup(ageInput, gender)) {
                     Intent intent = new Intent(v.getContext(), MainActivity.class);
                     startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -118,7 +118,6 @@ public class AgeAndGenderFragment extends Fragment {
             genderId = (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
             genderState = genderId.getText().toString();
             try{
-                Toast.makeText(this.getContext(), "Gender :"+genderState, Toast.LENGTH_LONG).show();
                 ProfileSetup.profile.setGender(genderState);
             } catch (Exception e) {
                 e.printStackTrace();
