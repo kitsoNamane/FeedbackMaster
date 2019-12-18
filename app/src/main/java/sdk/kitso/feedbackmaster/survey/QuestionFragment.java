@@ -6,19 +6,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.textview.MaterialTextView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.Globals;
+import sdk.kitso.feedbackmaster.MyListAdapter;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.db.MultipleChoiceOption;
 import sdk.kitso.feedbackmaster.question.QuestionController;
 
 
@@ -40,7 +39,7 @@ public class QuestionFragment extends Fragment {
     BottomNavigationView questionNav;
     FrameLayout questionView;
     MaterialTextView questionTitle;
-    MaterialButtonToggleGroup group;
+    ListView group;
     View questionContent;
 
     // TODO: Rename and change types of parameters
@@ -81,7 +80,6 @@ public class QuestionFragment extends Fragment {
         // Get value passed to this fragment using safeargs
         questionFragmentArgs = QuestionFragmentArgs.fromBundle(getArguments());
         questionController = QuestionController.getInstance();
-
     }
 
     @Override
@@ -95,9 +93,8 @@ public class QuestionFragment extends Fragment {
         questionController.setQuestions(questionFragmentArgs.getSurveyId());
         questionTitle = view.findViewById(R.id.question_title);
         questionTitle.setText(questionController.nextQuestion().getQuestion());
-
+        Toast.makeText(this.getContext(), "OPTIONS : "+questionController.options.size(), Toast.LENGTH_LONG).show();
         renderQuestion();
-
         questionNav.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem item) {
@@ -148,6 +145,7 @@ public class QuestionFragment extends Fragment {
     }
 
     public void renderQuestion() {
+        View view = questionNav.findViewById(R.id.dummy);
         switch(questionController.currentQuestion.getType()) {
             case Globals.RATING_STARS:
                 questionContent = setQuestionContent(R.layout.rating_stars);
@@ -157,14 +155,12 @@ public class QuestionFragment extends Fragment {
             case Globals.MULTIPLE_CHOICE:
                 questionContent = setQuestionContent(R.layout.multiple_choice);
                 group = questionContent.findViewById(R.id.multiply_options);
-                group.setSingleSelection(true);
-                addOptions(group);
+                addOptions(group, ListView.CHOICE_MODE_SINGLE);
                 break;
             case Globals.MULTIPLE_CHOICES:
                 questionContent = setQuestionContent(R.layout.multiple_choice);
                 group = questionContent.findViewById(R.id.multiply_options);
-                group.setSingleSelection(false);
-                addOptions(group);
+                addOptions(group, ListView.CHOICE_MODE_MULTIPLE);
                 break;
             case Globals.TRUE_FALSE:
                 questionContent = setQuestionContent(R.layout.true_or_false);
@@ -190,13 +186,11 @@ public class QuestionFragment extends Fragment {
         }
     }
 
-    public void addOptions(MaterialButtonToggleGroup myGroup) {
-        myGroup.removeAllViews();
-        for(MultipleChoiceOption option: questionController.options) {
-            MaterialButton newButton = new MaterialButton(this.getContext());
-            newButton.setText(option.getOption());
-            myGroup.addView(newButton);
-        }
+    public void addOptions(ListView myGroup, int CHOICE_MODE) {
+        myGroup.setAdapter(new MyListAdapter(this.getContext(), questionController.options.get(0).getOptions()));
+        myGroup.setDivider(null);
+        myGroup.setChoiceMode(CHOICE_MODE);
+        Toast.makeText(this.getContext(), "COWS : "+questionController.options.get(0).getOptions().size(), Toast.LENGTH_LONG).show();
         questionView.removeAllViews();
         questionView.addView(questionContent);
     }

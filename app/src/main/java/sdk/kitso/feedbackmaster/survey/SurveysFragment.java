@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.MockData;
 import sdk.kitso.feedbackmaster.R;
@@ -78,7 +79,12 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         }
         mock = new MockData(this.getContext());
         if(MainActivity.surveyDB.surveyDao().getSurveys().size() <= 0) {
-            mock.generateSurveys(100);
+            Globals.executor.execute(()->{
+                mock.generateSurveys(100);
+            });
+            Globals.executor.execute(()->{
+                mock.generateOptions();
+            });
         }
 
         //if(questionDB.questionDao().getQuestions(0).size() <= 0) {

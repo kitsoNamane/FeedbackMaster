@@ -20,6 +20,9 @@ public interface QuestionDao {
     @Query("SELECT * from questions where surveyId = :surveyId")
     public List<Question> getQuestions(int surveyId);
 
+    @Query("SELECT * from questions")
+    public List<Question> getAllQuestions();
+
     @Query("SELECT * from questions where id = :questionId")
     public List<QuestionsAndAllOptions> getOptions(int questionId);
 }

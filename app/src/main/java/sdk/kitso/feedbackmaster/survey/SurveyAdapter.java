@@ -119,23 +119,19 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
             depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
             // Currently O(X^2) complexity
             // find way to speed it up to O(X) complexity
-            for (int i = 0; i < branches_list.size(); i++) {
-                for (int j = 0; j < branches_list.get(i).getBranches().size(); j++) {
-                    checkBox = new RadioButton(holder.cardView.getContext());
-                    checkBox.setText(branches_list.get(i).getBranches().get(j).getBranch());
-                    checkBox.setTextSize(Float.parseFloat("16"));
-                    checkBox.setPadding(10, 10, 10, 10);
-                    holder.branches.addView(checkBox);
-                }
+            for (int j = 0; j < branches_list.get(0).getBranches().size(); j++) {
+                checkBox = new RadioButton(holder.cardView.getContext());
+                checkBox.setText(branches_list.get(0).getBranches().get(j).getBranch());
+                checkBox.setTextSize(Float.parseFloat("16"));
+                checkBox.setPadding(10, 10, 10, 10);
+                holder.branches.addView(checkBox);
             }
-            for (int i = 0; i < depts.size(); i++) {
-                for (int j = 0; j < depts.get(i).getDepartments().size(); j++) {
-                    checkBox = new RadioButton(holder.cardView.getContext());
-                    checkBox.setText(depts.get(i).getDepartments().get(j).getDept());
-                    checkBox.setTextSize(Float.parseFloat("16"));
-                    checkBox.setPadding(10, 10, 10, 10);
-                    holder.departments.addView(checkBox);
-                }
+            for (int j = 0; j < depts.get(0).getDepartments().size(); j++) {
+                checkBox = new RadioButton(holder.cardView.getContext());
+                checkBox.setText(depts.get(0).getDepartments().get(j).getDept());
+                checkBox.setTextSize(Float.parseFloat("16"));
+                checkBox.setPadding(10, 10, 10, 10);
+                holder.departments.addView(checkBox);
             }
         }
         if (holder.cardView.isChecked()) {

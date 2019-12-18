@@ -67,14 +67,19 @@ public class MockData {
                 question.setSurveyId(i);
                 type = qtype.nextInt(6);
                 question.setType(type);
-                for (int j = 0; j < 6; j++) {
-                    option.setQuestionId(k);
-                    option.setOption(faker.lorem().sentence());
-                    SurveysFragment.questionDB.questionDao().addOption(option);
-                }
                 SurveysFragment.questionDB.questionDao().addQuestion(question);
             }
             MainActivity.surveyDB.surveyDao().addSurvey(survey);
+        }
+    }
+
+    public void generateOptions() {
+        for(int i=0; i <= 1010; i++ ) {
+            for(int l = 0; l < 6; l++) {
+                option.setQuestionId(i);
+                option.setOption(faker.lorem().sentence());
+                SurveysFragment.questionDB.questionDao().addOption(option);
+            }
         }
     }
 }

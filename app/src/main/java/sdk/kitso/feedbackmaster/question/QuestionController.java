@@ -4,6 +4,7 @@ import java.util.List;
 
 import sdk.kitso.feedbackmaster.db.MultipleChoiceOption;
 import sdk.kitso.feedbackmaster.db.Question;
+import sdk.kitso.feedbackmaster.db.QuestionsAndAllOptions;
 import sdk.kitso.feedbackmaster.survey.SurveysFragment;
 
 // Make it a Singleton: If it's already created re-use the instantiated one
@@ -13,7 +14,7 @@ public class QuestionController {
     public Question currentQuestion;
     private List<Question> questions;
     public int listIterator;
-    public List<MultipleChoiceOption> options;
+    public List<QuestionsAndAllOptions> options;
 
     private QuestionController() {
         currentQuestion = new Question();
@@ -38,7 +39,7 @@ public class QuestionController {
         if(this.options == null || this.options.size() <= 0) {
             return null;
         }
-        return this.options;
+        return null;
     }
 
     public Question nextQuestion() {
@@ -46,8 +47,7 @@ public class QuestionController {
         if(this.listIterator < this.maxQuestions) {
             this.currentQuestion = this.questions.get(this.listIterator);
             this.options = SurveysFragment.questionDB.questionDao()
-                    .getOptions(this.currentQuestion.getId())
-                    .iterator().next().options;
+                    .getOptions(this.currentQuestion.getId());
             return this.currentQuestion;
         }
         this.listIterator -= 1;
@@ -59,8 +59,7 @@ public class QuestionController {
         if(this.listIterator >= 0) {
             this.currentQuestion = this.questions.get(this.listIterator);
             this.options = SurveysFragment.questionDB.questionDao()
-                    .getOptions(this.currentQuestion.getId())
-                    .iterator().next().options;
+                    .getOptions(this.currentQuestion.getId());
             return this.currentQuestion;
         }
         this.listIterator += 1;

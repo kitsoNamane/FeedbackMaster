@@ -10,6 +10,9 @@ import android.widget.Toast;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     NavController navController;
     Profile profile;
     Intent intent;
+    public static Executor executor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
         profile = surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
+        executor = Executors.newSingleThreadExecutor();
         if(profile == null) {
             intent = new Intent(this, ProfileSetup.class);
             startActivity(intent);

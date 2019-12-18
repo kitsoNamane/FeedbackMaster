@@ -5,15 +5,16 @@
     android:id="@+id/questions"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".survey.QuestionFragment" >
+    android:orientation="vertical"
+    tools:context=".survey.QuestionFragment">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/question_title"
-        android:layout_width="336dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:textSize="18sp"
@@ -23,20 +24,18 @@
 
     <FrameLayout
         android:id="@+id/question_showcase"
-        android:layout_width="342dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/question_title"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/question_nav_view"
+        app:layout_constraintEnd_toEndOf="@+id/question_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/question_nav_view">
-        />
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/question_title"></FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/question_nav_view"
@@ -44,8 +43,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/question_nav_menu" />
+        app:menu="@menu/question_nav_menu">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
