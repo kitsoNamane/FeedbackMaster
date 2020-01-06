@@ -4,23 +4,21 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.material.checkbox.MaterialCheckBox;
+import android.widget.Toast;
 
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.MockData;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.db.Branch;
-import sdk.kitso.feedbackmaster.db.Department;
-import sdk.kitso.feedbackmaster.db.Profile;
+import sdk.kitso.feedbackmaster.db.QuestionDB;
 import sdk.kitso.feedbackmaster.db.Survey;
-import sdk.kitso.feedbackmaster.db.SurveyAndAllBranches;
-import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
 
 
 /**
@@ -31,7 +29,7 @@ import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
  * Use the {@link SurveysFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyItemClickedListener {
+public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyItemClickedListener  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -39,19 +37,13 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
     public static RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private SurveyAdapter adapter;
-
-    private Survey survey;
-    private Branch branch;
-    private Department dept;
-    private Profile profile;
     private MockData mock;
+    public static QuestionDB questionDB;
+    SurveyAdapter.SurveyViewHolder holder;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-
-
 
     public SurveysFragment() {
         // Required empty public constructor
@@ -78,18 +70,26 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        questionDB = Room.databaseBuilder(this.getContext().getApplicationContext(), QuestionDB.class, "questions")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries().build();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        survey = new Survey();
-        profile = new Profile();
-        branch = new Branch();
-        dept = new Department();
-        mock = new MockData(profile, survey, branch, dept);
+        mock = new MockData(this.getContext());
         if(MainActivity.surveyDB.surveyDao().getSurveys().size() <= 0) {
-            mock.generateSurveys(100);
+            Globals.executor.execute(()->{
+                mock.generateSurveys(100);
+            });
+            Globals.executor.execute(()->{
+                mock.generateOptions();
+            });
         }
+
+        //if(questionDB.questionDao().getQuestions(0).size() <= 0) {
+        //    mock.generateQuestions();
+        //}
         List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
         adapter = new SurveyAdapter(surveys, this);
     }
@@ -109,31 +109,21 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
 
     @Override
     public void onItemClicked(View view, Survey survey) {
-        SurveyAdapter.SurveyViewHolder holder = (SurveyAdapter.SurveyViewHolder) recyclerView.findContainingViewHolder(view);
-        survey.setChecked(!survey.getChecked());
-        holder.cardView.setChecked(survey.getChecked());
-        if(holder.cardView.isChecked()==true && holder.departments.getChildCount() <= 2) {
-            List<SurveyAndAllBranches> branches = MainActivity.surveyDB.surveyDao().getBranches(survey.getId());
-            List<SurveyAndAllDepartments> depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
-            for(int i = 0; i < branches.size(); i++) {
-                for(int j = 0; j < branches.get(i).getBranches().size(); j++) {
-                    MaterialCheckBox checkBox = new MaterialCheckBox(view.getContext());
-                    checkBox.setText(branches.get(i).getBranches().get(j).getBranch());
-                    holder.branches.addView(checkBox);
-                }
-            }
-            for(int i = 0; i < depts.size(); i++) {
-                for(int j = 0; j < depts.get(i).getDepartments().size(); j++) {
-                    MaterialCheckBox checkBox = new MaterialCheckBox(view.getContext());
-                    checkBox.setText(depts.get(i).getDepartments().get(j).getDept());
-                    holder.departments.addView(checkBox);
-                }
-            }
-        }
-        if(holder.cardView.isChecked()) {
-            setVisibility(holder, View.VISIBLE);
-        } else {
-            setVisibility(holder, View.GONE);
+        switch (view.getId()) {
+        case(R.id.survey_card):
+            holder = (SurveyAdapter.SurveyViewHolder) recyclerView.findContainingViewHolder(view);
+            adapter.bindDynamicContent(holder, survey);
+            break;
+        case(R.id.start_survey):
+            SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());
+            Toast.makeText(this.getContext(), "SurveyId :"+survey.getId(), Toast.LENGTH_LONG).show();
+            Navigation.findNavController(view).navigate(actionSurvey);
+            break;
+        default:
+            Toast.makeText(this.getContext(), "ButtonId :"+Integer.toString(R.id.start_survey)
+                    +" CardId :"+Integer.toString(R.id.survey_card)+" Got :"+Integer.toString(view.getId()),
+                    Toast.LENGTH_LONG
+            ).show();
         }
 
     }

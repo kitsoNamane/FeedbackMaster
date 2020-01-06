@@ -1,50 +1,40 @@
 package sdk.kitso.feedbackmaster.profile;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.fragment.app.Fragment;
-import sdk.kitso.feedbackmaster.Globals;
-import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.db.Profile;
-
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ProfileFragment.OnFragmentInteractionListener} interface
+ * {@link SetPhoneFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ProfileFragment#newInstance} factory method to
+ * Use the {@link SetPhoneFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
+public class SetPhoneFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    TextInputEditText viewPhone;
-    TextInputEditText viewAge;
-    RadioGroup viewGender;
-    RadioButton male;
-    RadioButton female;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    Profile profile;
-
     //private OnFragmentInteractionListener mListener;
 
-    public ProfileFragment() {
+    public SetPhoneFragment() {
         // Required empty public constructor
     }
 
@@ -54,11 +44,11 @@ public class ProfileFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
+     * @return A new instance of fragment SetPhoneFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static SetPhoneFragment newInstance(String param1, String param2) {
+        SetPhoneFragment fragment = new SetPhoneFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -73,61 +63,54 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        viewPhone = view.findViewById(R.id.phone_view);
-        viewAge = view.findViewById(R.id.age_view);
-        viewGender = view.findViewById(R.id.gender_view);
-        male = viewGender.findViewById(R.id.male_view);
-        female = viewGender.findViewById(R.id.female_view);
-
-        viewPhone.setText(Integer.toString(profile.getPhone()));
-        viewAge.setText(Integer.toString(profile.getAge()));
-        FloatingActionButton editProfile = view.findViewById(R.id.edit_profile);
-
-        editProfile.setOnClickListener(new View.OnClickListener() {
+        View view = inflater.inflate(R.layout.fragment_set_phone, container, false);
+        final TextInputEditText phoneInput = view.findViewById(R.id.phone_input);
+        MaterialButton gotoAgeAndGender = view.findViewById(R.id.goto_age_and_gender);
+        gotoAgeAndGender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleInput(true);
+                // validate input
+                if(signup(phoneInput)) {
+                    ProfileSetup.navController.navigate(R.id.ageAndGenderFragment);
+                }
             }
         });
-
-
-        if(profile.getGender().equals("male")) {
-            male.setChecked(true);
-        } else {
-            female.setChecked(true);
-        }
-
-        //! Testing for now,
-        if(profile.getProfile() == false) {
-            viewPhone.setError(null,
-                    view.getResources()
-                        .getDrawable(R.drawable.ic_warning_orange_700_36dp));
-        } else {
-            viewPhone.setError(null,
-                    view.getResources()
-                            .getDrawable(R.drawable.ic_verified_user_black_24dp));
-        }
-        //Disable All Input until edit requested
-        toggleInput(false);
         return view;
     }
 
-    public void toggleInput(boolean enabledState) {
-        viewPhone.setEnabled(enabledState);
-        viewAge.setEnabled(enabledState);
-        male.setEnabled(enabledState);
-        female.setEnabled(enabledState);
+    public boolean signup(TextInputEditText textInputEditText) {
+        String phone = textInputEditText.getText().toString().trim();
+        Toast.makeText(this.getContext(), "Phone :"+phone+" "+Integer.toString(phone.length()), Toast.LENGTH_LONG).show();
+        if(!phone.isEmpty()==true && phone.length()==8) {
+            try {
+                ProfileSetup.profile.setPhone(new Integer(phone));
+            } catch (Exception e) {
+                textInputEditText.setError("Number Invalid");
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        textInputEditText.setError("Number Required");
+        return false;
     }
 
-    /** TODO: Rename method, update argument and hook method into UI event
+    public void hideSoftKeyboard(View view) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager)
+                    view.getContext().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            //imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
+    /**
+    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -163,5 +146,5 @@ public class ProfileFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    */
+     */
 }

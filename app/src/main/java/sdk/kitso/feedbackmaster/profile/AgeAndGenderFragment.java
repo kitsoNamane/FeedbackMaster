@@ -1,5 +1,6 @@
 package sdk.kitso.feedbackmaster.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,44 +8,42 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.db.Profile;
-
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ProfileFragment.OnFragmentInteractionListener} interface
+ * {@link AgeAndGenderFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ProfileFragment#newInstance} factory method to
+ * Use the {@link AgeAndGenderFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
+public class AgeAndGenderFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    TextInputEditText viewPhone;
-    TextInputEditText viewAge;
-    RadioGroup viewGender;
-    RadioButton male;
-    RadioButton female;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TextInputEditText ageInput;
+    private RadioGroup gender;
+    private RadioButton male;
+    private RadioButton female;
+    private RadioButton genderId;
+    private String genderState;
 
-    Profile profile;
 
     //private OnFragmentInteractionListener mListener;
 
-    public ProfileFragment() {
+    public AgeAndGenderFragment() {
         // Required empty public constructor
     }
 
@@ -54,11 +53,11 @@ public class ProfileFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
+     * @return A new instance of fragment AgeAndGenderFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static AgeAndGenderFragment newInstance(String param1, String param2) {
+        AgeAndGenderFragment fragment = new AgeAndGenderFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -73,61 +72,82 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        viewPhone = view.findViewById(R.id.phone_view);
-        viewAge = view.findViewById(R.id.age_view);
-        viewGender = view.findViewById(R.id.gender_view);
-        male = viewGender.findViewById(R.id.male_view);
-        female = viewGender.findViewById(R.id.female_view);
-
-        viewPhone.setText(Integer.toString(profile.getPhone()));
-        viewAge.setText(Integer.toString(profile.getAge()));
-        FloatingActionButton editProfile = view.findViewById(R.id.edit_profile);
-
-        editProfile.setOnClickListener(new View.OnClickListener() {
+        View view = inflater.inflate(R.layout.fragment_age_and_gender, container, false);
+        ageInput = view.findViewById(R.id.age_input);
+        gender = view.findViewById(R.id.gender_input);
+        male = gender.findViewById(R.id.male_radio);
+        female = gender.findViewById(R.id.female_radio);
+        MaterialButton gotoMainActivity = view.findViewById(R.id.goto_main);
+        gotoMainActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleInput(true);
+                if(signup(ageInput, gender)) {
+                    Intent intent = new Intent(v.getContext(), MainActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
             }
         });
-
-
-        if(profile.getGender().equals("male")) {
-            male.setChecked(true);
-        } else {
-            female.setChecked(true);
-        }
-
-        //! Testing for now,
-        if(profile.getProfile() == false) {
-            viewPhone.setError(null,
-                    view.getResources()
-                        .getDrawable(R.drawable.ic_warning_orange_700_36dp));
-        } else {
-            viewPhone.setError(null,
-                    view.getResources()
-                            .getDrawable(R.drawable.ic_verified_user_black_24dp));
-        }
-        //Disable All Input until edit requested
-        toggleInput(false);
         return view;
     }
 
-    public void toggleInput(boolean enabledState) {
-        viewPhone.setEnabled(enabledState);
-        viewAge.setEnabled(enabledState);
-        male.setEnabled(enabledState);
-        female.setEnabled(enabledState);
+    public boolean signup(TextInputEditText textInputEditText, RadioGroup radioGroup) {
+        String age = textInputEditText.getText().toString().trim();
+        boolean isAgeValid = false;
+        boolean isGenderValid = false;
+        if(!age.isEmpty()) {
+            try {
+                ProfileSetup.profile.setAge(new Integer(age));
+            } catch (Exception e) {
+                textInputEditText.setError("Age Invalid");
+                e.printStackTrace();
+            }
+            isAgeValid = true;
+        } else {
+            textInputEditText.setError("Age Required");
+        }
+
+        if(!(radioGroup.getCheckedRadioButtonId() == -1)) {
+            male.setError(null);
+            female.setError(null);
+            genderId = (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+            genderState = genderId.getText().toString();
+            try{
+                ProfileSetup.profile.setGender(genderState);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            isGenderValid = true;
+        } else {
+            male.setError("");
+            female.setError("");
+            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    male.setError(null);
+                    female.setError(null);
+                }
+            });
+        }
+
+        if(isAgeValid == true && isGenderValid == true) {
+            ProfileSetup.profile.setProfile(true);
+            Globals.executor.execute(()->{
+                ProfileSetup.surveyDB.surveyDao().addProfile(ProfileSetup.profile);
+            });
+        }
+        // Binary End-Gate guarantees that we'll get the right results nomatter the combinations
+        return isAgeValid && isGenderValid;
     }
 
-    /** TODO: Rename method, update argument and hook method into UI event
+    /**
+    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -163,5 +183,5 @@ public class ProfileFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    */
+     */
 }

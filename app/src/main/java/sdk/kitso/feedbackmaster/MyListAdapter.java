@@ -5,29 +5,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckedTextView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.google.android.material.button.MaterialButton;
+
+import java.util.List;
+
+import sdk.kitso.feedbackmaster.db.MultipleChoiceOption;
 
 public class MyListAdapter extends BaseAdapter {
 
-    private ArrayList<String> answers;
+    private List<MultipleChoiceOption> options;
     private LayoutInflater layoutInflater;
 
-    public MyListAdapter(Context context, ArrayList<String> answers) {
-        this.answers = answers;
+    public MyListAdapter(Context context, List<MultipleChoiceOption> options) {
+        this.options = options;
         layoutInflater = LayoutInflater.from(context);
     }
     @Override
     public int getCount() {
-        return answers.size();
+        return options.size();
     }
     @Override
     public Object getItem(int position) {
-        return answers.get(position);
+        return options.get(position);
     }
     @Override
     public long getItemId(int position) {
@@ -36,18 +38,18 @@ public class MyListAdapter extends BaseAdapter {
     public View getView(int position, View v, ViewGroup vg) {
         ViewHolder holder;
         if (v == null) {
-            v = layoutInflater.inflate(R.layout.answer, null);
+            v = layoutInflater.inflate(R.layout.option_item, null);
             holder = new ViewHolder();
-            holder.answer = v.findViewById(R.id.answer_item);
+            holder.option = v.findViewById(R.id.option_item);
             v.setTag(holder);
         } else {
             holder = (ViewHolder) v.getTag();
         }
-        holder.answer.setText(answers.get(position));
+        holder.option.setText(options.get(position).getOption());
         return v;
     }
     static class ViewHolder {
-        CheckedTextView answer;
+        MaterialButton option;
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
@@ -68,5 +70,5 @@ public class MyListAdapter extends BaseAdapter {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
         listView.requestLayout();
-}
+    }
 }

@@ -9,10 +9,26 @@
         android:id="@+id/navigation_survey"
         android:name="sdk.kitso.feedbackmaster.survey.SurveysFragment"
         android:label="fragment_surveys"
-        tools:layout="@layout/fragment_surveys" />
+        tools:layout="@layout/fragment_surveys" >
+        <action
+            android:id="@+id/actionSurvey"
+            app:destination="@id/questionFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/navigation_profile"
         android:name="sdk.kitso.feedbackmaster.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/questionFragment"
+        android:name="sdk.kitso.feedbackmaster.survey.QuestionFragment"
+        android:label="fragment_question">
+        tools:layout="@layout/fragment_question"
+        <argument
+            android:name="surveyId"
+            app:argType="integer"
+        />
+    </fragment>
 </navigation>

@@ -3,14 +3,18 @@ package sdk.kitso.feedbackmaster.db;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import sdk.kitso.feedbackmaster.Globals;
 
 @Entity(tableName="profile")
 public class Profile {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey(autoGenerate = false)
+    int id = Globals.CURRENT_USER_ID;
 
     @ColumnInfo(name = "phone_number")
     private int phone;
+
+    @ColumnInfo(name = "profile_set")
+    private boolean profile = false;
 
     @ColumnInfo(name = "gender")
     private String gender;
@@ -21,28 +25,32 @@ public class Profile {
     public void setId(int id) {
         this.id = id;
     }
-
     public void setPhone(int phone) {
         this.phone = phone;
     }
-
     public void setGender(String gender) {
         this.gender = gender;
     }
-
     public void setAge(int age) {
         this.age = age;
     }
-
-    String getPhone() {
-        return Integer.toString(this.phone);
+    public void setProfile(boolean profile) {
+        this.profile = profile;
     }
 
-    String getGender() {
+    public int getPhone() {
+        return this.phone;
+    }
+    public boolean getProfile() {
+        return this.profile;
+    }
+    public int getId() {
+        return this.id;
+    }
+    public String getGender() {
         return this.gender;
     }
-
-    String getAge() {
-        return Integer.toString(this.age);
+    public int getAge() {
+        return this.age;
     }
 }

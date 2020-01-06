@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.RadioButton;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -14,11 +14,17 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.Survey;
+import sdk.kitso.feedbackmaster.db.SurveyAndAllBranches;
+import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
 
 public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyViewHolder> {
     public final List<Survey> surveys;
+    List<SurveyAndAllBranches> branches_list;
+    List<SurveyAndAllDepartments> depts;
+    RadioButton checkBox;
 
     public OnSurveyItemClickedListener onSurveyItemClickedListener;
 
@@ -43,12 +49,13 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
     public void onBindViewHolder(@NonNull final SurveyAdapter.SurveyViewHolder holder, final int position) {
         Survey survey = surveys.get(position);
         holder.bind(survey, onSurveyItemClickedListener);
-        if(survey.getChecked() == true && holder.cardView.isChecked() == true) {
+        if (survey.getChecked() == true && holder.cardView.isChecked() == true) {
             setVisibility(holder, View.VISIBLE);
-            Toast.makeText(holder.cardView.getContext(), "I'm still checked!! "+survey.getCompany(), Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(holder.cardView.getContext(), "I'm not checked!! "+survey.getCompany(), Toast.LENGTH_LONG).show();
-            holder.cardView.setChecked(survey.getChecked());
+        } else if(survey.getChecked()) {
+            survey.setChecked(!survey.getChecked());
+            bindDynamicContent(holder, survey);
+        }else {
+            holder.cardView.setChecked(false);
             setVisibility(holder, View.GONE);
         }
     }
@@ -87,16 +94,52 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
         public void bind(final Survey survey, final OnSurveyItemClickedListener onSurveyItemClickedListener) {
             this.company.setText(survey.getCompany());
             this.survey.setText(survey.getSurvey());
-            this.cardView.setId(survey.getId());
+            //this.cardView.setId(survey.getId());
             this.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onSurveyItemClickedListener.onItemClicked(cardView, survey);
                 }
             });
+
+            this.start.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onSurveyItemClickedListener.onItemClicked(start, survey);
+                }
+            });
         }
     }
 
+    public void bindDynamicContent(SurveyViewHolder holder, Survey survey) {
+        survey.setChecked(!survey.getChecked());
+        holder.cardView.setChecked(survey.getChecked());
+        if (holder.cardView.isChecked() == true && holder.departments.getChildCount() <= 2) {
+            branches_list = MainActivity.surveyDB.surveyDao().getBranches(survey.getId());
+            depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
+            // Currently O(X^2) complexity
+            // find way to speed it up to O(X) complexity
+            for (int j = 0; j < branches_list.get(0).getBranches().size(); j++) {
+                checkBox = new RadioButton(holder.cardView.getContext());
+                checkBox.setText(branches_list.get(0).getBranches().get(j).getBranch());
+                checkBox.setTextSize(Float.parseFloat("16"));
+                checkBox.setPadding(10, 10, 10, 10);
+                holder.branches.addView(checkBox);
+            }
+            for (int j = 0; j < depts.get(0).getDepartments().size(); j++) {
+                checkBox = new RadioButton(holder.cardView.getContext());
+                checkBox.setText(depts.get(0).getDepartments().get(j).getDept());
+                checkBox.setTextSize(Float.parseFloat("16"));
+                checkBox.setPadding(10, 10, 10, 10);
+                holder.departments.addView(checkBox);
+            }
+        }
+        if (holder.cardView.isChecked()) {
+            setVisibility(holder, View.VISIBLE);
+        } else {
+            setVisibility(holder, View.GONE);
+        }
+    }
     interface OnSurveyItemClickedListener {
         public void onItemClicked(View view, Survey survey);
     }

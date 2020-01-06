@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/survey_card"
     android:layout_height="wrap_content"
     android:layout_marginStart="10dp"
     android:layout_marginLeft="10dp"
@@ -12,7 +13,7 @@
     android:checkable="true"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="5dp"
     app:cardElevation="3dp"
     app:cardMaxElevation="6dp">
 
@@ -30,20 +31,17 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center"
-            android:textSize="30sp"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></com.google.android.material.textview.MaterialTextView>
+            app:layout_constraintTop_toTopOf="parent">
+        </com.google.android.material.textview.MaterialTextView>
 
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginBottom="4dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintBottom_toTopOf="@+id/survey_title"
@@ -61,19 +59,18 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:gravity="center"
-            android:textSize="24sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/company_name"></com.google.android.material.textview.MaterialTextView>
+            app:layout_constraintTop_toBottomOf="@+id/company_name">
+        </com.google.android.material.textview.MaterialTextView>
 
         <RadioGroup
             android:id="@+id/branch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginRight="16dp"
             android:orientation="vertical"
             android:visibility="gone"
@@ -85,7 +82,8 @@
                 android:id="@+id/select_branch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/select_branch" />
+                android:text="@string/select_branch"
+                android:textSize="14sp" />
 
             <View
                 android:id="@+id/divider2"
@@ -98,10 +96,8 @@
             android:id="@+id/department"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:orientation="vertical"
             android:visibility="gone"
@@ -113,7 +109,8 @@
                 android:id="@+id/select_department"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/select_department" />
+                android:text="@string/select_department"
+                android:textSize="14sp" />
 
             <View
                 android:id="@+id/divider3"
@@ -122,22 +119,35 @@
                 android:background="?android:attr/listDivider" />
         </RadioGroup>
 
-        <Button
-            android:id="@+id/start_survey"
+        <View
+            android:id="@+id/divider8"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginTop="2dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/department" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/start_survey"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/start_survey"
-            android:visibility="gone"
+            android:textSize="18sp"
+            android:visibility="visible"
+            app:cornerRadius="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/department" />
+            app:layout_constraintTop_toBottomOf="@+id/divider8" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
