@@ -2,7 +2,6 @@ package sdk.kitso.feedbackmaster.db;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "surveys")
@@ -40,6 +39,7 @@ public class Survey {
         //return "SDK Digital Labs";
     }
 
+
     public String getSurvey() {
         return this.survey;
     }
@@ -52,3 +52,7 @@ public class Survey {
         return this.checked;
     }
 }
+
+
+
+

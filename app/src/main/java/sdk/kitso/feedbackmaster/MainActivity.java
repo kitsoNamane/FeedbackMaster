@@ -1,19 +1,5 @@
 package sdk.kitso.feedbackmaster;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.room.Room;
-import sdk.kitso.feedbackmaster.db.SurveyDB;
-import sdk.kitso.feedbackmaster.survey.SurveysFragment;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +18,15 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+import androidx.room.Room;
+import sdk.kitso.feedbackmaster.db.SurveyDB;
+
 public class MainActivity extends AppCompatActivity {
     LinearLayout linearLayout;
     View setup_profile;
@@ -49,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         //linearLayout = findViewById(R.id.scroll_layout);
         MaterialToolbar toolbar = findViewById(R.id.toolbar);
         surveyDB = Room.databaseBuilder(getApplicationContext(), SurveyDB.class, "userdb")
+                .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
         setSupportActionBar(toolbar);
         BottomNavigationView navView = findViewById(R.id.nav_view);

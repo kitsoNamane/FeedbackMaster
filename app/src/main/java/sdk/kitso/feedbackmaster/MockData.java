@@ -1,14 +1,9 @@
 package sdk.kitso.feedbackmaster;
 
-import android.util.JsonReader;
-
 import com.github.javafaker.Faker;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.text.ParseException;
-
+import sdk.kitso.feedbackmaster.db.Branch;
+import sdk.kitso.feedbackmaster.db.Department;
 import sdk.kitso.feedbackmaster.db.Profile;
 import sdk.kitso.feedbackmaster.db.Survey;
 
@@ -16,12 +11,16 @@ import sdk.kitso.feedbackmaster.db.Survey;
 public class MockData {
     Faker faker;
     Survey survey;
+    Branch branch;
+    Department dept;
     Profile profile;
 
-    public MockData(Profile profile, Survey survey) {
+    public MockData(Profile profile, Survey survey, Branch branch, Department dept) {
         this.faker = new Faker();
         this.profile = profile;
         this.survey = survey;
+        this.dept = dept;
+        this.branch = branch;
     }
 
     public void generateProfile() {
@@ -38,6 +37,13 @@ public class MockData {
             survey.setId(i);
             survey.setCompany(faker.company().name());
             survey.setSurvey(faker.commerce().productName());
+
+            for(int j = 0; j < 3; j++) {
+                branch.setBrach(faker.address().cityName(), i);
+                dept.setDepartment(faker.commerce().department(), i);
+                MainActivity.surveyDB.surveyDao().addBranch(branch);
+                MainActivity.surveyDB.surveyDao().addDepartment(dept);
+            }
             MainActivity.surveyDB.surveyDao().addSurvey(survey);
         }
     }

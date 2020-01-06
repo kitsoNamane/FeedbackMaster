@@ -1,10 +1,8 @@
 package sdk.kitso.feedbackmaster.survey;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -15,15 +13,9 @@ import com.google.android.material.textview.MaterialTextView;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.selection.ItemDetailsLookup;
-import androidx.recyclerview.selection.ItemKeyProvider;
-import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.Survey;
-
-import static android.widget.Toast.*;
 
 public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyViewHolder> {
     public final List<Survey> surveys;
@@ -49,9 +41,24 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
 
     @Override
     public void onBindViewHolder(@NonNull final SurveyAdapter.SurveyViewHolder holder, final int position) {
-        holder.bind(surveys.get(position), onSurveyItemClickedListener);
+        Survey survey = surveys.get(position);
+        holder.bind(survey, onSurveyItemClickedListener);
+        if(survey.getChecked() == true && holder.cardView.isChecked() == true) {
+            setVisibility(holder, View.VISIBLE);
+            Toast.makeText(holder.cardView.getContext(), "I'm still checked!! "+survey.getCompany(), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(holder.cardView.getContext(), "I'm not checked!! "+survey.getCompany(), Toast.LENGTH_LONG).show();
+            holder.cardView.setChecked(survey.getChecked());
+            setVisibility(holder, View.GONE);
+        }
     }
 
+
+    public static void setVisibility(SurveyAdapter.SurveyViewHolder holder, int VISIBILITY) {
+        holder.branches.setVisibility(VISIBILITY);
+        holder.departments.setVisibility(VISIBILITY);
+        holder.start.setVisibility(VISIBILITY);
+    }
 
 
     @Override
@@ -66,7 +73,6 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
         LinearLayout branches;
         LinearLayout departments;
         MaterialButton start;
-        boolean checked = false;
 
         public SurveyViewHolder(View view) {
             super(view);
@@ -85,13 +91,13 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
             this.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onSurveyItemClickedListener.onItemClicked(survey);
+                    onSurveyItemClickedListener.onItemClicked(cardView, survey);
                 }
             });
         }
     }
 
     interface OnSurveyItemClickedListener {
-        public void onItemClicked(Survey survey);
+        public void onItemClicked(View view, Survey survey);
     }
 }
