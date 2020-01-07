@@ -2,6 +2,7 @@ package sdk.kitso.feedbackmaster.db;
 
 import java.util.List;
 
+import androidx.paging.DataSource;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -28,6 +29,9 @@ public interface SurveyDao {
 
     @Query("select * from surveys")
     public List<Survey> getSurveys();
+
+    @Query("select * from surveys")
+    public DataSource.Factory<Integer, Survey> getAllSurveys();
 
     @Query("SELECT * from surveys where id = :surveyId")
     public List<SurveyAndAllBranches> getBranches(int surveyId);

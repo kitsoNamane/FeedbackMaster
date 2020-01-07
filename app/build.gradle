@@ -2,6 +2,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
 
 android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     compileSdkVersion 29
     defaultConfig {
         applicationId "sdk.kitso.feedbackmaster"
@@ -17,10 +21,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-    compileOptions {
-        targetCompatibility = 1.8
-        sourceCompatibility = 1.8
     }
 }
 
@@ -43,6 +43,17 @@ dependencies {
     implementation group: 'com.github.javafaker', name: 'javafaker', version: '0.18'
     implementation 'androidx.navigation:navigation-fragment:2.1.0'
     implementation 'androidx.navigation:navigation-ui:2.1.0'
+    def lifecycle_version = "2.1.0"
+
+    // ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    def paging_version = "2.1.1"
+
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "com.google.code.gson:gson:2.8.5"
+
+    implementation "com.squareup.retrofit2:converter-gson:2.7.1"
+    implementation "com.squareup.retrofit2:retrofit:2.7.1"
     debugImplementation 'com.idescout.sql:sqlscout-server:4.1'
     releaseImplementation 'com.idescout.sql:sqlscout-server-noop:4.1'
 }

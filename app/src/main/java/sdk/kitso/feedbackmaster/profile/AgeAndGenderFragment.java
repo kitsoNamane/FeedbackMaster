@@ -138,9 +138,7 @@ public class AgeAndGenderFragment extends Fragment {
 
         if(isAgeValid == true && isGenderValid == true) {
             ProfileSetup.profile.setProfile(true);
-            Globals.executor.execute(()->{
-                ProfileSetup.surveyDB.surveyDao().addProfile(ProfileSetup.profile);
-            });
+            ProfileSetup.surveyDB.surveyDao().addProfile(ProfileSetup.profile);
         }
         // Binary End-Gate guarantees that we'll get the right results nomatter the combinations
         return isAgeValid && isGenderValid;
