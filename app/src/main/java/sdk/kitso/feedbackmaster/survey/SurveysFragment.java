@@ -12,7 +12,6 @@ import java.util.List;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -23,7 +22,6 @@ import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.QuestionDB;
 import sdk.kitso.feedbackmaster.db.Survey;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataSource;
-import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataSourceImplementation;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApi;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApiService;
 
@@ -46,7 +44,7 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
     private SurveyAdapter adapter;
     private SurveyPagedAdapter pagedAdapter;
     private FeedbackMasterSurveyApiService apiService;
-    public static FeedbackMasterNetworkDataSourceImplementation dataSourceImplementation;
+    public static FeedbackMasterNetworkDataSource dataSourceImplementation;
     private MockData mock;
     private SurveyViewModel surveyViewModel;
     public static QuestionDB questionDB;
@@ -87,7 +85,6 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         String androidId = Settings.Secure.getString(this.getActivity().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         apiService = new FeedbackMasterSurveyApi().getService(androidId, getContext());
-        dataSourceImplementation = new FeedbackMasterNetworkDataSourceImplementation(apiService, this.getContext());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -107,9 +104,14 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         //}
         List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
         surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
-        surveyViewModel.init();
+
+        surveyViewModel.init(androidId, getContext());
         pagedAdapter = new SurveyPagedAdapter();
+        surveyViewModel.surveys.observe(this, it->{
+            pagedAdapter.submitList(it);
+        });
         adapter = new SurveyAdapter(surveys, this);
+        recyclerView.setAdapter(pagedAdapter);
     }
 
     @Override
@@ -121,7 +123,7 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(pagedAdapter);
         return view;
     }
 

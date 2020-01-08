@@ -11,6 +11,7 @@ import com.github.javafaker.Pokemon;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
@@ -26,22 +27,47 @@ import sdk.kitso.feedbackmaster.db.Survey;
 import sdk.kitso.feedbackmaster.db.SurveyAndAllBranches;
 import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
 
-public class SurveyPagedAdapter extends PagedListAdapter<Survey, SurveyPagedAdapter.SurveyViewHolder> {
-    List<SurveyAndAllBranches> branches_list;
-    List<SurveyAndAllDepartments> depts;
-    RadioButton checkBox;
+public class SurveyPagedAdapter extends PagedListAdapter<JsonObject, RecyclerView.ViewHolder> {
+    private int DATA_VIEW_TYPE = 1;
+    private int FOOTER_VIEW_TYPE = 2;
+    private State state = State.LOADING;
 
-    public static final DiffUtil.ItemCallback<Survey> DIFF_CALLBACK = new DiffUtil.ItemCallback<Survey>() {
+    public static final DiffUtil.ItemCallback<JsonObject> DIFF_CALLBACK = new DiffUtil.ItemCallback<JsonObject>() {
         @Override
-        public boolean areItemsTheSame(@NonNull Survey oldSurvey, @NonNull Survey newSurvey) {
-            return oldSurvey.getId() == newSurvey.getId();
+        public boolean areItemsTheSame(@NonNull JsonObject oldSurvey, @NonNull JsonObject newSurvey) {
+            return oldSurvey.toString() == newSurvey.toString();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull Survey oldSurvey, @NonNull Survey newSurvey) {
+        public boolean areContentsTheSame(@NonNull JsonObject oldSurvey, @NonNull JsonObject newSurvey) {
             return oldSurvey.equals(newSurvey);
         }
     };
+
+    protected SurveyPagedAdapter() {
+        super(DIFF_CALLBACK);
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType == DATA_VIEW_TYPE) {
+            return SurveyViewHolder.create(parent);
+        } else{
+            return ListFooterViewHolder.create(parent);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
+    }
+    /**List<SurveyAndAllBranches> branches_list;
+    List<SurveyAndAllDepartments> depts;
+    RadioButton checkBox;
+    private State state = State.LOADING;
+
+
 
 
     protected SurveyPagedAdapter() {
@@ -70,29 +96,34 @@ public class SurveyPagedAdapter extends PagedListAdapter<Survey, SurveyPagedAdap
         holder.departments.setVisibility(VISIBILITY);
         holder.start.setVisibility(VISIBILITY);
     }
+    */
 
-    public class SurveyViewHolder extends RecyclerView.ViewHolder {
-        MaterialTextView company;
-        MaterialTextView survey;
-        MaterialCardView cardView;
-        LinearLayout branches;
-        LinearLayout departments;
-        MaterialButton start;
-
-        public SurveyViewHolder(View view) {
-            super(view);
-            this.cardView = (MaterialCardView) view;
-            this.company = view.findViewById(R.id.company_name);
-            this.survey = view.findViewById(R.id.survey_title);
-            this.branches = view.findViewById(R.id.branch);
-            this.departments = view.findViewById(R.id.department);
-            this.start = view.findViewById(R.id.start_survey);
+    @Override
+    public int getItemViewType(int position) {
+        if(position < super.getItemCount()) {
+            return DATA_VIEW_TYPE;
+        } else {
+            return FOOTER_VIEW_TYPE;
         }
+    }
 
-        public void bind(Survey survey) {
-            this.company.setText(survey.getCompany());
-            this.survey.setText(survey.getSurvey());
-            //this.cardView.setId(survey.getId());
+    @Override
+    public int getItemCount() {
+        int i = 1;
+        if(hasFooter()) {
+            i = 1;
+        } else {
+            i = 0;
         }
+        return super.getItemCount() + i;
+    }
+
+    public boolean hasFooter() {
+        return super.getItemCount() != 0 && (state == State.LOADING || state == State.ERROR);
+    }
+
+    public void setState(State state) {
+        this.state = state;
+        notifyItemChanged(super.getItemCount());
     }
 }
