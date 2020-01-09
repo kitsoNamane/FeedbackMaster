@@ -1,5 +1,6 @@
 package sdk.kitso.feedbackmaster.db;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class BusinessData {
@@ -13,12 +14,15 @@ public class BusinessData {
 	private String alias;
 
 	@SerializedName("category")
+	@Expose
 	private Category category;
 
 	@SerializedName("country")
+	@Expose
 	private Country country;
 
 	@SerializedName("package")
+    @Expose
 	private Package aPackage;
 
 	public void setName(String name){

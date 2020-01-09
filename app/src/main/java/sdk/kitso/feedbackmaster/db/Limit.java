@@ -1,26 +1,32 @@
 package sdk.kitso.feedbackmaster.db;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Limit implements Serializable {
 
 	@SerializedName("campaign")
+	@Expose
 	private Campaign campaign;
 
 	@SerializedName("duration")
+	@Expose
 	private Duration duration;
 
 	@SerializedName("respondent")
+	@Expose
 	private Respondent respondent;
 
 	@SerializedName("question")
 	private int question;
 
 	@SerializedName("questionnaire")
+	@Expose
 	private Questionnaire questionnaire;
 
 	@SerializedName("units")
+	@Expose
 	private Units units;
 
 	public void setCampaign(Campaign campaign){

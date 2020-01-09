@@ -1,6 +1,8 @@
 package sdk.kitso.feedbackmaster.db;
 
 import java.io.Serializable;
+
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
@@ -22,9 +24,11 @@ public class Package implements Serializable {
         private String currency;
 
         @SerializedName("limit")
+        @Expose
         private Limit limit;
 
         @SerializedName("expiry")
+        @Expose
         private Expiry expiry;
 
         public void setName(String name){

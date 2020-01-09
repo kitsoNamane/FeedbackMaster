@@ -40,15 +40,20 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
     public void loadInitial(@NonNull LoadInitialParams<Integer> loadInitialParams, @NonNull LoadInitialCallback<Integer, DataItem> loadInitialCallback) {
         initialLoading.postValue(NetworkState.LOADING);
         networkState.postValue(NetworkState.LOADING);
+        Log.i("MESSAGE", "HELLO THE REQUEST IS GOING THROUGH");
 
         apiService.getNextSurveys(1).enqueue(new Callback<List<DataItem>>() {
             @Override
             public void onResponse(Call<List<DataItem>> call, Response<List<DataItem>> response) {
                 if(response.isSuccessful()) {
                     loadInitialCallback.onResult(response.body(), null, 2);
+                    for(DataItem item: response.body()) {
+                        Log.i("RESPONSE ", item.toString());
+                    }
                     initialLoading.postValue(NetworkState.LOADED);
                     networkState.postValue(NetworkState.LOADED);
                 } else {
+                    Log.i("ERROR ", "EOOR BAAP");
                     initialLoading.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }

@@ -1,5 +1,6 @@
 package sdk.kitso.feedbackmaster.db;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
@@ -7,9 +8,11 @@ import java.util.List;
 public class Data implements Serializable {
 
 	@SerializedName("data")
+	@Expose
 	private List<DataItem> dataItemList;
 
 	@SerializedName("meta")
+    @Expose
 	private Meta meta;
 
 	public void setDataItemList(List<DataItem> dataItemList){

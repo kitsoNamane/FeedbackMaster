@@ -34,7 +34,7 @@ public class SurveyViewModel extends ViewModel {
         PagedList.Config config = new PagedList.Config.Builder()
                 .setPageSize(pageSize)
                 .setInitialLoadSizeHint(pageSize)
-                .setEnablePlaceholders(true)
+                .setEnablePlaceholders(false)
                 .build();
         surveyLiveData = new LivePagedListBuilder(feedbackMasterNetworkDataFactory, config).build();
     }

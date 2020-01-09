@@ -1,5 +1,6 @@
 package sdk.kitso.feedbackmaster.db;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
@@ -21,6 +22,7 @@ public class Country implements Serializable {
         private String dialcode;
 
         @SerializedName("currency")
+        @Expose
         private Currency currency;
 
         public void setName(String name){

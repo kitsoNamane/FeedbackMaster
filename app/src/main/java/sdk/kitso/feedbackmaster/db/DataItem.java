@@ -22,6 +22,7 @@ public class DataItem implements Serializable {
 	private String ends;
 
 	@SerializedName("entries")
+	@Expose
 	private Entries entries;
 
 	@SerializedName("status")

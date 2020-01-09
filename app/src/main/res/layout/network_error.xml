@@ -12,6 +12,7 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="164dp"
         android:layout_height="117dp"
+        android:outlineSpotShadowColor="#00351B1B"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"

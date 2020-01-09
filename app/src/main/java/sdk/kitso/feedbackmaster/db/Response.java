@@ -1,6 +1,8 @@
 package sdk.kitso.feedbackmaster.db;
 
 import java.util.List;
+
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
@@ -13,15 +15,19 @@ public class Response implements Serializable {
 	private int errorCode;
 
 	@SerializedName("message")
+	@Expose
 	private List<String> message;
 
 	@SerializedName("data")
+	@Expose
 	private Data data;
 
 	@SerializedName("status_code")
+	@Expose
 	private Object statusCode;
 
 	@SerializedName("posted")
+	@Expose
 	private Posted posted;
 
 	public void setSuccess(boolean success){

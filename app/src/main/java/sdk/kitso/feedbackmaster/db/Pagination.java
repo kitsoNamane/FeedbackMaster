@@ -1,5 +1,6 @@
 package sdk.kitso.feedbackmaster.db;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
@@ -21,6 +22,7 @@ public class Pagination implements Serializable {
 	private int totalPages;
 
 	@SerializedName("links")
+	@Expose
 	private Links links;
 
 	public void setTotal(int total){
