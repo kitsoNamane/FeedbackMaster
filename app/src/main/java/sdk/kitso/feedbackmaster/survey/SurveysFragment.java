@@ -42,8 +42,8 @@ public class SurveysFragment extends Fragment  {
     private SurveyPagedAdapter pagedAdapter;
     private SurveyViewModel surveyViewModel;
     //private SurveyAdapter adapter;
-    //private MockData mock;
-    //public static QuestionDB questionDB;
+    private MockData mock;
+    public static QuestionDB questionDB;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -76,7 +76,7 @@ public class SurveysFragment extends Fragment  {
         super.onCreate(savedInstanceState);
         String androidId = Settings.Secure.getString(this.getActivity().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-        /**questionDB = Room.databaseBuilder(this.getContext().getApplicationContext(), QuestionDB.class, "questions")
+        questionDB = Room.databaseBuilder(this.getContext().getApplicationContext(), QuestionDB.class, "questions")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
         if (getArguments() != null) {
@@ -92,13 +92,12 @@ public class SurveysFragment extends Fragment  {
                 mock.generateOptions();
             });
         }
-
         //if(questionDB.questionDao().getQuestions(0).size() <= 0) {
         //    mock.generateQuestions();
         //}
-        List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
-        adapter = new SurveyAdapter(surveys, this);
-         */
+        //List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
+        //adapter = new SurveyAdapter(surveys, this);
+
         surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
         surveyViewModel.init(androidId, this.getContext());
         pagedAdapter = new SurveyPagedAdapter(this.getContext());
