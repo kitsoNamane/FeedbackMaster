@@ -15,7 +15,7 @@ import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.DataItem;
 
-public class SurveyPagedListAdapter extends PagedListAdapter<DataItem, RecyclerView.ViewHolder> {
+public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.ViewHolder> {
     private static final int TYPE_PROGRESS = 0;
     private static final int TYPE_ITEM = 1;
 
@@ -33,7 +33,7 @@ public class SurveyPagedListAdapter extends PagedListAdapter<DataItem, RecyclerV
             return oldSurvey.equals(newSurvey);
         }
     };
-    protected SurveyPagedListAdapter(Context context) {
+    protected SurveyPagedAdapter(Context context) {
         super(DIFF_CALLBACK);
         this.context = context;
     }

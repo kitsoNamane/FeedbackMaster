@@ -24,10 +24,6 @@ public class SurveyViewModel extends ViewModel {
     private int pageSize = 10;
     private FeedbackMasterNetworkDataFactory feedbackMasterNetworkDataFactory;
 
-    public SurveyViewModel(String device_uuid, Context context) {
-       init(device_uuid, context);
-    }
-
     public void init(String device_uuid, Context context) {
         feedbackMasterSurveyApiService = FeedbackMasterSurveyApi.getService(device_uuid, context);
         feedbackMasterNetworkDataFactory = new FeedbackMasterNetworkDataFactory(feedbackMasterSurveyApiService);

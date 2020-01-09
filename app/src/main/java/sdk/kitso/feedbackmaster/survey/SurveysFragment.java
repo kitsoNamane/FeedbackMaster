@@ -1,6 +1,7 @@
 package sdk.kitso.feedbackmaster.survey;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.Toast;
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,17 +32,18 @@ import sdk.kitso.feedbackmaster.db.Survey;
  * Use the {@link SurveysFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyItemClickedListener  {
+public class SurveysFragment extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     public static RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private SurveyAdapter adapter;
-    private MockData mock;
-    public static QuestionDB questionDB;
-    SurveyAdapter.SurveyViewHolder holder;
+    private SurveyPagedAdapter pagedAdapter;
+    private SurveyViewModel surveyViewModel;
+    //private SurveyAdapter adapter;
+    //private MockData mock;
+    //public static QuestionDB questionDB;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -70,7 +74,9 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        questionDB = Room.databaseBuilder(this.getContext().getApplicationContext(), QuestionDB.class, "questions")
+        String androidId = Settings.Secure.getString(this.getActivity().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        /**questionDB = Room.databaseBuilder(this.getContext().getApplicationContext(), QuestionDB.class, "questions")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
         if (getArguments() != null) {
@@ -92,6 +98,17 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         //}
         List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
         adapter = new SurveyAdapter(surveys, this);
+         */
+        surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
+        surveyViewModel.init(androidId, this.getContext());
+        pagedAdapter = new SurveyPagedAdapter(this.getContext());
+        surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
+            pagedAdapter.submitList(pagedList);
+        });
+
+        surveyViewModel.getNetworkState().observe(this, networkState->{
+            pagedAdapter.setNetworkState(networkState);
+        });
     }
 
     @Override
@@ -100,14 +117,13 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_surveys, container, false);
         recyclerView = view.findViewById(R.id.survey_list);
-        recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(pagedAdapter);
         return view;
     }
 
-    @Override
+    /**@Override
     public void onItemClicked(View view, Survey survey) {
         switch (view.getId()) {
         case(R.id.survey_card):
@@ -127,7 +143,6 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         }
     }
 
-    /**
      // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
