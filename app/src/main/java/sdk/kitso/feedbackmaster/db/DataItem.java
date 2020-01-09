@@ -1,5 +1,6 @@
 package sdk.kitso.feedbackmaster.db;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
@@ -27,6 +28,7 @@ public class DataItem implements Serializable {
 	private int status;
 
 	@SerializedName("business")
+    @Expose
 	private Business business;
 
 	public void setName(String name){
@@ -90,7 +92,7 @@ public class DataItem implements Serializable {
 	}
 
 	public Business getBusiness(){
-		return business;
+		return this.business;
 	}
 
 	@Override
@@ -106,5 +108,10 @@ public class DataItem implements Serializable {
 			",status = '" + status + '\'' + 
 			",business = '" + business + '\'' + 
 			"}";
-		}
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return this == other;
+	}
 }
