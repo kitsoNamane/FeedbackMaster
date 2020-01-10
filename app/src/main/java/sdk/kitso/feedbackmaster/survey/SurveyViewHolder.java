@@ -22,8 +22,13 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindTo(DataItem item) {
-        survey.setText(item.getName());
-        company.setText(item.getBusiness().getBusinessData().getName());
+        if(item == null) {
+            survey.setText("Company Survey");
+            company.setText("SDK DIGITAL LLC");
+        } else {
+            survey.setText(item.getName());
+            company.setText(item.getBusiness().getBusinessData().getName());
+        }
     }
 
     public static SurveyViewHolder create(ViewGroup parent) {

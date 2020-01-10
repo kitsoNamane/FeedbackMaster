@@ -22,6 +22,7 @@ import sdk.kitso.feedbackmaster.MockData;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.QuestionDB;
 import sdk.kitso.feedbackmaster.db.Survey;
+import sdk.kitso.feedbackmaster.db.SurveyDao;
 
 
 /**
@@ -40,7 +41,9 @@ public class SurveysFragment extends Fragment  {
     public static RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private SurveyPagedAdapter pagedAdapter;
+    private SurveyLocalPagedAdapter localPagedAdapter;
     private SurveyViewModel surveyViewModel;
+    private SurveyLocalViewModel localViewModel;
     //private SurveyAdapter adapter;
     private MockData mock;
     public static QuestionDB questionDB;
@@ -100,7 +103,15 @@ public class SurveysFragment extends Fragment  {
 
         surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
         surveyViewModel.init(androidId, this.getContext());
-        pagedAdapter = new SurveyPagedAdapter(this.getContext());
+        localViewModel = ViewModelProviders.of(this).get(SurveyLocalViewModel.class);
+        localViewModel.init(MainActivity.surveyDB.surveyDao());
+        localPagedAdapter = new SurveyLocalPagedAdapter();
+
+        localViewModel.surveys.observe(this, pageList->{
+            localPagedAdapter.submitList(pageList);
+        });
+
+       /** pagedAdapter = new SurveyPagedAdapter();
         surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
             pagedAdapter.submitList(pagedList);
         });
@@ -108,6 +119,7 @@ public class SurveysFragment extends Fragment  {
         surveyViewModel.getNetworkState().observe(this, networkState->{
             pagedAdapter.setNetworkState(networkState);
         });
+        */
     }
 
     @Override
@@ -118,7 +130,7 @@ public class SurveysFragment extends Fragment  {
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(pagedAdapter);
+        recyclerView.setAdapter(localPagedAdapter);
         return view;
     }
 

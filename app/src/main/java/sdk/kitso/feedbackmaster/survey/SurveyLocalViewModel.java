@@ -1,19 +1,20 @@
 package sdk.kitso.feedbackmaster.survey;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 import sdk.kitso.feedbackmaster.db.Survey;
 import sdk.kitso.feedbackmaster.db.SurveyDao;
 
-public class SurveyLocalViewModel {
+public class SurveyLocalViewModel extends ViewModel {
     private SurveyDao surveyDao;
-    public final LiveData<PagedList<Survey>> surveys;
+    public LiveData<PagedList<Survey>> surveys;
 
-    public SurveyLocalViewModel(SurveyDao surveyDao) {
+    public void init(SurveyDao surveyDao) {
         this.surveyDao = surveyDao;
-        surveys = new LivePagedListBuilder<>(surveyDao.getAllSurveys(), 10).build();
+        this.surveys = new LivePagedListBuilder<>(surveyDao.getAllSurveys(), 5).build();
     }
 
 }

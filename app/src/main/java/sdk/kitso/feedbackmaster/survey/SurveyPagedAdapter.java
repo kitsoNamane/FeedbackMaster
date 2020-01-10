@@ -19,13 +19,12 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     private static final int TYPE_PROGRESS = 0;
     private static final int TYPE_ITEM = 1;
 
-    private Context context;
     private NetworkState networkState;
 
     public static final DiffUtil.ItemCallback<DataItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<DataItem>() {
         @Override
         public boolean areItemsTheSame(@NonNull DataItem oldSurvey, @NonNull DataItem newSurvey) {
-            return oldSurvey.getName() == newSurvey.getName();
+            return oldSurvey.getReference() == newSurvey.getReference();
         }
 
         @Override
@@ -33,18 +32,17 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
             return oldSurvey.equals(newSurvey);
         }
     };
-    protected SurveyPagedAdapter(Context context) {
+    protected SurveyPagedAdapter() {
         super(DIFF_CALLBACK);
-        this.context = context;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == TYPE_PROGRESS) {
-            return SurveyViewHolder.create(parent);
-        } else{
             return NetworkStateViewHolder.create(parent);
+        } else{
+            return SurveyViewHolder.create(parent);
         }
     }
 
@@ -62,10 +60,16 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
      */
     @Override
     public int getItemViewType(int position) {
-        if (hasExtraRow() && position == getItemCount() - 1) {
+        /**if (hasExtraRow() && position == getItemCount() - 1) {
             return TYPE_PROGRESS;
         } else {
             return TYPE_ITEM;
+        }
+         */
+        if(getItem(position) instanceof DataItem) {
+            return TYPE_ITEM;
+        } else {
+            return TYPE_PROGRESS;
         }
     }
 

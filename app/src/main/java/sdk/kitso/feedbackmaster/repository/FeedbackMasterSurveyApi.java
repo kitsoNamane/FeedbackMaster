@@ -37,7 +37,7 @@ public class FeedbackMasterSurveyApi {
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .client(httpClient)
-                .baseUrl("http://localhost:8000/api/v1/")
+                .baseUrl("http://192.168.1.101:8000/api/v1/")
                 .addConverterFactory(customConverterFactory())
                 .build();
         return retrofit.create(FeedbackMasterSurveyApiService.class);

@@ -17,6 +17,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.Survey;
 import sdk.kitso.feedbackmaster.db.SurveyAndAllBranches;
@@ -45,18 +46,17 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLoca
     }
 
     @Override
-        public void onBindViewHolder(@NonNull SurveyLocalViewHolder holder,
-                                     int position) {
+        public void onBindViewHolder(@NonNull SurveyLocalViewHolder holder, int position) {
             Survey survey = getItem(position);
-        holder.bind(survey);
-        if (survey.getChecked() == true && holder.cardView.isChecked() == true) {
-            setVisibility(holder, View.VISIBLE);
-        } else if(survey.getChecked()) {
-            survey.setChecked(!survey.getChecked());
-        }else {
-            holder.cardView.setChecked(false);
-            setVisibility(holder, View.GONE);
-        }
+            holder.bind(survey);
+            if (survey.getChecked() == true && holder.cardView.isChecked() == true) {
+                setVisibility(holder, View.VISIBLE);
+            } else if(survey.getChecked()) {
+                survey.setChecked(!survey.getChecked());
+            }else {
+                holder.cardView.setChecked(false);
+                setVisibility(holder, View.GONE);
+            }
         }
 
         private static DiffUtil.ItemCallback<Survey> DIFF_CALLBACK =
