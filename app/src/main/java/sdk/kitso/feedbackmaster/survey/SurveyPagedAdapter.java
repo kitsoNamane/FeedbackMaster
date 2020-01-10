@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.DataItem;
+import sdk.kitso.feedbackmaster.db.Survey;
 
 public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.ViewHolder> {
     private static final int TYPE_PROGRESS = 0;
     private static final int TYPE_ITEM = 1;
-
     private NetworkState networkState;
 
     public static final DiffUtil.ItemCallback<DataItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<DataItem>() {
@@ -96,4 +96,9 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
             notifyItemChanged(getItemCount() - 1);
         }
     }
+
+    interface OnSurveyItemClickedListener {
+        public void onItemClicked(View view, Survey survey);
+    }
+
 }

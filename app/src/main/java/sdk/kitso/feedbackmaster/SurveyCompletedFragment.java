@@ -1,52 +1,36 @@
-package sdk.kitso.feedbackmaster.profile;
+package sdk.kitso.feedbackmaster;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
-
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textview.MaterialTextView;
-
-import androidx.fragment.app.Fragment;
-import sdk.kitso.feedbackmaster.Globals;
-import sdk.kitso.feedbackmaster.MainActivity;
-import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.db.Profile;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ProfileFragment.OnFragmentInteractionListener} interface
+ * {@link SurveyCompletedFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ProfileFragment#newInstance} factory method to
+ * Use the {@link SurveyCompletedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
+public class SurveyCompletedFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    MaterialTextView viewPhone;
-    MaterialTextView viewAge;
-    MaterialTextView viewGender;
-    MaterialButton editUser;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    Profile profile;
 
-    //private OnFragmentInteractionListener mListener;
-
-    public ProfileFragment() {
+    public SurveyCompletedFragment() {
         // Required empty public constructor
     }
 
@@ -56,11 +40,11 @@ public class ProfileFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
+     * @return A new instance of fragment SurveyCompletedFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static SurveyCompletedFragment newInstance(String param1, String param2) {
+        SurveyCompletedFragment fragment = new SurveyCompletedFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -75,31 +59,14 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        viewPhone = view.findViewById(R.id.phone_view);
-        editUser = view.findViewById(R.id.edit_profile);
-        viewAge = view.findViewById(R.id.age_view);
-        viewGender = view.findViewById(R.id.gender_view);
-        viewPhone.setText(Integer.toString(profile.getPhone()));
-        viewAge.setText(Integer.toString(profile.getAge()));
-        viewGender.setText(profile.getGender());
-
-        editUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Go to edit page", Toast.LENGTH_LONG).show();
-            }
-        });
-        return view;
+        return inflater.inflate(R.layout.fragment_survey_completed, container, false);
     }
-
-
 
     /** TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -125,7 +92,6 @@ public class ProfileFragment extends Fragment {
         mListener = null;
     }
 
-     * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
@@ -137,5 +103,5 @@ public class ProfileFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    */
+     */
 }

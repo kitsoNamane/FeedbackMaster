@@ -25,6 +25,7 @@ import androidx.room.Room;
 import sdk.kitso.feedbackmaster.db.Profile;
 import sdk.kitso.feedbackmaster.db.SurveyDB;
 import sdk.kitso.feedbackmaster.profile.ProfileSetup;
+import sdk.kitso.feedbackmaster.survey.SurveysFragmentDirections;
 
 public class MainActivity extends AppCompatActivity {
     ListView listView;
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         if(profile == null) {
             intent = new Intent(this, ProfileSetup.class);
             startActivity(intent);
+            //SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());
+            //Toast.makeText(this.getContext(), "SurveyId :"+survey.getId(), Toast.LENGTH_LONG).show();
+            //Navigation.findNavController(view).navigate(actionSurvey);
         }
 
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);

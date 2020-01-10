@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.List;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,7 +20,6 @@ import sdk.kitso.feedbackmaster.MockData;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.QuestionDB;
 import sdk.kitso.feedbackmaster.db.Survey;
-import sdk.kitso.feedbackmaster.db.SurveyDao;
 
 
 /**
@@ -33,7 +30,7 @@ import sdk.kitso.feedbackmaster.db.SurveyDao;
  * Use the {@link SurveysFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SurveysFragment extends Fragment  {
+public class SurveysFragment extends Fragment  implements SurveyLocalPagedAdapter.OnSurveyItemClickedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,6 +42,7 @@ public class SurveysFragment extends Fragment  {
     private SurveyViewModel surveyViewModel;
     private SurveyLocalViewModel localViewModel;
     //private SurveyAdapter adapter;
+    private SurveyLocalPagedAdapter.SurveyLocalViewHolder holder;
     private MockData mock;
     public static QuestionDB questionDB;
 
@@ -105,11 +103,12 @@ public class SurveysFragment extends Fragment  {
         surveyViewModel.init(androidId, this.getContext());
         localViewModel = ViewModelProviders.of(this).get(SurveyLocalViewModel.class);
         localViewModel.init(MainActivity.surveyDB.surveyDao());
-        localPagedAdapter = new SurveyLocalPagedAdapter();
+        localPagedAdapter = new SurveyLocalPagedAdapter(this);
 
         localViewModel.surveys.observe(this, pageList->{
-            localPagedAdapter.submitList(pageList);
+            if(pageList != null) localPagedAdapter.submitList(pageList);
         });
+
 
        /** pagedAdapter = new SurveyPagedAdapter();
         surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
@@ -134,16 +133,16 @@ public class SurveysFragment extends Fragment  {
         return view;
     }
 
-    /**@Override
+    @Override
     public void onItemClicked(View view, Survey survey) {
         switch (view.getId()) {
         case(R.id.survey_card):
-            holder = (SurveyAdapter.SurveyViewHolder) recyclerView.findContainingViewHolder(view);
-            adapter.bindDynamicContent(holder, survey);
+            holder = (SurveyLocalPagedAdapter.SurveyLocalViewHolder) recyclerView.findContainingViewHolder(view);
+            localPagedAdapter.bindDynamicContent(holder, survey);
             break;
         case(R.id.start_survey):
             SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());
-            Toast.makeText(this.getContext(), "SurveyId :"+survey.getId(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this.getContext(), "SurveyId :"+survey.getId(), Toast.LENGTH_LONG).show();
             Navigation.findNavController(view).navigate(actionSurvey);
             break;
         default:
@@ -154,6 +153,7 @@ public class SurveysFragment extends Fragment  {
         }
     }
 
+    /**
      // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

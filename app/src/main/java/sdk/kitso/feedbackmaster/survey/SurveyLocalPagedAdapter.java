@@ -26,10 +26,14 @@ import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
 public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLocalPagedAdapter.SurveyLocalViewHolder> {
     List<SurveyAndAllBranches> branches_list;
     List<SurveyAndAllDepartments> depts;
+    public OnSurveyItemClickedListener onSurveyItemClickedListener;
     RadioButton checkBox;
-        public SurveyLocalPagedAdapter() {
+
+    public SurveyLocalPagedAdapter(OnSurveyItemClickedListener onSurveyItemClickedListener) {
             super(DIFF_CALLBACK);
-        }
+            this.onSurveyItemClickedListener = onSurveyItemClickedListener;
+    }
+
     public static void setVisibility(SurveyLocalViewHolder holder, int VISIBILITY) {
         holder.branches.setVisibility(VISIBILITY);
         holder.departments.setVisibility(VISIBILITY);
@@ -48,7 +52,7 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLoca
     @Override
         public void onBindViewHolder(@NonNull SurveyLocalViewHolder holder, int position) {
             Survey survey = getItem(position);
-            holder.bind(survey);
+            holder.bind(survey, onSurveyItemClickedListener);
             if (survey.getChecked() == true && holder.cardView.isChecked() == true) {
                 setVisibility(holder, View.VISIBLE);
             } else if(survey.getChecked()) {
@@ -60,20 +64,19 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLoca
         }
 
         private static DiffUtil.ItemCallback<Survey> DIFF_CALLBACK =
-                new DiffUtil.ItemCallback<Survey>() {
-                    // Concert details may have changed if reloaded from the database,
-                    // but ID is fixed.
-                    @Override
-                    public boolean areItemsTheSame(Survey oldSurvey, Survey newSurvey) {
-                        return oldSurvey.getId() == newSurvey.getId();
-                    }
+            new DiffUtil.ItemCallback<Survey>() {
+                // Concert details may have changed if reloaded from the database,
+                // but ID is fixed.
+                @Override
+                public boolean areItemsTheSame(Survey oldSurvey, Survey newSurvey) {
+                    return oldSurvey.getId() == newSurvey.getId();
+                }
 
-                    @Override
-                    public boolean areContentsTheSame(Survey oldSurvey,
-                                                      Survey newSurvey) {
-                        return oldSurvey.equals(newSurvey);
-                    }
-                };
+                @Override
+                public boolean areContentsTheSame(Survey oldSurvey, Survey newSurvey) {
+                    return oldSurvey.equals(newSurvey);
+                }
+        };
 
     public class SurveyLocalViewHolder extends RecyclerView.ViewHolder {
         MaterialTextView company;
@@ -93,10 +96,23 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLoca
             this.start = view.findViewById(R.id.start_survey);
         }
 
-        public void bind(final Survey survey) {
+        public void bind(final Survey survey, OnSurveyItemClickedListener onSurveyItemClickedListener) {
             this.company.setText(survey.getCompany());
             this.survey.setText(survey.getSurvey());
             //this.cardView.setId(survey.getId());
+            this.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onSurveyItemClickedListener.onItemClicked(cardView, survey);
+                }
+            });
+
+            this.start.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onSurveyItemClickedListener.onItemClicked(start, survey);
+                }
+            });
         }
     }
 
@@ -129,6 +145,7 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLoca
             setVisibility(holder, View.GONE);
         }
     }
+
     interface OnSurveyItemClickedListener {
         public void onItemClicked(View view, Survey survey);
     }
