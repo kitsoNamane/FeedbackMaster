@@ -51,6 +51,11 @@ public class Survey {
     public boolean getChecked() {
         return this.checked;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return this == other;
+    }
 }
 
 
