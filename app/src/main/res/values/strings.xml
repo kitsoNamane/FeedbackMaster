@@ -19,7 +19,7 @@
     <string name="lie">false</string>
     <string name="select_branch">SELECT BRANCH</string>
     <string name="select_department">SELECT DEPARTMENT</string>
-    <string name="start_survey">start survey</string>
+    <string name="start_survey">Start Survey</string>
     <string name="enter_your_phone_number">enter your phone number</string>
     <string name="how_old_are_you">how old are you?</string>
     <string name="gender">Gender</string>
@@ -35,4 +35,6 @@
     <string name="network_error_image">network error image</string>
     <string name="cellphone_image">Cellphone image</string>
     <string name="age_view">AGE</string>
+    <string name="select_branches">Select Branches</string>
+    <string name="select_departments">Select Departments</string>
 </resources>

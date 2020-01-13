@@ -7,12 +7,15 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.Group;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
@@ -26,8 +29,8 @@ import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
 public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLocalPagedAdapter.SurveyLocalViewHolder> {
     List<SurveyAndAllBranches> branches_list;
     List<SurveyAndAllDepartments> depts;
+    Chip chipItem;
     public OnSurveyItemClickedListener onSurveyItemClickedListener;
-    RadioButton checkBox;
 
     public SurveyLocalPagedAdapter(OnSurveyItemClickedListener onSurveyItemClickedListener) {
             super(DIFF_CALLBACK);
@@ -35,15 +38,15 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLoca
     }
 
     public static void setVisibility(SurveyLocalViewHolder holder, int VISIBILITY) {
-        holder.branches.setVisibility(VISIBILITY);
-        holder.departments.setVisibility(VISIBILITY);
+        holder.branch.setVisibility(VISIBILITY);
+        holder.department.setVisibility(VISIBILITY);
         holder.start.setVisibility(VISIBILITY);
     }
     @NonNull
     @Override
     public SurveyLocalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.survey_card, parent, false
+                R.layout.card_survey, parent, false
         );
         SurveyLocalViewHolder surveyLocalViewHolder = new SurveyLocalViewHolder(view);
         return surveyLocalViewHolder;
@@ -82,8 +85,10 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLoca
         MaterialTextView company;
         MaterialTextView survey;
         MaterialCardView cardView;
-        LinearLayout branches;
-        LinearLayout departments;
+        Group branch;
+        Group department;
+        ChipGroup branches;
+        ChipGroup departments;
         MaterialButton start;
 
         public SurveyLocalViewHolder(View view) {
@@ -93,6 +98,8 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLoca
             this.survey = view.findViewById(R.id.survey_title);
             this.branches = view.findViewById(R.id.branch);
             this.departments = view.findViewById(R.id.department);
+            this.branch = view.findViewById(R.id.branches_list);
+            this.department = view.findViewById(R.id.department_list);
             this.start = view.findViewById(R.id.start_survey);
         }
 
@@ -125,18 +132,21 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLoca
             // Currently O(X^2) complexity
             // find way to speed it up to O(X) complexity
             for (int j = 0; j < branches_list.get(0).getBranches().size(); j++) {
-                checkBox = new RadioButton(holder.cardView.getContext());
-                checkBox.setText(branches_list.get(0).getBranches().get(j).getBranch());
-                checkBox.setTextSize(Float.parseFloat("16"));
-                checkBox.setPadding(10, 10, 10, 10);
-                holder.branches.addView(checkBox);
+                chipItem = new Chip(holder.cardView.getContext());
+                chipItem.setText(branches_list.get(0).getBranches().get(j).getBranch());
+                chipItem.setCheckable(true);
+                chipItem.setCheckedIcon(holder.cardView.getContext().getResources().getDrawable(R.drawable.ic_check_black_24dp));
+                chipItem.setTextSize(Float.parseFloat("16"));
+                //chipItem.setPadding(10, 10, 10, 10);
+                holder.branches.addView(chipItem);
             }
             for (int j = 0; j < depts.get(0).getDepartments().size(); j++) {
-                checkBox = new RadioButton(holder.cardView.getContext());
-                checkBox.setText(depts.get(0).getDepartments().get(j).getDept());
-                checkBox.setTextSize(Float.parseFloat("16"));
-                checkBox.setPadding(10, 10, 10, 10);
-                holder.departments.addView(checkBox);
+                chipItem = new Chip(holder.cardView.getContext());
+                chipItem.setText(depts.get(0).getDepartments().get(j).getDept());
+                chipItem.setCheckable(true);
+                chipItem.setCheckedIcon(holder.cardView.getContext().getResources().getDrawable(R.drawable.ic_check_black_24dp));
+                chipItem.setTextSize(Float.parseFloat("16"));
+                holder.departments.addView(chipItem);
             }
         }
         if (holder.cardView.isChecked()) {

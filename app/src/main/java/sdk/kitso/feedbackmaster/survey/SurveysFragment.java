@@ -136,7 +136,7 @@ public class SurveysFragment extends Fragment  implements SurveyLocalPagedAdapte
     @Override
     public void onItemClicked(View view, Survey survey) {
         switch (view.getId()) {
-        case(R.id.survey_card):
+        case(R.id.card_survey):
             holder = (SurveyLocalPagedAdapter.SurveyLocalViewHolder) recyclerView.findContainingViewHolder(view);
             localPagedAdapter.bindDynamicContent(holder, survey);
             break;

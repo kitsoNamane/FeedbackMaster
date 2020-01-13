@@ -51,6 +51,7 @@ public class QuestionController {
             return this.currentQuestion;
         }
         this.listIterator -= 1;
+        this.currentQuestion = null;
         return this.currentQuestion;
     }
 

@@ -11,6 +11,7 @@
         android:id="@+id/survey_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         android:clipChildren="true"
         android:scrollbars="vertical" />
 </FrameLayout>

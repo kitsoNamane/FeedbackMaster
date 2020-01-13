@@ -1,14 +1,16 @@
-package sdk.kitso.feedbackmaster;
+package sdk.kitso.feedbackmaster.survey;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import sdk.kitso.feedbackmaster.R;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.material.button.MaterialButton;
 
 
 /**
@@ -22,6 +24,7 @@ import android.view.ViewGroup;
 public class SurveyCompletedFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    MaterialButton goHome;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -65,7 +68,16 @@ public class SurveyCompletedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_survey_completed, container, false);
+        View view  = inflater.inflate(R.layout.fragment_survey_completed, container, false);
+        goHome = view.findViewById(R.id.go_home_text);
+        goHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(SurveyCompletedFragmentDirections.actionHome());
+            }
+        });
+
+        return view;
     }
 
     /** TODO: Rename method, update argument and hook method into UI event

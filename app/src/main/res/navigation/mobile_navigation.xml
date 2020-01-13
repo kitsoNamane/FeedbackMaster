@@ -30,5 +30,22 @@
             android:name="surveyId"
             app:argType="integer"
         />
+        <action
+            android:id="@+id/actionCompleted"
+            app:destination="@id/surveyCompletedFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/surveyCompletedFragment"
+        android:name="sdk.kitso.feedbackmaster.survey.SurveyCompletedFragment"
+        android:label="fragment_survey_completed"
+        tools:layout="@layout/fragment_survey_completed" >
+        <action
+            android:id="@+id/actionHome"
+            app:destination="@id/navigation_survey" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="sdk.kitso.feedbackmaster.profile.SignUpFragment"
+        android:label="fragment_signup"
+        tools:layout="@layout/fragment_signup" />
 </navigation>

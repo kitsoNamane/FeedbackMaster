@@ -1,5 +1,7 @@
 package sdk.kitso.feedbackmaster.survey;
 
+import java.util.List;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.paging.LivePagedListBuilder;
@@ -16,5 +18,4 @@ public class SurveyLocalViewModel extends ViewModel {
         this.surveyDao = surveyDao;
         this.surveys = new LivePagedListBuilder<>(surveyDao.getAllSurveys(), 5).build();
     }
-
 }

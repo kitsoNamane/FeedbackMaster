@@ -15,6 +15,7 @@ import com.google.android.material.textview.MaterialTextView;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MyListAdapter;
 import sdk.kitso.feedbackmaster.R;
@@ -105,9 +106,15 @@ public class QuestionFragment extends Fragment {
         questionNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
                 switch (item.getItemId()) {
                     case R.id.question_next:
-                        questionTitle.setText(questionController.nextQuestion().getQuestion());
+                        questionController.nextQuestion();
+                        if(questionController.currentQuestion == null) {
+                            Navigation.findNavController(view).navigate(QuestionFragmentDirections.actionCompleted());
+                            break;
+                        }
+                        questionTitle.setText(questionController.currentQuestion.getQuestion());
                         renderQuestion();
                         Toast.makeText(view.getContext(), "Question ID : "+questionController.currentQuestion.getId(), Toast.LENGTH_SHORT).show();
                         break;
