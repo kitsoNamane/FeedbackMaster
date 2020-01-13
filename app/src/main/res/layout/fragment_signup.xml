@@ -129,6 +129,7 @@
 
                 <com.google.android.material.chip.ChipGroup
                     android:layout_width="match_parent"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
@@ -173,6 +174,7 @@
                         style='style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"'
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
                         android:gravity="start"
                         android:inputType="phone"
                         android:textSize="18sp"></com.google.android.material.textfield.TextInputEditText>
