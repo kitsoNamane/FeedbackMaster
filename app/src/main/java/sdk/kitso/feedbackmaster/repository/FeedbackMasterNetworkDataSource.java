@@ -39,28 +39,26 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
     public void loadInitial(@NonNull LoadInitialParams<Integer> loadInitialParams, @NonNull LoadInitialCallback<Integer, DataItem> loadInitialCallback) {
         initialLoading.postValue(NetworkState.LOADING);
         networkState.postValue(NetworkState.LOADING);
-        Log.d("MESSAGE", "HELLO THE REQUEST IS GOING THROUGH");
+        Log.d("FMDIGILAB", "HELLO THE REQUEST IS GOING THROUGH");
 
-        apiService.getNextSurveys(1).enqueue(new Callback<List<DataItem>>() {
+        apiService.getNextSurveys(1).enqueue(new Callback<sdk.kitso.feedbackmaster.db.Response>() {
             @Override
-            public void onResponse(Call<List<DataItem>> call, Response<List<DataItem>> response) {
+            public void onResponse(Call<sdk.kitso.feedbackmaster.db.Response> call, Response<sdk.kitso.feedbackmaster.db.Response> response) {
                 if(response.isSuccessful()) {
-                    loadInitialCallback.onResult(response.body(), null, 2);
-                    for(DataItem item: response.body()) {
-                        Log.d("RESPONSE ", item.toString());
-                    }
+                    loadInitialCallback.onResult(response.body().getData().getDataItemList(), null, 2);
                     initialLoading.postValue(NetworkState.LOADED);
                     networkState.postValue(NetworkState.LOADED);
                 } else {
-                    Log.d("ERROR ", "EOOR BAAP");
+                    Log.d("FMDIGILAB 2", response.message());
                     initialLoading.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
             }
 
             @Override
-            public void onFailure(Call<List<DataItem>> call, Throwable throwable) {
+            public void onFailure(Call<sdk.kitso.feedbackmaster.db.Response> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
+                Log.d("FMDIGILAB 3", errorMessage);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });
@@ -76,11 +74,11 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
         Log.d(TAG, "Loading Page " + loadParams.key);
         networkState.postValue(NetworkState.LOADING);
 
-        apiService.getNextSurveys(loadParams.key).enqueue(new Callback<List<DataItem>>() {
+        apiService.getNextSurveys(loadParams.key).enqueue(new Callback<sdk.kitso.feedbackmaster.db.Response>() {
               @Override
-              public void onResponse(Call<List<DataItem>> call, Response<List<DataItem>> response) {
+              public void onResponse(Call<sdk.kitso.feedbackmaster.db.Response> call, Response<sdk.kitso.feedbackmaster.db.Response> response) {
                   if(response.isSuccessful()) {
-                      loadCallback.onResult(response.body(), loadParams.key + 1);
+                      loadCallback.onResult(response.body().getData().getDataItemList(), loadParams.key + 1);
                       networkState.postValue(NetworkState.LOADED);
                   } else {
                       networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
@@ -88,7 +86,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
               }
 
               @Override
-              public void onFailure(Call<List<DataItem>> call, Throwable throwable) {
+              public void onFailure(Call<sdk.kitso.feedbackmaster.db.Response> call, Throwable throwable) {
                   String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
                   networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
               }

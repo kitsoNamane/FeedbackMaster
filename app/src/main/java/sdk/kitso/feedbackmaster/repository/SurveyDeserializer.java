@@ -1,5 +1,7 @@
 package sdk.kitso.feedbackmaster.repository;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -21,8 +23,12 @@ class SurveyDeserializer implements JsonDeserializer<List<DataItem>> {
         Gson gson = new Gson();
         JsonObject jsonObject = json.getAsJsonObject();
         JsonArray jsonArray = jsonObject.getAsJsonObject("data").getAsJsonArray("data");
+        Log.d("FMDIGILAB 5", jsonArray.getAsString());
         Type dataItemListType = new TypeToken<ArrayList<DataItem>>(){}.getType();
         ArrayList<DataItem> dataItemsArray = gson.fromJson(jsonArray, dataItemListType);
+        for(DataItem item: dataItemsArray) {
+            Log.d("FMDIGILAB 6", item.getName());
+        }
         return dataItemsArray;
     }
 }
