@@ -16,6 +16,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     private static final int TYPE_PROGRESS = 0;
     private static final int TYPE_ITEM = 1;
     private NetworkState networkState;
+    public OnSurveyItemClickedListener onSurveyItemClickedListener;
 
     public static final DiffUtil.ItemCallback<DataItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<DataItem>() {
         @Override
@@ -28,8 +29,9 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
             return oldSurvey.equals(newSurvey);
         }
     };
-    protected SurveyPagedAdapter() {
+    protected SurveyPagedAdapter(OnSurveyItemClickedListener onSurveyItemClickedListener) {
         super(DIFF_CALLBACK);
+        this.onSurveyItemClickedListener = onSurveyItemClickedListener;
     }
 
     @NonNull
@@ -45,7 +47,16 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof SurveyViewHolder) {
-            ((SurveyViewHolder) holder).bindTo(getItem(position));
+            DataItem item = getItem(position);
+            ((SurveyViewHolder)holder).bind(item, onSurveyItemClickedListener);
+            if (item.getChecked() == true && ((SurveyViewHolder) holder).cardView.isChecked() == true) {
+                ((SurveyViewHolder) holder).setVisibility(View.VISIBLE);
+            } else if(item.getChecked()) {
+                item.setChecked(!item.getChecked());
+            }else {
+                ((SurveyViewHolder) holder).cardView.setChecked(false);
+                ((SurveyViewHolder) holder).setVisibility(View.GONE);
+            }
         } else {
             ((NetworkStateViewHolder) holder).bind(networkState);
         }
@@ -56,12 +67,6 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
      */
     @Override
     public int getItemViewType(int position) {
-        /**if (hasExtraRow() && position == getItemCount() - 1) {
-            return TYPE_PROGRESS;
-        } else {
-            return TYPE_ITEM;
-        }
-         */
         if(getItem(position) == null) {
             return TYPE_PROGRESS;
         } else {
@@ -94,7 +99,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     }
 
     interface OnSurveyItemClickedListener {
-        public void onItemClicked(View view, Survey survey);
+        public void onItemClicked(View view, DataItem dataItem);
     }
 
 }

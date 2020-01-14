@@ -4,6 +4,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
+import androidx.room.ColumnInfo;
+
 public class DataItem implements Serializable {
 
 	@SerializedName("name")
@@ -28,9 +30,20 @@ public class DataItem implements Serializable {
 	@SerializedName("status")
 	private int status;
 
+	@ColumnInfo(name="is_checked")
+	private boolean checked = false;
+
 	@SerializedName("business")
     @Expose
 	private Business business;
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+
+	public boolean getChecked() {
+		return this.checked;
+	}
 
 	public void setName(String name){
 		this.name = name;
