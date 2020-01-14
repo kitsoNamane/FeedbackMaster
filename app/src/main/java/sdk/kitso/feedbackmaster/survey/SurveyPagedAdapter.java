@@ -66,10 +66,10 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
             return TYPE_ITEM;
         }
          */
-        if(getItem(position) instanceof DataItem) {
-            return TYPE_ITEM;
-        } else {
+        if(getItem(position) == null) {
             return TYPE_PROGRESS;
+        } else {
+            return TYPE_ITEM;
         }
     }
 

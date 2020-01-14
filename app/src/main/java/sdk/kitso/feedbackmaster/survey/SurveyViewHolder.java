@@ -22,18 +22,13 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindTo(DataItem item) {
-        if(item == null) {
-            survey.setText("Company Survey");
-            company.setText("SDK DIGITAL LLC");
-        } else {
-            survey.setText(item.getName());
-            company.setText(item.getBusiness().getBusinessData().getName());
-        }
+        survey.setText(item.getName());
+        company.setText(item.getBusiness().getBusinessData().getName());
     }
 
     public static SurveyViewHolder create(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.survey_card, parent, false
+                R.layout.card_survey, parent, false
         );
         return new SurveyViewHolder(view);
     }

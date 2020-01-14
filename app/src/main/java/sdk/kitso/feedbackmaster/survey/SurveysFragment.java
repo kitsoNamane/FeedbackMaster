@@ -42,7 +42,7 @@ public class SurveysFragment extends Fragment  implements SurveyLocalPagedAdapte
     private SurveyViewModel surveyViewModel;
     private SurveyLocalViewModel localViewModel;
     //private SurveyAdapter adapter;
-    private SurveyLocalPagedAdapter.SurveyLocalViewHolder holder;
+    private SurveyLocalViewHolder holder;
     private MockData mock;
     public static QuestionDB questionDB;
 
@@ -137,8 +137,8 @@ public class SurveysFragment extends Fragment  implements SurveyLocalPagedAdapte
     public void onItemClicked(View view, Survey survey) {
         switch (view.getId()) {
         case(R.id.card_survey):
-            holder = (SurveyLocalPagedAdapter.SurveyLocalViewHolder) recyclerView.findContainingViewHolder(view);
-            localPagedAdapter.bindDynamicContent(holder, survey);
+            holder = (SurveyLocalViewHolder) recyclerView.findContainingViewHolder(view);
+            holder.bindDynamicContent(survey);
             break;
         case(R.id.start_survey):
             SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());

@@ -21,15 +21,17 @@ import com.google.android.material.textview.MaterialTextView;
 import java.util.List;
 
 import sdk.kitso.feedbackmaster.MainActivity;
+import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.Survey;
 import sdk.kitso.feedbackmaster.db.SurveyAndAllBranches;
 import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
 
-public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLocalPagedAdapter.SurveyLocalViewHolder> {
-    List<SurveyAndAllBranches> branches_list;
-    List<SurveyAndAllDepartments> depts;
-    Chip chipItem;
+public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, RecyclerView.ViewHolder> {
+    private static final int TYPE_PROGRESS = 0;
+    private static final int TYPE_ITEM = 1;
+    private NetworkState networkState;
+
     public OnSurveyItemClickedListener onSurveyItemClickedListener;
 
     public SurveyLocalPagedAdapter(OnSurveyItemClickedListener onSurveyItemClickedListener) {
@@ -37,124 +39,82 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, SurveyLoca
             this.onSurveyItemClickedListener = onSurveyItemClickedListener;
     }
 
-    public static void setVisibility(SurveyLocalViewHolder holder, int VISIBILITY) {
-        holder.branch.setVisibility(VISIBILITY);
-        holder.department.setVisibility(VISIBILITY);
-        holder.start.setVisibility(VISIBILITY);
-    }
+
     @NonNull
     @Override
-    public SurveyLocalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.card_survey, parent, false
-        );
-        SurveyLocalViewHolder surveyLocalViewHolder = new SurveyLocalViewHolder(view);
-        return surveyLocalViewHolder;
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType == TYPE_PROGRESS) {
+            return NetworkStateViewHolder.create(parent);
+        } else{
+            return SurveyLocalViewHolder.create(parent);
+        }
     }
 
     @Override
-        public void onBindViewHolder(@NonNull SurveyLocalViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if(holder instanceof SurveyLocalViewHolder) {
             Survey survey = getItem(position);
-            holder.bind(survey, onSurveyItemClickedListener);
-            if (survey.getChecked() == true && holder.cardView.isChecked() == true) {
-                setVisibility(holder, View.VISIBLE);
+            ((SurveyLocalViewHolder)holder).bind(survey, onSurveyItemClickedListener);
+            if (survey.getChecked() == true && ((SurveyLocalViewHolder) holder).cardView.isChecked() == true) {
+                ((SurveyLocalViewHolder) holder).setVisibility(View.VISIBLE);
             } else if(survey.getChecked()) {
                 survey.setChecked(!survey.getChecked());
             }else {
-                holder.cardView.setChecked(false);
-                setVisibility(holder, View.GONE);
+                ((SurveyLocalViewHolder) holder).cardView.setChecked(false);
+                ((SurveyLocalViewHolder) holder).setVisibility(View.GONE);
             }
-        }
-
-        private static DiffUtil.ItemCallback<Survey> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<Survey>() {
-                // Concert details may have changed if reloaded from the database,
-                // but ID is fixed.
-                @Override
-                public boolean areItemsTheSame(Survey oldSurvey, Survey newSurvey) {
-                    return oldSurvey.getId() == newSurvey.getId();
-                }
-
-                @Override
-                public boolean areContentsTheSame(Survey oldSurvey, Survey newSurvey) {
-                    return oldSurvey.equals(newSurvey);
-                }
-        };
-
-    public class SurveyLocalViewHolder extends RecyclerView.ViewHolder {
-        MaterialTextView company;
-        MaterialTextView survey;
-        MaterialCardView cardView;
-        Group branch;
-        Group department;
-        ChipGroup branches;
-        ChipGroup departments;
-        MaterialButton start;
-
-        public SurveyLocalViewHolder(View view) {
-            super(view);
-            this.cardView = (MaterialCardView) view;
-            this.company = view.findViewById(R.id.company_name);
-            this.survey = view.findViewById(R.id.survey_title);
-            this.branches = view.findViewById(R.id.branch);
-            this.departments = view.findViewById(R.id.department);
-            this.branch = view.findViewById(R.id.branches_list);
-            this.department = view.findViewById(R.id.department_list);
-            this.start = view.findViewById(R.id.start_survey);
-        }
-
-        public void bind(final Survey survey, OnSurveyItemClickedListener onSurveyItemClickedListener) {
-            this.company.setText(survey.getCompany());
-            this.survey.setText(survey.getSurvey());
-            //this.cardView.setId(survey.getId());
-            this.cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onSurveyItemClickedListener.onItemClicked(cardView, survey);
-                }
-            });
-
-            this.start.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onSurveyItemClickedListener.onItemClicked(start, survey);
-                }
-            });
-        }
-    }
-
-    public void bindDynamicContent(SurveyLocalViewHolder holder, Survey survey) {
-        survey.setChecked(!survey.getChecked());
-        holder.cardView.setChecked(survey.getChecked());
-        if (holder.cardView.isChecked() == true && holder.departments.getChildCount() <= 2) {
-            branches_list = MainActivity.surveyDB.surveyDao().getBranches(survey.getId());
-            depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
-            // Currently O(X^2) complexity
-            // find way to speed it up to O(X) complexity
-            for (int j = 0; j < branches_list.get(0).getBranches().size(); j++) {
-                chipItem = new Chip(holder.cardView.getContext());
-                chipItem.setText(branches_list.get(0).getBranches().get(j).getBranch());
-                chipItem.setCheckable(true);
-                chipItem.setCheckedIcon(holder.cardView.getContext().getResources().getDrawable(R.drawable.ic_check_black_24dp));
-                chipItem.setTextSize(Float.parseFloat("16"));
-                //chipItem.setPadding(10, 10, 10, 10);
-                holder.branches.addView(chipItem);
-            }
-            for (int j = 0; j < depts.get(0).getDepartments().size(); j++) {
-                chipItem = new Chip(holder.cardView.getContext());
-                chipItem.setText(depts.get(0).getDepartments().get(j).getDept());
-                chipItem.setCheckable(true);
-                chipItem.setCheckedIcon(holder.cardView.getContext().getResources().getDrawable(R.drawable.ic_check_black_24dp));
-                chipItem.setTextSize(Float.parseFloat("16"));
-                holder.departments.addView(chipItem);
-            }
-        }
-        if (holder.cardView.isChecked()) {
-            setVisibility(holder, View.VISIBLE);
         } else {
-            setVisibility(holder, View.GONE);
+            ((NetworkStateViewHolder) holder).bind(networkState);
+        }
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if( hasExtraRow() && getItem(position) == null) {
+            return TYPE_PROGRESS;
+        } else {
+            return TYPE_ITEM;
         }
     }
+
+
+    private boolean hasExtraRow() {
+        if (networkState != null && networkState != NetworkState.LOADED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public void setNetworkState(NetworkState newNetworkState) {
+        NetworkState previousState = this.networkState;
+        boolean previousExtraRow = hasExtraRow();
+        this.networkState = newNetworkState;
+        boolean newExtraRow = hasExtraRow();
+        if (previousExtraRow != newExtraRow) {
+            if (previousExtraRow) {
+                notifyItemRemoved(getItemCount());
+            } else {
+                notifyItemInserted(getItemCount());
+            }
+        } else if (newExtraRow && previousState != newNetworkState) {
+            notifyItemChanged(getItemCount() - 1);
+        }
+    }
+    private static DiffUtil.ItemCallback<Survey> DIFF_CALLBACK =
+        new DiffUtil.ItemCallback<Survey>() {
+            // Concert details may have changed if reloaded from the database,
+            // but ID is fixed.
+            @Override
+            public boolean areItemsTheSame(Survey oldSurvey, Survey newSurvey) {
+                return oldSurvey.getId() == newSurvey.getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(Survey oldSurvey, Survey newSurvey) {
+                return oldSurvey.equals(newSurvey);
+            }
+    };
 
     interface OnSurveyItemClickedListener {
         public void onItemClicked(View view, Survey survey);
