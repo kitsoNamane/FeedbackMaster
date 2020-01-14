@@ -40,4 +40,9 @@
     <string name="total_wins">Total Wins :</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="phone">Phone</string>
+    <string name="signup_to_continue">signup to continue</string>
+    <string name="welcome">Welcome</string>
+    <string name="application_name">Application Name</string>
+    <string name="continue_text">continue</string>
+    <string name="by_continuing_you_agree_to_the_terms_amp_conditions"><![CDATA[By continuing, you agree to the terms & conditions]]></string>
 </resources>

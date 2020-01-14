@@ -1,18 +1,14 @@
 package sdk.kitso.feedbackmaster.survey;
 
-import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.JsonObject;
 
 import androidx.annotation.NonNull;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.NetworkState;
-import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.DataItem;
 import sdk.kitso.feedbackmaster.db.Survey;
 

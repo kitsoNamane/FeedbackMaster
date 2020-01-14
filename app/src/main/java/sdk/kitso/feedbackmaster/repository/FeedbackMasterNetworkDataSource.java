@@ -1,7 +1,6 @@
 package sdk.kitso.feedbackmaster.repository;
 
 
-import android.net.Network;
 import android.util.Log;
 
 import java.util.List;
@@ -40,7 +39,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
     public void loadInitial(@NonNull LoadInitialParams<Integer> loadInitialParams, @NonNull LoadInitialCallback<Integer, DataItem> loadInitialCallback) {
         initialLoading.postValue(NetworkState.LOADING);
         networkState.postValue(NetworkState.LOADING);
-        Log.i("MESSAGE", "HELLO THE REQUEST IS GOING THROUGH");
+        Log.d("MESSAGE", "HELLO THE REQUEST IS GOING THROUGH");
 
         apiService.getNextSurveys(1).enqueue(new Callback<List<DataItem>>() {
             @Override
@@ -48,12 +47,12 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
                 if(response.isSuccessful()) {
                     loadInitialCallback.onResult(response.body(), null, 2);
                     for(DataItem item: response.body()) {
-                        Log.i("RESPONSE ", item.toString());
+                        Log.d("RESPONSE ", item.toString());
                     }
                     initialLoading.postValue(NetworkState.LOADED);
                     networkState.postValue(NetworkState.LOADED);
                 } else {
-                    Log.i("ERROR ", "EOOR BAAP");
+                    Log.d("ERROR ", "EOOR BAAP");
                     initialLoading.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
@@ -74,7 +73,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
 
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> loadParams, @NonNull LoadCallback<Integer, DataItem> loadCallback) {
-        Log.i(TAG, "Loading Page " + loadParams.key);
+        Log.d(TAG, "Loading Page " + loadParams.key);
         networkState.postValue(NetworkState.LOADING);
 
         apiService.getNextSurveys(loadParams.key).enqueue(new Callback<List<DataItem>>() {

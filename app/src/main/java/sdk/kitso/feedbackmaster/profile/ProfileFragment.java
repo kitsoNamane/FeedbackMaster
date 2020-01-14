@@ -4,13 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
 import androidx.fragment.app.Fragment;
@@ -84,7 +80,7 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         viewPhone = view.findViewById(R.id.phone_view);
         editUser = view.findViewById(R.id.edit_profile);
-        viewAge = view.findViewById(R.id.age_view);
+        viewAge = view.findViewById(R.id.age_input);
         viewGender = view.findViewById(R.id.gender_view);
         viewPhone.setText(Integer.toString(profile.getPhone()));
         viewAge.setText(Integer.toString(profile.getAge()));

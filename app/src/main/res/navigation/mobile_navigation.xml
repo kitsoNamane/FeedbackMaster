@@ -13,6 +13,9 @@
         <action
             android:id="@+id/actionSurvey"
             app:destination="@id/questionFragment" />
+        <action
+            android:id="@+id/actionSignup"
+            app:destination="@id/signUpFragment" />
     </fragment>
 
     <fragment
@@ -47,5 +50,10 @@
         android:id="@+id/signUpFragment"
         android:name="sdk.kitso.feedbackmaster.profile.SignUpFragment"
         android:label="fragment_signup"
-        tools:layout="@layout/fragment_signup" />
+        tools:layout="@layout/fragment_signup" >
+        <action
+            android:id="@+id/action_signUpFragment_pop"
+            app:popUpTo="@+id/navigation_survey"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

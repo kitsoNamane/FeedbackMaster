@@ -18,6 +18,7 @@ import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.MockData;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.db.Profile;
 import sdk.kitso.feedbackmaster.db.QuestionDB;
 import sdk.kitso.feedbackmaster.db.Survey;
 
@@ -45,6 +46,7 @@ public class SurveysFragment extends Fragment  implements SurveyLocalPagedAdapte
     private SurveyLocalViewHolder holder;
     private MockData mock;
     public static QuestionDB questionDB;
+    Profile profile;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -77,13 +79,16 @@ public class SurveysFragment extends Fragment  implements SurveyLocalPagedAdapte
         super.onCreate(savedInstanceState);
         String androidId = Settings.Secure.getString(this.getActivity().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
+
         questionDB = Room.databaseBuilder(this.getContext().getApplicationContext(), QuestionDB.class, "questions")
                 .fallbackToDestructiveMigration()
-                .allowMainThreadQueries().build();
+                .build();
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
         mock = new MockData(this.getContext());
         if(MainActivity.surveyDB.surveyDao().getSurveys().size() <= 0) {
             Globals.executor.execute(()->{
@@ -93,24 +98,19 @@ public class SurveysFragment extends Fragment  implements SurveyLocalPagedAdapte
                 mock.generateOptions();
             });
         }
-        //if(questionDB.questionDao().getQuestions(0).size() <= 0) {
-        //    mock.generateQuestions();
-        //}
-        //List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
-        //adapter = new SurveyAdapter(surveys, this);
 
         surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
         surveyViewModel.init(androidId, this.getContext());
         localViewModel = ViewModelProviders.of(this).get(SurveyLocalViewModel.class);
         localViewModel.init(MainActivity.surveyDB.surveyDao());
         localPagedAdapter = new SurveyLocalPagedAdapter(this);
+        pagedAdapter = new SurveyPagedAdapter();
 
         localViewModel.surveys.observe(this, pageList->{
-            if(pageList != null) localPagedAdapter.submitList(pageList);
+            localPagedAdapter.submitList(pageList);
         });
 
-
-       /** pagedAdapter = new SurveyPagedAdapter();
+        pagedAdapter = new SurveyPagedAdapter();
         surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
             pagedAdapter.submitList(pagedList);
         });
@@ -118,7 +118,6 @@ public class SurveysFragment extends Fragment  implements SurveyLocalPagedAdapte
         surveyViewModel.getNetworkState().observe(this, networkState->{
             pagedAdapter.setNetworkState(networkState);
         });
-        */
     }
 
     @Override
@@ -126,10 +125,16 @@ public class SurveysFragment extends Fragment  implements SurveyLocalPagedAdapte
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_surveys, container, false);
+
+        profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
+        if(profile == null) {
+            MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
+        }
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(localPagedAdapter);
+        //recyclerView.setAdapter(localPagedAdapter);
+        recyclerView.setAdapter(pagedAdapter);
         return view;
     }
 

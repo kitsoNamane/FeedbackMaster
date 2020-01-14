@@ -4,14 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,16 +20,12 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
 import sdk.kitso.feedbackmaster.db.Profile;
 import sdk.kitso.feedbackmaster.db.SurveyDB;
-import sdk.kitso.feedbackmaster.profile.ProfileSetup;
-import sdk.kitso.feedbackmaster.survey.SurveysFragmentDirections;
 
 public class MainActivity extends AppCompatActivity {
-    ListView listView;
     public static SurveyDB surveyDB;
-    NavController navController;
+    public static NavController navController;
     Profile profile;
     Intent intent;
-    public static Executor executor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +34,6 @@ public class MainActivity extends AppCompatActivity {
         surveyDB = Room.databaseBuilder(getApplicationContext(), SurveyDB.class, "userdb")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
-        profile = surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
-        executor = Executors.newSingleThreadExecutor();
-        if(profile == null) {
-            intent = new Intent(this, ProfileSetup.class);
-            startActivity(intent);
-            //SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());
-            //Toast.makeText(this.getContext(), "SurveyId :"+survey.getId(), Toast.LENGTH_LONG).show();
-            //Navigation.findNavController(view).navigate(actionSurvey);
-        }
 
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -70,12 +53,11 @@ public class MainActivity extends AppCompatActivity {
             public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
                 switch (navDestination.getId()) {
                     // use the ID of the navigation graph not the ID of the Question fragment
+                    case R.id.signUpFragment:
                     case R.id.questionFragment:
-                        Toast.makeText(MainActivity.this, "I'M AT Questions", Toast.LENGTH_LONG).show();
                         navView.setVisibility(View.GONE);
                         toolbar.setVisibility(View.GONE);
                         break;
-                        // TODO: Add another Destination for survey finished with prompt to return the user home
                     default:
                         navView.setVisibility(View.VISIBLE);
                         toolbar.setVisibility(View.VISIBLE);

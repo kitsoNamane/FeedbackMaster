@@ -1,31 +1,15 @@
 package sdk.kitso.feedbackmaster.survey;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.Group;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.textview.MaterialTextView;
-
-import java.util.List;
-
-import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.NetworkState;
-import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.Survey;
-import sdk.kitso.feedbackmaster.db.SurveyAndAllBranches;
-import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
 
 public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, RecyclerView.ViewHolder> {
     private static final int TYPE_PROGRESS = 0;
@@ -71,7 +55,8 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, RecyclerVi
 
     @Override
     public int getItemViewType(int position) {
-        if( hasExtraRow() && getItem(position) == null) {
+        Survey survey = getItem(position);
+        if( hasExtraRow() && survey == null) {
             return TYPE_PROGRESS;
         } else {
             return TYPE_ITEM;

@@ -12,7 +12,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.fragment.app.Fragment;
-import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 
@@ -138,7 +137,7 @@ public class AgeAndGenderFragment extends Fragment {
 
         if(isAgeValid == true && isGenderValid == true) {
             ProfileSetup.profile.setProfile(true);
-            //Globals.executor.execute(()->{
+            //Globals.exec.execute(()->{
             ProfileSetup.surveyDB.surveyDao().addProfile(ProfileSetup.profile);
             //});
         }

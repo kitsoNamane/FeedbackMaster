@@ -9,7 +9,6 @@ import com.google.android.material.textview.MaterialTextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.db.Business;
 import sdk.kitso.feedbackmaster.db.DataItem;
 
 public class SurveyViewHolder extends RecyclerView.ViewHolder {

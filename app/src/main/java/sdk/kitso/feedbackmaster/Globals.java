@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 public class Globals {
     public static final int CURRENT_USER_ID = 0;
     public static Executor executor = Executors.newSingleThreadExecutor();
+    public static Executor exec = Executors.newFixedThreadPool(1);
     public static final int RATING_STARS = 0;
     public static final int SHORT_ANSWER = 1;
     public static final int TRUE_FALSE = 2;
