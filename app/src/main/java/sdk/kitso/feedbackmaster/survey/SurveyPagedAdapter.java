@@ -9,6 +9,7 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.NetworkState;
+import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.DataItem;
 import sdk.kitso.feedbackmaster.db.Survey;
 
@@ -37,10 +38,12 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == TYPE_PROGRESS) {
-            return NetworkStateViewHolder.create(parent);
-        } else{
-            return SurveyViewHolder.create(parent);
+        switch (viewType) {
+            case R.layout.network_error:
+                return NetworkStateViewHolder.create(parent);
+            case R.layout.card_survey:
+            default:
+                return SurveyViewHolder.create(parent);
         }
     }
 
@@ -68,9 +71,9 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     @Override
     public int getItemViewType(int position) {
         if(getItem(position) == null) {
-            return TYPE_PROGRESS;
+            return R.layout.network_error;
         } else {
-            return TYPE_ITEM;
+            return R.layout.survey_card;
         }
     }
 
