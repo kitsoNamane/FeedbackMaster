@@ -1,9 +1,9 @@
 package sdk.kitso.feedbackmaster.repository;
 
 
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
-
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -23,7 +23,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
 
     public FeedbackMasterNetworkDataSource(FeedbackMasterSurveyApiService api) {
         this.apiService = api;
-        networkState = new MutableLiveData<>();
+        networkState = new MutableLiveData<NetworkState>();
         initialLoading = new MutableLiveData<>();
     }
 
@@ -45,6 +45,8 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
             @Override
             public void onResponse(Call<sdk.kitso.feedbackmaster.db.Response> call, Response<sdk.kitso.feedbackmaster.db.Response> response) {
                 if(response.isSuccessful()) {
+                    //SystemClock.sleep(3000);
+                    Log.d("FMDIGILAB 2", response.message());
                     loadInitialCallback.onResult(response.body().getData().getDataItemList(), null, 2);
                     initialLoading.postValue(NetworkState.LOADED);
                     networkState.postValue(NetworkState.LOADED);
@@ -62,25 +64,29 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });
-
+        //Log.d("FMDIGILAB 18", networkState.getValue().getMsg());
     }
 
     @Override
     public void loadBefore(@NonNull LoadParams<Integer> loadParams, @NonNull LoadCallback<Integer, DataItem> loadCallback) {
+        Log.d("FMDIGILAB", "LOAD BEFORE RUNNNING");
     }
 
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> loadParams, @NonNull LoadCallback<Integer, DataItem> loadCallback) {
-        Log.d(TAG, "Loading Page " + loadParams.key);
+        Log.d(TAG, "FMDIGILAB 9" + loadParams.key);
         networkState.postValue(NetworkState.LOADING);
 
         apiService.getNextSurveys(loadParams.key).enqueue(new Callback<sdk.kitso.feedbackmaster.db.Response>() {
               @Override
               public void onResponse(Call<sdk.kitso.feedbackmaster.db.Response> call, Response<sdk.kitso.feedbackmaster.db.Response> response) {
                   if(response.isSuccessful()) {
+                      //SystemClock.sleep(3000);
+                      Log.d("FMDIGILAB 11", response.message());
                       loadCallback.onResult(response.body().getData().getDataItemList(), loadParams.key + 1);
                       networkState.postValue(NetworkState.LOADED);
                   } else {
+                      Log.d("FMDIGILAB 11", response.message());
                       networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                   }
               }
@@ -88,6 +94,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
               @Override
               public void onFailure(Call<sdk.kitso.feedbackmaster.db.Response> call, Throwable throwable) {
                   String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
+                  Log.d("FMDIGILAB 10", errorMessage);
                   networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
               }
           }

@@ -17,7 +17,7 @@ public class ConnectivityInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         if(!isOnline()) {
-            throw new IOException("");
+            throw new IOException("No Internet Connection");
         }
         return chain.proceed(chain.request());
     }

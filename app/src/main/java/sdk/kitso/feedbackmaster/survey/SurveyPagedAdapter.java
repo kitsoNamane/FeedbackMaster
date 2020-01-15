@@ -1,5 +1,6 @@
 package sdk.kitso.feedbackmaster.survey;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -39,11 +40,11 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
-            case R.layout.network_error:
-                return NetworkStateViewHolder.create(parent);
             case R.layout.card_survey:
-            default:
                 return SurveyViewHolder.create(parent);
+            case R.layout.network_error:
+            default:
+                return NetworkStateViewHolder.create(parent);
         }
     }
 
@@ -70,10 +71,27 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
      */
     @Override
     public int getItemViewType(int position) {
-        if(getItem(position) == null) {
+        Log.d("FMDIGILAB 13 POSITION :", Integer.toString(position));
+        if(getItem(position) instanceof DataItem && getNetworkState()) {
+            Log.d("FMDIGILAB 7 POSITION : ", Integer.toString(position));
+            return R.layout.survey_card;
+        } else if(getItem(position) == null){
+            Log.d("FMDIGILAB 8 POSITION : ", Integer.toString(position));
             return R.layout.network_error;
         } else {
             return R.layout.survey_card;
+        }
+    }
+
+    //private NetworkState.Status getNetworkState() {
+    private boolean getNetworkState() {
+        switch(networkState.getStatus()) {
+            case FAILED:
+                return false;
+            case SUCCESS:
+            case RUNNING:
+            default:
+                return true;
         }
     }
 
