@@ -48,7 +48,7 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, RecyclerVi
                 ((SurveyLocalViewHolder) holder).setVisibility(View.GONE);
             }
         } else {
-            ((NetworkStateViewHolder) holder).bind(networkState);
+            ((NetworkStateViewHolder) holder).bind();
         }
 
     }

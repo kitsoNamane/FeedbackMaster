@@ -101,6 +101,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
         );
     }
 
-    public void retry(int pageKey) {
+    public void retry() {
+
     }
 }

@@ -8,11 +8,11 @@ import sdk.kitso.feedbackmaster.db.DataItem;
 public class FeedbackMasterNetworkDataFactory extends DataSource.Factory<Integer, DataItem> {
     FeedbackMasterNetworkDataSource feedbackMasterNetworkDataSource;
     FeedbackMasterSurveyApiService apiService;
-    private MutableLiveData<FeedbackMasterNetworkDataSource> mutableLiveData;
+    public MutableLiveData<FeedbackMasterNetworkDataSource> mutableLiveData;
 
     public FeedbackMasterNetworkDataFactory(FeedbackMasterSurveyApiService api) {
         this.apiService = api;
-        this.mutableLiveData = new MutableLiveData<FeedbackMasterNetworkDataSource>();
+        this.mutableLiveData = new MutableLiveData<>();
     }
 
     @NonNull

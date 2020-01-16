@@ -2,6 +2,7 @@ package sdk.kitso.feedbackmaster.survey;
 
 import android.content.Context;
 
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -43,6 +44,10 @@ public class SurveyViewModel extends ViewModel {
         surveyLiveData = new LivePagedListBuilder(feedbackMasterNetworkDataFactory, config)
                 .setFetchExecutor(executor)
                 .build();
+    }
+
+    public void retry() {
+        feedbackMasterNetworkDataFactory.mutableLiveData.getValue().invalidate();
     }
 
     /*

@@ -31,6 +31,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
             return oldSurvey.equals(newSurvey);
         }
     };
+
     protected SurveyPagedAdapter(OnSurveyItemClickedListener onSurveyItemClickedListener) {
         super(DIFF_CALLBACK);
         this.onSurveyItemClickedListener = onSurveyItemClickedListener;
@@ -39,49 +40,36 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case R.layout.network_error:
-                return NetworkStateViewHolder.create(parent);
-            case R.layout.card_survey:
-            default:
-                return SurveyViewHolder.create(parent);
-        }
+        return SurveyViewHolder.create(parent);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof SurveyViewHolder) {
-            DataItem item = getItem(position);
-            ((SurveyViewHolder)holder).bind(item, onSurveyItemClickedListener);
-            if (item.getChecked() == true && ((SurveyViewHolder) holder).cardView.isChecked() == true) {
-                ((SurveyViewHolder) holder).setVisibility(View.VISIBLE);
-            } else if(item.getChecked()) {
-                item.setChecked(!item.getChecked());
-            }else {
-                ((SurveyViewHolder) holder).cardView.setChecked(false);
-                ((SurveyViewHolder) holder).setVisibility(View.GONE);
-            }
-        } else {
-            ((NetworkStateViewHolder) holder).bind(networkState);
+        DataItem item = getItem(position);
+        ((SurveyViewHolder)holder).bind(item, onSurveyItemClickedListener);
+        if (item.getChecked() == true && ((SurveyViewHolder) holder).cardView.isChecked() == true) {
+            ((SurveyViewHolder) holder).setVisibility(View.VISIBLE);
+        } else if(item.getChecked()) {
+            item.setChecked(!item.getChecked());
+        }else {
+            ((SurveyViewHolder) holder).cardView.setChecked(false);
+            ((SurveyViewHolder) holder).setVisibility(View.GONE);
         }
     }
 
     /*
      * Default method of RecyclerView.Adapter
-     */
     @Override
     public int getItemViewType(int position) {
-        Log.d("FMDIGILAB 13 POSITION :", Integer.toString(position));
         if(getItem(position) instanceof DataItem && getNetworkState()) {
             Log.d("FMDIGILAB 7 POSITION : ", Integer.toString(position));
             return R.layout.survey_card;
-        } else if(getItem(position) == null){
-            Log.d("FMDIGILAB 8 POSITION : ", Integer.toString(position));
-            return R.layout.network_error;
         } else {
-            return R.layout.survey_card;
+            Log.d("FMDIGILAB 8 POSITION : ", Integer.toString(position));
+            return R.layout.load_more;
         }
     }
+     */
 
     //private NetworkState.Status getNetworkState() {
     private boolean getNetworkState() {

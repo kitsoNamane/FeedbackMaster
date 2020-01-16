@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.google.android.material.chip.Chip;
 import com.google.android.material.textview.MaterialTextView;
 
 import androidx.annotation.NonNull;
@@ -14,36 +15,25 @@ import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
 
 public class NetworkStateViewHolder extends RecyclerView.ViewHolder {
-    ProgressBar progressBar;
-    Group group;
-    MaterialTextView errorMsg;
+    Chip loadMore;
     public NetworkStateViewHolder(@NonNull View view) {
         super(view);
-        this.setIsRecyclable(false);
-        progressBar = view.findViewById(R.id.progressBar);
-        group = view.findViewById(R.id.network_error_group);
+        loadMore = view.findViewById(R.id.load_more);
+
     }
 
-    public void bind(NetworkState networkState) {
-        if (networkState != null && networkState.getStatus() == NetworkState.Status.RUNNING) {
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            progressBar.setVisibility(View.GONE);
-        }
-
-        if (networkState != null && networkState.getStatus() == NetworkState.Status.FAILED) {
-            //errorMsg.setVisibility(View.VISIBLE);
-            //errorMsg.setText(networkState.getMsg());
-            group.setVisibility(View.VISIBLE);
-        } else {
-            //errorMsg.setVisibility(View.GONE);
-            group.setVisibility(View.GONE);
-        }
+    public void bind() {
+        loadMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SurveysFragment.retry();
+            }
+        });
     }
 
     public static NetworkStateViewHolder create(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.network_error, parent, false
+                R.layout.load_more, parent, false
         );
         return new NetworkStateViewHolder(view);
     }

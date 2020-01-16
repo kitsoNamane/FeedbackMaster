@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.chip.Chip;
+
 import java.util.Objects;
 
 import androidx.fragment.app.Fragment;
@@ -21,6 +25,7 @@ import androidx.room.Room;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.MockData;
+import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.Utils;
 import sdk.kitso.feedbackmaster.db.DataItem;
@@ -44,9 +49,11 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
     private static final String ARG_PARAM2 = "param2";
     public static RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private SurveyPagedAdapter pagedAdapter;
+    private static SurveyPagedAdapter pagedAdapter;
+    private MaterialCardView reloadCard;
+    private Chip reloadChip;
     private SurveyLocalPagedAdapter localPagedAdapter;
-    private SurveyViewModel surveyViewModel;
+    private static SurveyViewModel surveyViewModel;
     private SurveyLocalViewModel localViewModel;
     //private SurveyAdapter adapter;
     private SurveyLocalViewHolder holder;
@@ -91,14 +98,26 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
         }
     }
 
-    public void retry() {
-        Objects.requireNonNull(surveyViewModel.getSurveyLiveData().getValue()).retry();
-        pagedAdapter.notifyDataSetChanged();
+    public static void retry() {
+        surveyViewModel.retry();
+        Log.d("FMDIGILAB 16", "RETYRING");
+        //pagedAdapter.notifyDataSetChanged();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_surveys, container, false);
+
+        reloadCard = view.findViewById(R.id.reloadCard);
+        reloadChip = view.findViewById(R.id.load_more);
+        reloadChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                retry();
+            }
+        });
+
         String androidId = Settings.Secure.getString(this.getActivity().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
@@ -113,14 +132,13 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
 
         surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
             pagedAdapter.submitList(pagedList);
-
         });
 
         surveyViewModel.getNetworkState().observe(this, networkState->{
             pagedAdapter.setNetworkState(networkState);
+            toggleReload(networkState.getStatus());
         });
 
-        View view = inflater.inflate(R.layout.fragment_surveys, container, false);
 
         profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
         if(profile == null) {
@@ -133,6 +151,16 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
         recyclerView.setAdapter(pagedAdapter);
 
         return view;
+    }
+
+    public void toggleReload(NetworkState.Status status) {
+        if(status == NetworkState.Status.FAILED) {
+            reloadCard.setVisibility(View.VISIBLE);
+            Log.d("FMDIGILAB 14", "LiveUpdate");
+        } else {
+            Log.d("FMDIGILAB 15", "LiveUpdate");
+            reloadCard.setVisibility(View.GONE);
+        }
     }
 
 
