@@ -1,5 +1,6 @@
 package sdk.kitso.feedbackmaster.survey;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.MockData;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.Utils;
 import sdk.kitso.feedbackmaster.db.DataItem;
 import sdk.kitso.feedbackmaster.db.Profile;
 import sdk.kitso.feedbackmaster.db.QuestionDB;
@@ -79,6 +81,7 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        onNetworkState(this.getContext());
         String androidId = Settings.Secure.getString(this.getActivity().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
@@ -139,6 +142,11 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
         return view;
     }
 
+    private void onNetworkState(Context context) {
+        if(!Utils.isOnline(context)) {
+            MainActivity.navController.navigate(SurveysFragmentDirections.actionNetworkError());
+        }
+    }
     /**
     @Override
     public void onItemClicked(View view, Survey survey) {

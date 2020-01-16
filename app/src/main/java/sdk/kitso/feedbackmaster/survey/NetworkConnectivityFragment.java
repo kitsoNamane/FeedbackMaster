@@ -4,13 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
+
+
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,8 +38,12 @@ public class NetworkConnectivityFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    ProgressBar progressBar;
+    Handler handler = new Handler();
+    Group group;
+    MaterialButton retry;
 
-    private OnFragmentInteractionListener mListener;
+    //private OnFragmentInteractionListener mListener;
 
     public NetworkConnectivityFragment() {
         // Required empty public constructor
@@ -67,10 +80,44 @@ public class NetworkConnectivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_network_connectivity, container, false);
+        View view = inflater.inflate(R.layout.fragment_network_connectivity, container, false);
+        retry = view.findViewById(R.id.try_again);
+        progressBar = view.findViewById(R.id.progressBar);
+        group = view.findViewById(R.id.network_error_group);
+        group.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+
+        // check network below
+        onNetworkState(this.getContext());
+
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                group.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                onNetworkState(v.getContext());
+            }
+        });
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    private void onNetworkState(Context context) {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(Utils.isOnline(context)) {
+                    // to to surveys
+                    MainActivity.navController.navigate(NetworkConnectivityFragmentDirections.actionNetworkConnectivityFragmentPop());
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    group.setVisibility(View.VISIBLE);
+                }
+            }
+        }, 1000);
+
+    }
+
+    /** TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -94,7 +141,6 @@ public class NetworkConnectivityFragment extends Fragment {
         mListener = null;
     }
 
-    /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -103,9 +149,10 @@ public class NetworkConnectivityFragment extends Fragment {
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+     */
+
 }

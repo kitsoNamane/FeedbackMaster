@@ -40,11 +40,11 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
-            case R.layout.card_survey:
-                return SurveyViewHolder.create(parent);
             case R.layout.network_error:
-            default:
                 return NetworkStateViewHolder.create(parent);
+            case R.layout.card_survey:
+            default:
+                return SurveyViewHolder.create(parent);
         }
     }
 
