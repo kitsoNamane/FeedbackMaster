@@ -3,11 +3,14 @@ package sdk.kitso.feedbackmaster.survey;
 import android.content.Context;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+
+import java.util.Objects;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -82,6 +85,20 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onNetworkState(this.getContext());
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    public void retry() {
+        Objects.requireNonNull(surveyViewModel.getSurveyLiveData().getValue()).retry();
+        pagedAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         String androidId = Settings.Secure.getString(this.getActivity().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
@@ -89,58 +106,35 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
                 .fallbackToDestructiveMigration()
                 .build();
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        mock = new MockData(this.getContext());
-        if(MainActivity.surveyDB.surveyDao().getSurveys().size() <= 0) {
-            Globals.executor.execute(()->{
-                mock.generateSurveys(100);
-            });
-            Globals.executor.execute(()->{
-                mock.generateOptions();
-            });
-        }
-
         surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
         surveyViewModel.init(androidId, this.getContext());
         localViewModel = ViewModelProviders.of(this).get(SurveyLocalViewModel.class);
-        //localViewModel.init(MainActivity.surveyDB.surveyDao());
-        //localPagedAdapter = new SurveyLocalPagedAdapter(this);
         pagedAdapter = new SurveyPagedAdapter(this);
-
-        //localViewModel.surveys.observe(this, pageList->{
-        //    localPagedAdapter.submitList(pageList);
-        //});
 
         surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
             pagedAdapter.submitList(pagedList);
+
         });
 
         surveyViewModel.getNetworkState().observe(this, networkState->{
             pagedAdapter.setNetworkState(networkState);
         });
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_surveys, container, false);
 
         profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
         if(profile == null) {
             MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
         }
+
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        //recyclerView.setAdapter(localPagedAdapter);
         recyclerView.setAdapter(pagedAdapter);
+
         return view;
     }
+
 
     private void onNetworkState(Context context) {
         if(!Utils.isOnline(context)) {
