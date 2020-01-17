@@ -19,13 +19,16 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
     private FeedbackMasterSurveyApiService apiService;
 
     private MutableLiveData networkState;
+    public Runnable reload;
     private MutableLiveData initialLoading;
+
 
     public FeedbackMasterNetworkDataSource(FeedbackMasterSurveyApiService api) {
         this.apiService = api;
         networkState = new MutableLiveData<NetworkState>();
         initialLoading = new MutableLiveData<>();
     }
+
 
     public MutableLiveData<NetworkState> getNetworkState() {
         return networkState;
@@ -60,6 +63,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
             @Override
             public void onFailure(Call<sdk.kitso.feedbackmaster.db.Response> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
+                reload = () -> loadInitial(loadInitialParams, loadInitialCallback);
                 Log.d("FMDIGILAB 3", errorMessage);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
@@ -94,6 +98,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
               @Override
               public void onFailure(Call<sdk.kitso.feedbackmaster.db.Response> call, Throwable throwable) {
                   String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
+                  reload = () -> loadAfter(loadParams, loadCallback);
                   Log.d("FMDIGILAB 10", errorMessage);
                   networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
               }

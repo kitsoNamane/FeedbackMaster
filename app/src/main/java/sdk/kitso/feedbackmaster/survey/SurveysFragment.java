@@ -101,7 +101,6 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
     public static void retry() {
         surveyViewModel.retry();
         Log.d("FMDIGILAB 16", "RETYRING");
-        //pagedAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -127,7 +126,6 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
 
         surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
         surveyViewModel.init(androidId, this.getContext());
-        localViewModel = ViewModelProviders.of(this).get(SurveyLocalViewModel.class);
         pagedAdapter = new SurveyPagedAdapter(this);
 
         surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
@@ -138,6 +136,7 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
             pagedAdapter.setNetworkState(networkState);
             toggleReload(networkState.getStatus());
         });
+
 
 
         profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
