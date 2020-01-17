@@ -6,21 +6,14 @@ import android.view.ViewGroup;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textview.MaterialTextView;
-
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.RecyclerView;
-import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.DataItem;
-import sdk.kitso.feedbackmaster.db.Survey;
-import sdk.kitso.feedbackmaster.db.SurveyAndAllBranches;
-import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
 
 public class SurveyViewHolder extends RecyclerView.ViewHolder {
     MaterialTextView company;
@@ -28,7 +21,6 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
     MaterialCardView cardView;
     Group branch;
     Group department;
-    Chip chipItem;
     ChipGroup branches;
     ChipGroup departments;
     MaterialButton start;
@@ -38,11 +30,10 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
         this.cardView = (MaterialCardView) view;
         this.company = view.findViewById(R.id.company_name);
         this.survey = view.findViewById(R.id.survey_title);
-        this.survey = view.findViewById(R.id.survey_title);
-        this.branches = view.findViewById(R.id.branch);
+        this.branches = view.findViewById(R.id.branchOld);
         this.departments = view.findViewById(R.id.department);
-        this.branch = view.findViewById(R.id.branches_list);
         this.department = view.findViewById(R.id.department_list);
+        this.branch = view.findViewById(R.id.branch_list);
         this.start = view.findViewById(R.id.start_survey);
     }
 
@@ -72,23 +63,41 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
         return new SurveyViewHolder(view);
     }
 
+    public void bindDynamic(DataItem item) {
+        item.setChecked(!item.getChecked());
+        this.cardView.setChecked(item.getChecked());
+        if(this.cardView.isChecked()) {
+            branch.setVisibility(View.VISIBLE);
+            department.setVisibility(View.VISIBLE);
+            start.setVisibility(View.VISIBLE);
+        } else {
+            branch.setVisibility(View.GONE);
+            department.setVisibility(View.GONE);
+            start.setVisibility(View.GONE);
+        }
+    }
+
+    public void renderDepartments() {
+
+    }
+
     /**
     public void bindDynamicContent(DataItem item) {
         survey.setChecked(!survey.getChecked());
         this.cardView.setChecked(survey.getChecked());
         if (this.cardView.isChecked() == true && this.departments.getChildCount() <= 2) {
-            branches_list = MainActivity.surveyDB.surveyDao().getBranches(survey.getId());
+            branches_list = MainActivity.surveyDB.surveyDao().getBranchOlds(survey.getId());
             depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
             // Currently O(X^2) complexity
             // find way to speed it up to O(X) complexity
-            for (int j = 0; j < branches_list.get(0).getBranches().size(); j++) {
+            for (int j = 0; j < branches_list.get(0).getBranchOlds().size(); j++) {
                 chipItem = new Chip(this.cardView.getContext());
-                chipItem.setText(branches_list.get(0).getBranches().get(j).getBranch());
+                chipItem.setText(branches_list.get(0).getBranchOlds().get(j).getBranch());
                 chipItem.setCheckable(true);
                 chipItem.setCheckedIcon(this.cardView.getContext().getResources().getDrawable(R.drawable.ic_check_black_24dp));
                 chipItem.setTextSize(Float.parseFloat("16"));
                 //chipItem.setPadding(10, 10, 10, 10);
-                this.branches.addView(chipItem);
+                this.branchOlds.addView(chipItem);
             }
             for (int j = 0; j < depts.get(0).getDepartments().size(); j++) {
                 chipItem = new Chip(this.cardView.getContext());

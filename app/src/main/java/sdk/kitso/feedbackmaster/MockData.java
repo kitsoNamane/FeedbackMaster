@@ -7,7 +7,7 @@ import com.github.javafaker.Faker;
 import java.util.List;
 import java.util.Random;
 
-import sdk.kitso.feedbackmaster.db.Branch;
+import sdk.kitso.feedbackmaster.db.Branch_old;
 import sdk.kitso.feedbackmaster.db.Department;
 import sdk.kitso.feedbackmaster.db.MultipleChoiceOption;
 import sdk.kitso.feedbackmaster.db.Profile;
@@ -20,7 +20,7 @@ public class MockData {
     private Faker faker;
     private Survey survey;
     private List<Survey> surveys;
-    private Branch branch;
+    private Branch_old branchOld;
     private Department dept;
     private Profile profile;
     private Question question;
@@ -34,7 +34,7 @@ public class MockData {
         this.profile = new Profile();
         this.survey = new Survey();
         this.dept = new Department();
-        this.branch = new Branch();
+        this.branchOld = new Branch_old();
         this.question = new Question();
         this.option = new MultipleChoiceOption();
         this.qtype = new Random();
@@ -57,9 +57,9 @@ public class MockData {
             survey.setSurvey(faker.commerce().productName());
 
             for(int j = 0; j < 3; j++) {
-                branch.setBranch(faker.address().cityName(), i);
+                branchOld.setBranch(faker.address().cityName(), i);
                 dept.setDepartment(faker.commerce().department(), i);
-                MainActivity.surveyDB.surveyDao().addBranch(branch);
+                MainActivity.surveyDB.surveyDao().addBranch(branchOld);
                 MainActivity.surveyDB.surveyDao().addDepartment(dept);
             }
             for (int k = 1; k < 11; k++) {

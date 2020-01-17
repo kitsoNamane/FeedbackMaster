@@ -1,8 +1,5 @@
 package sdk.kitso.feedbackmaster.repository;
 
-
-import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -63,9 +60,9 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
             @Override
             public void onFailure(Call<sdk.kitso.feedbackmaster.db.Response> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
-                reload = () -> loadInitial(loadInitialParams, loadInitialCallback);
                 Log.d("FMDIGILAB 3", errorMessage);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+                reload = () -> loadInitial(loadInitialParams, loadInitialCallback);
             }
         });
         //Log.d("FMDIGILAB 18", networkState.getValue().getMsg());
@@ -98,9 +95,9 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
               @Override
               public void onFailure(Call<sdk.kitso.feedbackmaster.db.Response> call, Throwable throwable) {
                   String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
-                  reload = () -> loadAfter(loadParams, loadCallback);
                   Log.d("FMDIGILAB 10", errorMessage);
                   networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+                  reload = () -> loadAfter(loadParams, loadCallback);
               }
           }
         );

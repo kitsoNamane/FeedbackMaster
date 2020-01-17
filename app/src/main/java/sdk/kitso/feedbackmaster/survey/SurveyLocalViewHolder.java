@@ -36,12 +36,12 @@ public class SurveyLocalViewHolder extends RecyclerView.ViewHolder {
     public SurveyLocalViewHolder(View view) {
         super(view);
         this.cardView = (MaterialCardView) view;
-        this.company = view.findViewById(R.id.company_name);
-        this.survey = view.findViewById(R.id.survey_title);
-        this.branches = view.findViewById(R.id.branch);
+        this.company = view.findViewById(R.id.survey_title);
+        this.survey = view.findViewById(R.id.company_name);
+        this.branches = view.findViewById(R.id.branchOld);
         this.departments = view.findViewById(R.id.department);
-        this.branch = view.findViewById(R.id.branches_list);
-        this.department = view.findViewById(R.id.department_list);
+        this.branch = view.findViewById(R.id.department_list);
+        this.department = view.findViewById(R.id.branch_list);
         this.start = view.findViewById(R.id.start_survey);
     }
     public static SurveyLocalViewHolder create(ViewGroup parent) {
@@ -79,9 +79,9 @@ public class SurveyLocalViewHolder extends RecyclerView.ViewHolder {
             depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
             // Currently O(X^2) complexity
             // find way to speed it up to O(X) complexity
-            for (int j = 0; j < branches_list.get(0).getBranches().size(); j++) {
+            for (int j = 0; j < branches_list.get(0).getBranchOlds().size(); j++) {
                 chipItem = new Chip(this.cardView.getContext());
-                chipItem.setText(branches_list.get(0).getBranches().get(j).getBranch());
+                chipItem.setText(branches_list.get(0).getBranchOlds().get(j).getBranch());
                 chipItem.setCheckable(true);
                 chipItem.setCheckedIcon(this.cardView.getContext().getResources().getDrawable(R.drawable.ic_check_black_24dp));
                 chipItem.setTextSize(Float.parseFloat("16"));

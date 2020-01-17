@@ -14,7 +14,7 @@ public interface SurveyDao {
     public void addSurvey(Survey survey);
 
     @Insert
-    void addBranch(Branch branch);
+    void addBranch(Branch_old branchOld);
 
     @Insert
     void addDepartment(Department dept);

@@ -84,9 +84,9 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
         public SurveyViewHolder(View view) {
             super(view);
             this.cardView = (MaterialCardView) view;
-            this.company = view.findViewById(R.id.company_name);
-            this.survey = view.findViewById(R.id.survey_title);
-            this.branches = view.findViewById(R.id.branch);
+            this.company = view.findViewById(R.id.survey_title);
+            this.survey = view.findViewById(R.id.company_name);
+            this.branches = view.findViewById(R.id.branchOld);
             this.departments = view.findViewById(R.id.department);
             this.start = view.findViewById(R.id.start_survey);
         }
@@ -119,9 +119,9 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
             depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
             // Currently O(X^2) complexity
             // find way to speed it up to O(X) complexity
-            for (int j = 0; j < branches_list.get(0).getBranches().size(); j++) {
+            for (int j = 0; j < branches_list.get(0).getBranchOlds().size(); j++) {
                 checkBox = new RadioButton(holder.cardView.getContext());
-                checkBox.setText(branches_list.get(0).getBranches().get(j).getBranch());
+                checkBox.setText(branches_list.get(0).getBranchOlds().get(j).getBranch());
                 checkBox.setTextSize(Float.parseFloat("16"));
                 checkBox.setPadding(10, 10, 10, 10);
                 holder.branches.addView(checkBox);

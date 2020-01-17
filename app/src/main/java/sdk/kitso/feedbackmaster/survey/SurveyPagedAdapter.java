@@ -1,6 +1,5 @@
 package sdk.kitso.feedbackmaster.survey;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -10,9 +9,7 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.NetworkState;
-import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.db.DataItem;
-import sdk.kitso.feedbackmaster.db.Survey;
 
 public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.ViewHolder> {
     private static final int TYPE_PROGRESS = 0;

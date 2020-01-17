@@ -3,15 +3,11 @@ package sdk.kitso.feedbackmaster.survey;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.google.android.material.chip.Chip;
-import com.google.android.material.textview.MaterialTextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.RecyclerView;
-import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
 
 public class NetworkStateViewHolder extends RecyclerView.ViewHolder {

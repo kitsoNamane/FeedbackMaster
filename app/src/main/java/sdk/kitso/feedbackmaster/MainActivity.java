@@ -24,8 +24,6 @@ import sdk.kitso.feedbackmaster.db.SurveyDB;
 public class MainActivity extends AppCompatActivity {
     public static SurveyDB surveyDB;
     public static NavController navController;
-    Profile profile;
-    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

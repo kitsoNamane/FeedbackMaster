@@ -1,7 +1,6 @@
 package sdk.kitso.feedbackmaster.survey;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.Group;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 

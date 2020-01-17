@@ -10,11 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 
-import java.util.Objects;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -31,7 +29,6 @@ import sdk.kitso.feedbackmaster.Utils;
 import sdk.kitso.feedbackmaster.db.DataItem;
 import sdk.kitso.feedbackmaster.db.Profile;
 import sdk.kitso.feedbackmaster.db.QuestionDB;
-import sdk.kitso.feedbackmaster.db.Survey;
 
 
 /**
@@ -168,34 +165,13 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
             MainActivity.navController.navigate(SurveysFragmentDirections.actionNetworkError());
         }
     }
-    /**
-    @Override
-    public void onItemClicked(View view, Survey survey) {
-        switch (view.getId()) {
-        case(R.id.card_survey):
-            holder = (SurveyLocalViewHolder) recyclerView.findContainingViewHolder(view);
-            holder.bindDynamicContent(survey);
-            break;
-        case(R.id.start_survey):
-            SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());
-            //Toast.makeText(this.getContext(), "SurveyId :"+survey.getId(), Toast.LENGTH_LONG).show();
-            Navigation.findNavController(view).navigate(actionSurvey);
-            break;
-        default:
-            Toast.makeText(this.getContext(), "ButtonId :"+Integer.toString(R.id.start_survey)
-                    +" CardId :"+Integer.toString(R.id.survey_card)+" Got :"+Integer.toString(view.getId()),
-                    Toast.LENGTH_LONG
-            ).show();
-        }
-    }
-     */
 
     @Override
     public void onItemClicked(View view, DataItem item) {
         switch (view.getId()) {
             case(R.id.card_survey):
                 surveyViewHolder = (SurveyViewHolder) recyclerView.findContainingViewHolder(view);
-                //surveyViewHolder.bindDynamicContent(item);
+                surveyViewHolder.bindDynamic(item);
                 break;
             case(R.id.start_survey):
                 SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(2);
