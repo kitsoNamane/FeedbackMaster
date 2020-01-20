@@ -10,7 +10,7 @@ public class ChildrenDataItem {
 
 	@SerializedName("children")
     @Expose
-	private ChildrenData children;
+	private BranchChildren children;
 
 	@SerializedName("name")
 	private String name;
@@ -34,11 +34,11 @@ public class ChildrenDataItem {
 		return ref;
 	}
 
-	public void setChildren(ChildrenData children){
+	public void setChildren(BranchChildren children){
 		this.children = children;
 	}
 
-	public ChildrenData getChildren(){
+	public BranchChildren getChildren(){
 		return children;
 	}
 

@@ -5,17 +5,17 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Children{
+public class DepartmentChildren {
 
 	@SerializedName("data")
-    @Expose
-	private List<ChildrenDataItem> data;
+	@Expose
+	private List<Object> data;
 
-	public void setData(List<ChildrenDataItem> data){
+	public void setData(List<Object> data){
 		this.data = data;
 	}
 
-	public List<ChildrenDataItem> getData(){
+	public List<Object> getData(){
 		return data;
 	}
 

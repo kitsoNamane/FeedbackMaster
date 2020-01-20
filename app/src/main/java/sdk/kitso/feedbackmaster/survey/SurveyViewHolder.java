@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.model.BranchChildren;
+import sdk.kitso.feedbackmaster.model.BranchDataItem;
 import sdk.kitso.feedbackmaster.model.ChildrenData;
 import sdk.kitso.feedbackmaster.model.ChildrenDataItem;
 import sdk.kitso.feedbackmaster.model.DataItem;
@@ -125,44 +127,33 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void renderDepartments(ChildrenDataItem child) {
-    }
-
-
-    /**
-    public void bindDynamicContent(QuestionDataItem item) {
-        survey.setChecked(!survey.getChecked());
-        this.cardView.setChecked(survey.getChecked());
-        if (this.cardView.isChecked() == true && this.departments.getChildCount() <= 2) {
-            branches_list = MainActivity.surveyDB.surveyDao().getBranchOlds(survey.getId());
-            depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
-            // Currently O(X^2) complexity
-            // find way to speed it up to O(X) complexity
-            for (int j = 0; j < branches_list.get(0).getBranchOlds().size(); j++) {
-                chipItem = new Chip(this.cardView.getContext());
-                chipItem.setText(branches_list.get(0).getBranchOlds().get(j).getBranch());
-                chipItem.setCheckable(true);
-                chipItem.setCheckedIcon(this.cardView.getContext().getResources().getDrawable(R.drawable.ic_check_black_24dp));
-                chipItem.setTextSize(Float.parseFloat("16"));
-                //chipItem.setPadding(10, 10, 10, 10);
-                this.branchOlds.addView(chipItem);
+    public void renderDepartments(ChildrenDataItem childObj) {
+        List<BranchDataItem> children = childObj.getChildren().getData();
+        if(children.size() > 0) {
+            if(departments.getChildCount() > 0) {
+                department.setVisibility(View.VISIBLE);
+                return;
             }
-            for (int j = 0; j < depts.get(0).getDepartments().size(); j++) {
+
+            for(BranchDataItem child : children) {
                 chipItem = new Chip(this.cardView.getContext());
-                chipItem.setText(depts.get(0).getDepartments().get(j).getDept());
+                Log.d("FMDIGITAL Dep", child.getName());
+                chipItem.setText(child.getName());
                 chipItem.setCheckable(true);
-                chipItem.setCheckedIcon(this.cardView.getContext().getResources().getDrawable(R.drawable.ic_check_black_24dp));
-                chipItem.setTextSize(Float.parseFloat("16"));
-                this.departments.addView(chipItem);
+
+                chipItem.setCheckedIcon(
+                        this.cardView.getContext().getResources().getDrawable(
+                                R.drawable.ic_check_black_24dp
+                        )
+                );
+                departments.addView(chipItem);
             }
-        }
-        if (this.cardView.isChecked()) {
-            setVisibility(View.VISIBLE);
+            department.setVisibility(View.VISIBLE);
         } else {
-            setVisibility(View.GONE);
+            departments.removeAllViews();
+            department.setVisibility(View.GONE);
         }
     }
-     */
 
     public void setVisibility(int VISIBILITY) {
         this.branch.setVisibility(VISIBILITY);

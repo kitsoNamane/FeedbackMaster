@@ -142,7 +142,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/department_text"
-            app:singleSelection="false"/>
+            app:singleSelection="true"/>
 
         <View
             android:id="@+id/divider2"
