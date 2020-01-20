@@ -19,7 +19,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.db.Profile;
+import sdk.kitso.feedbackmaster.model.Profile;
 
 /**
  * A simple {@link Fragment} subclass.

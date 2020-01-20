@@ -1,6 +1,5 @@
 package sdk.kitso.feedbackmaster;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,8 +17,7 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
-import sdk.kitso.feedbackmaster.db.Profile;
-import sdk.kitso.feedbackmaster.db.SurveyDB;
+import sdk.kitso.feedbackmaster.model.SurveyDB;
 
 public class MainActivity extends AppCompatActivity {
     public static SurveyDB surveyDB;

@@ -12,7 +12,7 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
-import sdk.kitso.feedbackmaster.db.MultipleChoiceOption;
+import sdk.kitso.feedbackmaster.model.MultipleChoiceOption;
 
 public class MyListAdapter extends BaseAdapter {
 

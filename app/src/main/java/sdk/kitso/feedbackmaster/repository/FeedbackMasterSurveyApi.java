@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import sdk.kitso.feedbackmaster.db.DataItem;
+import sdk.kitso.feedbackmaster.model.DataItem;
 
 public class FeedbackMasterSurveyApi {
     public static GsonConverterFactory customConverterFactory() {

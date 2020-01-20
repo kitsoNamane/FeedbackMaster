@@ -9,7 +9,7 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.NetworkState;
-import sdk.kitso.feedbackmaster.db.DataItem;
+import sdk.kitso.feedbackmaster.model.DataItem;
 
 public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.ViewHolder> {
     private static final int TYPE_PROGRESS = 0;
@@ -58,7 +58,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
      * Default method of RecyclerView.Adapter
     @Override
     public int getItemViewType(int position) {
-        if(getItem(position) instanceof DataItem && getNetworkState()) {
+        if(getItem(position) instanceof QuestionDataItem && getNetworkState()) {
             Log.d("FMDIGILAB 7 POSITION : ", Integer.toString(position));
             return R.layout.survey_card;
         } else {

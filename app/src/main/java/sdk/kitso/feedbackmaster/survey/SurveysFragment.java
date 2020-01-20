@@ -16,19 +16,15 @@ import com.google.android.material.chip.Chip;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
-import sdk.kitso.feedbackmaster.MockData;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.Utils;
-import sdk.kitso.feedbackmaster.db.DataItem;
-import sdk.kitso.feedbackmaster.db.Profile;
-import sdk.kitso.feedbackmaster.db.QuestionDB;
+import sdk.kitso.feedbackmaster.model.DataItem;
+import sdk.kitso.feedbackmaster.model.Profile;
 
 
 /**
@@ -49,14 +45,8 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
     private static SurveyPagedAdapter pagedAdapter;
     private MaterialCardView reloadCard;
     private Chip reloadChip;
-    private SurveyLocalPagedAdapter localPagedAdapter;
     private static SurveyViewModel surveyViewModel;
-    private SurveyLocalViewModel localViewModel;
-    //private SurveyAdapter adapter;
-    private SurveyLocalViewHolder holder;
     private SurveyViewHolder surveyViewHolder;
-    private MockData mock;
-    public static QuestionDB questionDB;
     Profile profile;
 
     // TODO: Rename and change types of parameters
@@ -117,10 +107,6 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
         String androidId = Settings.Secure.getString(this.getActivity().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 
-        questionDB = Room.databaseBuilder(this.getContext().getApplicationContext(), QuestionDB.class, "questions")
-                .fallbackToDestructiveMigration()
-                .build();
-
         surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
         surveyViewModel.init(androidId, this.getContext());
         pagedAdapter = new SurveyPagedAdapter(this);
@@ -175,8 +161,7 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
                 break;
             case(R.id.start_survey):
                 SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(2);
-                //Toast.makeText(this.getContext(), "SurveyId :"+survey.getId(), Toast.LENGTH_LONG).show();
-                Navigation.findNavController(view).navigate(actionSurvey);
+                MainActivity.navController.navigate(actionSurvey);
                 break;
             default:
                 Toast.makeText(this.getContext(), "ButtonId :"+Integer.toString(R.id.start_survey)

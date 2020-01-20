@@ -15,7 +15,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import sdk.kitso.feedbackmaster.db.DataItem;
+import sdk.kitso.feedbackmaster.model.DataItem;
 
 class SurveyDeserializer implements JsonDeserializer<List<DataItem>> {
     @Override

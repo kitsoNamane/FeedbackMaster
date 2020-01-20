@@ -8,8 +8,8 @@ import androidx.navigation.Navigation;
 import androidx.room.Room;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.db.Profile;
-import sdk.kitso.feedbackmaster.db.SurveyDB;
+import sdk.kitso.feedbackmaster.model.Profile;
+import sdk.kitso.feedbackmaster.model.SurveyDB;
 
 public class ProfileSetup extends AppCompatActivity {
     public static NavController navController;

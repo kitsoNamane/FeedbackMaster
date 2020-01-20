@@ -14,7 +14,7 @@ import androidx.paging.DataSource;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 import sdk.kitso.feedbackmaster.NetworkState;
-import sdk.kitso.feedbackmaster.db.DataItem;
+import sdk.kitso.feedbackmaster.model.DataItem;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataFactory;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApi;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApiService;

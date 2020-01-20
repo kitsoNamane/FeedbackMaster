@@ -91,9 +91,12 @@ public class QuestionFragment extends Fragment {
         questionNav = view.findViewById(R.id.question_nav_view);
         questionView = view.findViewById(R.id.question_showcase);
         questionNav.setSelectedItemId(R.id.dummy);
-        questionController.setQuestions(questionFragmentArgs.getSurveyId());
+        //questionController.setQuestions(questionFragmentArgs.getSurveyId());
+        //questionController.setQuestions();
         questionTitle = view.findViewById(R.id.question_title);
-        questionTitle.setText(questionController.nextQuestion().getQuestion());
+        return view;
+    }
+        /**questionTitle.setText(questionController.nextQuestion().getQuestion());
         Toast.makeText(this.getContext(), "OPTIONS : "+questionController.options.size(), Toast.LENGTH_LONG).show();
         renderQuestion();
         questionNav.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
@@ -203,7 +206,6 @@ public class QuestionFragment extends Fragment {
     }
 
 
-    /**
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

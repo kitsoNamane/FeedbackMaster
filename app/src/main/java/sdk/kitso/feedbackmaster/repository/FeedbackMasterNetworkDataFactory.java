@@ -3,7 +3,7 @@ package sdk.kitso.feedbackmaster.repository;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
-import sdk.kitso.feedbackmaster.db.DataItem;
+import sdk.kitso.feedbackmaster.model.DataItem;
 
 public class FeedbackMasterNetworkDataFactory extends DataSource.Factory<Integer, DataItem> {
     FeedbackMasterNetworkDataSource feedbackMasterNetworkDataSource;

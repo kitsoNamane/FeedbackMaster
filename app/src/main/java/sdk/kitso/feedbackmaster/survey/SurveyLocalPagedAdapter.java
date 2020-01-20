@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import sdk.kitso.feedbackmaster.NetworkState;
-import sdk.kitso.feedbackmaster.db.Survey;
+import sdk.kitso.feedbackmaster.model.Survey;
 
 public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, RecyclerView.ViewHolder> {
     private static final int TYPE_PROGRESS = 0;

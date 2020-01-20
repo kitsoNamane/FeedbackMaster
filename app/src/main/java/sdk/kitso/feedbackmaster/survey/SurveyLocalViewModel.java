@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
-import sdk.kitso.feedbackmaster.db.Survey;
-import sdk.kitso.feedbackmaster.db.SurveyDao;
+import sdk.kitso.feedbackmaster.model.Survey;
+import sdk.kitso.feedbackmaster.model.SurveyDao;
 
 public class SurveyLocalViewModel extends ViewModel {
     private SurveyDao surveyDao;

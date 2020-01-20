@@ -16,9 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.db.Survey;
-import sdk.kitso.feedbackmaster.db.SurveyAndAllBranches;
-import sdk.kitso.feedbackmaster.db.SurveyAndAllDepartments;
+import sdk.kitso.feedbackmaster.model.Survey;
+import sdk.kitso.feedbackmaster.model.SurveyAndAllBranches;
+import sdk.kitso.feedbackmaster.model.SurveyAndAllDepartments;
 
 public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyViewHolder> {
     public final List<Survey> surveys;
