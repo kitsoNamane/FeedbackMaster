@@ -16,7 +16,6 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 
-import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.Profile;
@@ -24,7 +23,6 @@ import sdk.kitso.feedbackmaster.model.Profile;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SignUpFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link SignUpFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -78,8 +76,8 @@ public class SignUpFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
-        if(profile == null) {
+        //profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
+        if(MainActivity.profile == null) {
             profile = new Profile();
         }
     }
@@ -149,7 +147,7 @@ public class SignUpFragment extends Fragment {
         if(!(radioGroup.getCheckedChipId() == -1)) {
             male.setError(null);
             female.setError(null);
-            genderId = (Chip) radioGroup.findViewById(radioGroup.getCheckedChipId());
+            genderId = radioGroup.findViewById(radioGroup.getCheckedChipId());
             //genderState = genderId.getChipText().toString();
             genderState = genderId.getText().toString();
             try{

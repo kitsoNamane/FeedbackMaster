@@ -1,5 +1,7 @@
 package sdk.kitso.feedbackmaster.question;
 
+import android.util.Log;
+
 import java.util.List;
 
 import sdk.kitso.feedbackmaster.model.Question;
@@ -22,6 +24,7 @@ public class QuestionController {
     public void setQuestions(List<QuestionDataItem> questions) {
         this.questions = questions;
         this.maxQuestions = this.questions.size();
+        Log.d("FMDIGILAB", "MAX Questions : "+this.maxQuestions);
         this.listIterator = -1;
     }
 

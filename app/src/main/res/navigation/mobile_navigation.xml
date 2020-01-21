@@ -80,7 +80,7 @@
             android:name="currentSurvey"
             app:argType="sdk.kitso.feedbackmaster.model.DataItem" />
         <action
-            android:id="@+id/renderQuestion"
+            android:id="@+id/actionBeginSurvey"
             app:destination="@id/questionFragment" />
     </fragment>
 </navigation>

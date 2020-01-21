@@ -19,12 +19,7 @@ public class NetworkStateViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind() {
-        loadMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SurveysFragment.retry();
-            }
-        });
+        loadMore.setOnClickListener(v -> SurveysFragment.retry());
     }
 
     public static NetworkStateViewHolder create(ViewGroup parent) {

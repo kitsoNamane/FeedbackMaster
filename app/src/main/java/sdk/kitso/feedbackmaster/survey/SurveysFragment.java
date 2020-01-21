@@ -2,12 +2,10 @@ package sdk.kitso.feedbackmaster.survey;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 
 import com.google.android.material.card.MaterialCardView;
@@ -15,7 +13,6 @@ import com.google.android.material.chip.Chip;
 
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.Globals;
@@ -23,7 +20,6 @@ import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.Utils;
-import sdk.kitso.feedbackmaster.model.DataItem;
 import sdk.kitso.feedbackmaster.model.Profile;
 
 
@@ -37,16 +33,12 @@ import sdk.kitso.feedbackmaster.model.Profile;
 public class SurveysFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    public static RecyclerView recyclerView;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    public static RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private static SurveyPagedAdapter pagedAdapter;
     private static MaterialCardView reloadCard;
     private Chip reloadChip;
-    private static SurveyViewModel surveyViewModel;
-    private SurveyViewHolder surveyViewHolder;
-    Profile profile;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -85,7 +77,7 @@ public class SurveysFragment extends Fragment {
     }
 
     public static void retry() {
-        surveyViewModel.retry();
+        MainActivity.surveyViewModel.retry();
         Log.d("FMDIGILAB 16", "RETYRING");
     }
 
@@ -103,8 +95,8 @@ public class SurveysFragment extends Fragment {
             }
         });
 
-        profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
-        if(profile == null) {
+        //profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
+        if(MainActivity.profile == null) {
             MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
         }
 

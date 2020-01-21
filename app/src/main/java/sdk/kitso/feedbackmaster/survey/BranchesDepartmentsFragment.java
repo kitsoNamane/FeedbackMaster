@@ -1,7 +1,5 @@
 package sdk.kitso.feedbackmaster.survey;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.Group;
@@ -11,10 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textview.MaterialTextView;
@@ -104,10 +100,10 @@ public class BranchesDepartmentsFragment extends Fragment {
         this.start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SurveysFragmentDirections.ActionStartSurvey actionStartSurvey = SurveysFragmentDirections.actionStartSurvey(
+                BranchesDepartmentsFragmentDirections.ActionBeginSurvey actionBeginSurvey = BranchesDepartmentsFragmentDirections.actionBeginSurvey(
                         branchesDepartmentsFragmentArgs.getCurrentSurvey()
                 );
-                MainActivity.navController.navigate(actionStartSurvey);
+                MainActivity.navController.navigate(actionBeginSurvey);
             }
         });
 
@@ -133,13 +129,7 @@ public class BranchesDepartmentsFragment extends Fragment {
                         )
                 );
 
-                chipItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        renderDepartments(child);
-                    }
-                });
-
+                chipItem.setOnClickListener(v -> renderDepartments(child));
 
                 branches.addView(chipItem);
             }
@@ -179,6 +169,7 @@ public class BranchesDepartmentsFragment extends Fragment {
         this.department.setVisibility(VISIBILITY);
         this.start.setVisibility(VISIBILITY);
     }
+
     /**
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

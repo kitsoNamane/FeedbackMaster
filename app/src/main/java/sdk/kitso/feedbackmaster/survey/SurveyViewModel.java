@@ -51,11 +51,6 @@ public class SurveyViewModel extends ViewModel {
                 .build();
     }
 
-    public void invalidateDataSource() {
-        mostRecentDataSource.invalidate();
-        Log.d("FMDIGILAB 17", "INVALIDATING");
-    }
-
     public void retry() {
         Thread thread = new Thread(
                Objects.requireNonNull(feedbackMasterNetworkDataFactory.getMutableLiveData().getValue()).reload

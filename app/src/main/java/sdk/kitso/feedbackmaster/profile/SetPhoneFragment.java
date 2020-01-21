@@ -12,12 +12,12 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.fragment.app.Fragment;
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SetPhoneFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link SetPhoneFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -77,7 +77,7 @@ public class SetPhoneFragment extends Fragment {
             public void onClick(View v) {
                 // validate input
                 if(signup(phoneInput)) {
-                    ProfileSetup.navController.navigate(R.id.ageAndGenderFragment);
+                    MainActivity.navController.navigate(R.id.ageAndGenderFragment);
                 }
             }
         });
@@ -89,7 +89,7 @@ public class SetPhoneFragment extends Fragment {
         Toast.makeText(this.getContext(), "Phone :"+phone+" "+Integer.toString(phone.length()), Toast.LENGTH_LONG).show();
         if(!phone.isEmpty()==true && phone.length()==8) {
             try {
-                ProfileSetup.profile.setPhone(new Integer(phone));
+                MainActivity.profile.setPhone(new Integer(phone));
             } catch (Exception e) {
                 textInputEditText.setError("Number Invalid");
                 e.printStackTrace();

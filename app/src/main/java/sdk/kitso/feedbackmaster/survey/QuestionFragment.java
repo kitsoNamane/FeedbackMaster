@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import sdk.kitso.feedbackmaster.Globals;
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.MyListAdapter;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.question.QuestionController;
@@ -97,41 +98,41 @@ public class QuestionFragment extends Fragment {
         questionTitle.setText(questionController.nextQuestion().getCaption());
         /**questionTitle.setText(questionController.nextQuestion().getQuestion());
         Toast.makeText(this.getContext(), "OPTIONS : "+questionController.options.size(), Toast.LENGTH_LONG).show();
-        renderQuestion();
         questionNav.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem item) {
                 // Do nothing for now
             }
         });
+         */
 
-        questionNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        questionNav.setOnNavigationItemReselectedListener(item -> {
+            // Do nothing for now
+        });
 
-                switch (item.getItemId()) {
-                    case R.id.question_next:
-                        questionController.nextQuestion();
-                        if(questionController.currentQuestion == null) {
-                            Navigation.findNavController(view).navigate(QuestionFragmentDirections.actionCompleted());
-                            break;
-                        }
-                        questionTitle.setText(questionController.currentQuestion.getQuestion());
-                        renderQuestion();
-                        Toast.makeText(view.getContext(), "Question ID : "+questionController.currentQuestion.getId(), Toast.LENGTH_SHORT).show();
+        renderQuestion();
+        questionNav.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.question_next:
+                    questionController.nextQuestion();
+                    if(questionController.currentQuestion == null) {
+                        //Navigation.findNavController(view).navigate(QuestionFragmentDirections.actionCompleted());
+                        MainActivity.navController.navigate(QuestionFragmentDirections.actionCompleted());
                         break;
-                    case R.id.previous_question:
-                        questionTitle.setText(questionController.previousQuestion().getQuestion());
-                        renderQuestion();
-                        Toast.makeText(view.getContext(), "Question ID : "+questionController.currentQuestion.getId(), Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.dummy:
-                        break;
-                    default:
-                        // Do something
-                }
-                return false;
+                    }
+                    questionTitle.setText(questionController.nextQuestion().getCaption());
+                    renderQuestion();
+                    break;
+                case R.id.previous_question:
+                    questionTitle.setText(questionController.nextQuestion().getCaption());
+                    renderQuestion();
+                    break;
+                case R.id.dummy:
+                    break;
+                default:
+                    // Do something
             }
+            return false;
         });
 
         //MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
@@ -146,24 +147,24 @@ public class QuestionFragment extends Fragment {
         //decorView.setSystemUiVisibility(uiOptions);
         //toolbar.setVisibility(View.GONE);
         // navView.setVisibility(View.GONE);
-         */
         return view;
     }
 
-    /**
     public View setQuestionContent(@LayoutRes int i) {
        return getLayoutInflater().inflate(i, questionView, false);
     }
 
     public void renderQuestion() {
         View view = questionNav.findViewById(R.id.dummy);
-        switch(questionController.currentQuestion.getType()) {
-            case Globals.RATING_STARS:
+        switch(questionController.currentQuestion.getQuestionType().getQuestionData().getName()) {
+            //case Globals.RATING_STARS:
+            case "rating":
                 questionContent = setQuestionContent(R.layout.rating_stars);
                 questionView.removeAllViews();
                 questionView.addView(questionContent);
                 break;
-            case Globals.MULTIPLE_CHOICE:
+            /**case Globals.MULTIPLE_CHOICE:
+            case "single select":
                 questionContent = setQuestionContent(R.layout.multiple_choice);
                 group = questionContent.findViewById(R.id.multiply_options);
                 addOptions(group, ListView.CHOICE_MODE_SINGLE);
@@ -188,15 +189,18 @@ public class QuestionFragment extends Fragment {
                 questionView.removeAllViews();
                 questionView.addView(questionContent);
                 break;
+             */
             default:
                 // multiple choice
                 questionContent = getLayoutInflater().inflate(R.layout.rating_stars, questionView, false);
                 questionView.addView(questionContent);
                 questionView.removeAllViews();
-                questionTitle.setText(questionController.nextQuestion().getQuestion());
+                //questionTitle.setText(questionController.nextQuestion().getQuestion().);
+                questionTitle.setText(questionController.nextQuestion().getCaption());
         }
     }
 
+    /**
     public void addOptions(ListView myGroup, int CHOICE_MODE) {
         myGroup.setAdapter(new MyListAdapter(this.getContext(), questionController.options.get(0).getOptions()));
         myGroup.setDivider(null);

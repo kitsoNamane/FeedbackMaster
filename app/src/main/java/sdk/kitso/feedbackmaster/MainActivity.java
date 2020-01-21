@@ -2,7 +2,6 @@ package sdk.kitso.feedbackmaster;
 
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -20,6 +19,7 @@ import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
+import sdk.kitso.feedbackmaster.model.Profile;
 import sdk.kitso.feedbackmaster.model.SurveyDB;
 import sdk.kitso.feedbackmaster.survey.SurveyPagedAdapter;
 import sdk.kitso.feedbackmaster.survey.SurveyViewModel;
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static NavController navController;
     public static SurveyViewModel surveyViewModel;
     public static SurveyPagedAdapter pagedAdapter;
+    public static Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
         surveyDB = Room.databaseBuilder(getApplicationContext(), SurveyDB.class, "userdb")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
+
+        profile = surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
+        if(profile == null) {
+            profile = new Profile();
+        }
 
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

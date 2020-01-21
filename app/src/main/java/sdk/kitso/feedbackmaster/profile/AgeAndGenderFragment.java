@@ -18,7 +18,6 @@ import sdk.kitso.feedbackmaster.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AgeAndGenderFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link AgeAndGenderFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -102,7 +101,7 @@ public class AgeAndGenderFragment extends Fragment {
         boolean isGenderValid = false;
         if(!age.isEmpty()) {
             try {
-                ProfileSetup.profile.setAge(new Integer(age));
+                MainActivity.profile.setAge(new Integer(age));
             } catch (Exception e) {
                 textInputEditText.setError("Age Invalid");
                 e.printStackTrace();
@@ -118,7 +117,7 @@ public class AgeAndGenderFragment extends Fragment {
             genderId = (RadioButton) radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
             genderState = genderId.getText().toString();
             try{
-                ProfileSetup.profile.setGender(genderState);
+                MainActivity.profile.setGender(genderState);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -136,9 +135,9 @@ public class AgeAndGenderFragment extends Fragment {
         }
 
         if(isAgeValid == true && isGenderValid == true) {
-            ProfileSetup.profile.setProfile(true);
+            MainActivity.profile.setProfile(true);
             //Globals.exec.execute(()->{
-            ProfileSetup.surveyDB.surveyDao().addProfile(ProfileSetup.profile);
+            MainActivity.surveyDB.surveyDao().addProfile(MainActivity.profile);
             //});
         }
         // Binary End-Gate guarantees that we'll get the right results nomatter the combinations
