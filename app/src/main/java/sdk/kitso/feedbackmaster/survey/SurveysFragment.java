@@ -42,7 +42,7 @@ public class SurveysFragment extends Fragment {
     public static RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private static SurveyPagedAdapter pagedAdapter;
-    private MaterialCardView reloadCard;
+    private static MaterialCardView reloadCard;
     private Chip reloadChip;
     private static SurveyViewModel surveyViewModel;
     private SurveyViewHolder surveyViewHolder;
@@ -103,24 +103,6 @@ public class SurveysFragment extends Fragment {
             }
         });
 
-        String androidId = Settings.Secure.getString(this.getActivity().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-
-        surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
-        surveyViewModel.init(androidId, this.getContext());
-        pagedAdapter = new SurveyPagedAdapter();
-
-        surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
-            pagedAdapter.submitList(pagedList);
-        });
-
-        surveyViewModel.getNetworkState().observe(this, networkState->{
-            pagedAdapter.setNetworkState(networkState);
-            toggleReload(networkState.getStatus());
-        });
-
-
-
         profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
         if(profile == null) {
             MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
@@ -129,12 +111,12 @@ public class SurveysFragment extends Fragment {
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(pagedAdapter);
+        recyclerView.setAdapter(MainActivity.pagedAdapter);
 
         return view;
     }
 
-    public void toggleReload(NetworkState.Status status) {
+    public static void toggleReload(NetworkState.Status status) {
         if(status == NetworkState.Status.FAILED) {
             reloadCard.setVisibility(View.VISIBLE);
             Log.d("FMDIGILAB 14", "LiveUpdate");

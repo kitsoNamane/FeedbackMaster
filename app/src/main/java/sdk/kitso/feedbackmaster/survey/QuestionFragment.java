@@ -1,5 +1,7 @@
 package sdk.kitso.feedbackmaster.survey;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -25,7 +27,6 @@ import sdk.kitso.feedbackmaster.question.QuestionController;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link QuestionFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link QuestionFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -47,7 +48,6 @@ public class QuestionFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    //private OnFragmentInteractionListener mListener;
 
     public QuestionFragment() {
         // Required empty public constructor
@@ -91,11 +91,10 @@ public class QuestionFragment extends Fragment {
         questionNav = view.findViewById(R.id.question_nav_view);
         questionView = view.findViewById(R.id.question_showcase);
         questionNav.setSelectedItemId(R.id.dummy);
-        //questionController.setQuestions(questionFragmentArgs.getSurveyId());
-        //questionController.setQuestions();
+        questionController.setQuestions(questionFragmentArgs.getCurrentQuestions().getQuestions().getData());
         questionTitle = view.findViewById(R.id.question_title);
-        return view;
-    }
+
+        questionTitle.setText(questionController.nextQuestion().getCaption());
         /**questionTitle.setText(questionController.nextQuestion().getQuestion());
         Toast.makeText(this.getContext(), "OPTIONS : "+questionController.options.size(), Toast.LENGTH_LONG).show();
         renderQuestion();
@@ -147,9 +146,11 @@ public class QuestionFragment extends Fragment {
         //decorView.setSystemUiVisibility(uiOptions);
         //toolbar.setVisibility(View.GONE);
         // navView.setVisibility(View.GONE);
+         */
         return view;
     }
 
+    /**
     public View setQuestionContent(@LayoutRes int i) {
        return getLayoutInflater().inflate(i, questionView, false);
     }

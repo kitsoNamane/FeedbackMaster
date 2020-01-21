@@ -21,6 +21,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.BranchDataItem;
 import sdk.kitso.feedbackmaster.model.ChildrenDataItem;
@@ -103,6 +104,10 @@ public class BranchesDepartmentsFragment extends Fragment {
         this.start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SurveysFragmentDirections.ActionStartSurvey actionStartSurvey = SurveysFragmentDirections.actionStartSurvey(
+                        branchesDepartmentsFragmentArgs.getCurrentSurvey()
+                );
+                MainActivity.navController.navigate(actionStartSurvey);
             }
         });
 

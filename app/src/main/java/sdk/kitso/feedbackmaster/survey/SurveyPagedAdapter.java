@@ -28,7 +28,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
         }
     };
 
-    protected SurveyPagedAdapter() {
+    public SurveyPagedAdapter() {
         super(DIFF_CALLBACK);
     }
 
