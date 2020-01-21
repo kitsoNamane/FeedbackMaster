@@ -30,12 +30,11 @@ import sdk.kitso.feedbackmaster.model.Profile;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SurveysFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link SurveysFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnSurveyItemClickedListener {
+public class SurveysFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -109,7 +108,7 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
 
         surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
         surveyViewModel.init(androidId, this.getContext());
-        pagedAdapter = new SurveyPagedAdapter(this);
+        pagedAdapter = new SurveyPagedAdapter();
 
         surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
             pagedAdapter.submitList(pagedList);
@@ -149,25 +148,6 @@ public class SurveysFragment extends Fragment  implements SurveyPagedAdapter.OnS
     private void onNetworkState(Context context) {
         if(!Utils.isOnline(context)) {
             MainActivity.navController.navigate(SurveysFragmentDirections.actionNetworkError());
-        }
-    }
-
-    @Override
-    public void onItemClicked(View view, DataItem item) {
-        switch (view.getId()) {
-            case(R.id.card_survey):
-                surveyViewHolder = (SurveyViewHolder) recyclerView.findContainingViewHolder(view);
-                surveyViewHolder.bindDynamic(item);
-                break;
-            case(R.id.start_survey):
-                SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(2);
-                MainActivity.navController.navigate(actionSurvey);
-                break;
-            default:
-                Toast.makeText(this.getContext(), "ButtonId :"+Integer.toString(R.id.start_survey)
-                                +" CardId :"+Integer.toString(R.id.survey_card)+" Got :"+Integer.toString(view.getId()),
-                        Toast.LENGTH_LONG
-                ).show();
         }
     }
 

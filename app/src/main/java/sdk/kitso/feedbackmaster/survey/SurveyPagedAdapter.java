@@ -15,7 +15,6 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     private static final int TYPE_PROGRESS = 0;
     private static final int TYPE_ITEM = 1;
     private NetworkState networkState;
-    public OnSurveyItemClickedListener onSurveyItemClickedListener;
 
     public static final DiffUtil.ItemCallback<DataItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<DataItem>() {
         @Override
@@ -29,9 +28,8 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
         }
     };
 
-    protected SurveyPagedAdapter(OnSurveyItemClickedListener onSurveyItemClickedListener) {
+    protected SurveyPagedAdapter() {
         super(DIFF_CALLBACK);
-        this.onSurveyItemClickedListener = onSurveyItemClickedListener;
     }
 
     @NonNull
@@ -43,7 +41,8 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         DataItem item = getItem(position);
-        ((SurveyViewHolder)holder).bind(item, onSurveyItemClickedListener);
+        ((SurveyViewHolder)holder).bind(item);
+        /**
         if (item.getChecked() == true && ((SurveyViewHolder) holder).cardView.isChecked() == true) {
             ((SurveyViewHolder) holder).setVisibility(View.VISIBLE);
         } else if(item.getChecked()) {
@@ -52,6 +51,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
             ((SurveyViewHolder) holder).cardView.setChecked(false);
             ((SurveyViewHolder) holder).setVisibility(View.GONE);
         }
+         */
     }
 
     /*

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="6dp"
-    android:checkable="true"
+    android:checkable="false"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
@@ -20,15 +20,13 @@
             android:id="@+id/department_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:constraint_referenced_ids="department,department_text,divider1" />
+            android:visibility="visible" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/branch_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:constraint_referenced_ids="branchOld,branch_text,divider2" />
+            android:visibility="visible" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/survey_title"
@@ -66,120 +64,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/survey_title" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/branch_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:layout_marginLeft="17dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="308dp"
-            android:layout_marginRight="308dp"
-            android:text="@string/select_branches"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.066"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/company_name" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/branchOld"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:orientation="vertical"
-            app:chipSpacing="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/branch_text"
-            app:singleSelection="true"/>
-
-        <View
-            android:id="@+id/divider1"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/branchOld" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/department_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="336dp"
-            android:layout_marginRight="336dp"
-            android:text="@string/select_departments"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider1" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/department"
-            style="@style/Widget.MaterialComponents.Chip.Filter"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:orientation="vertical"
-            app:chipSpacing="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/department_text"
-            app:singleSelection="true"/>
-
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:background="?android:attr/listDivider"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/department" />
-
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="19dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider2"
-            app:srcCompat="@drawable/ic_assignment_black_24dp" />
+            app:layout_constraintTop_toBottomOf="@+id/company_name"
+            app:srcCompat="@drawable/ic_assignment_black_18dp" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/number_of_questions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginLeft="1dp"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="25"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toBottomOf="@+id/department" />
+            app:layout_constraintTop_toBottomOf="@+id/company_name" />
 
         <ImageView
             android:id="@+id/imageView5"
@@ -187,26 +97,26 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="19dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/number_of_questions"
-            app:layout_constraintTop_toBottomOf="@+id/divider2"
+            app:layout_constraintTop_toBottomOf="@+id/company_name"
             app:srcCompat="@drawable/ic_015_speech_bubble" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/number_of_respondents"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginLeft="1dp"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="40"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+            app:layout_constraintTop_toBottomOf="@+id/company_name" />
 
         <ImageView
             android:id="@+id/imageView6"
@@ -214,45 +124,29 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="19dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="TODO"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/number_of_respondents"
-            app:layout_constraintTop_toBottomOf="@+id/divider2"
-            app:srcCompat="@drawable/ic_timer_black_24dp"
-            android:contentDescription="TODO" />
+            app:layout_constraintTop_toBottomOf="@+id/company_name"
+            app:srcCompat="@drawable/ic_timer_black_18dp" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/expiry_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginLeft="2dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginLeft="1dp"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="88-88-8888"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/imageView6"
-            app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-        <ImageView
-            android:id="@+id/start_survey"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/expiry_date"
-            app:layout_constraintTop_toBottomOf="@+id/divider2"
-            app:srcCompat="@drawable/ic_022_next_page_hand_drawn_symbol" />
+            app:layout_constraintTop_toBottomOf="@+id/company_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

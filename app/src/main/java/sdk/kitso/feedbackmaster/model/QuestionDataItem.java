@@ -1,5 +1,6 @@
 package sdk.kitso.feedbackmaster.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class QuestionDataItem {
@@ -13,8 +14,9 @@ public class QuestionDataItem {
 	@SerializedName("responses")
 	private Responses responses;
 
-	@SerializedName("status")
-	private int status;
+	@SerializedName("type")
+	@Expose
+	private QuestionType type;
 
 	@SerializedName("question")
 	private Question question;
@@ -24,6 +26,14 @@ public class QuestionDataItem {
 
 	@SerializedName("created")
 	private String created;
+
+	public void setQuestionType(QuestionType type) {
+		this.type = type;
+	}
+
+	public QuestionType getQuestionType() {
+		return type;
+	}
 
 	public void setReference(String reference){
 		this.reference = reference;
@@ -47,14 +57,6 @@ public class QuestionDataItem {
 
 	public Responses getResponses(){
 		return responses;
-	}
-
-	public void setStatus(int status){
-		this.status = status;
-	}
-
-	public int getStatus(){
-		return status;
 	}
 
 	public void setQuestion(Question question){
@@ -88,10 +90,10 @@ public class QuestionDataItem {
 			"reference = '" + reference + '\'' + 
 			",caption = '" + caption + '\'' + 
 			",responses = '" + responses + '\'' + 
-			",status = '" + status + '\'' + 
-			",question = '" + question + '\'' + 
+			",question = '" + question + '\'' +
 			",answer = '" + answer + '\'' + 
 			",created = '" + created + '\'' + 
 			"}";
 		}
 }
+

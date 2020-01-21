@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
@@ -16,6 +17,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.RecyclerView;
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.BranchChildren;
 import sdk.kitso.feedbackmaster.model.BranchDataItem;
@@ -44,16 +46,13 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
         this.company = view.findViewById(R.id.company_name);
         this.survey = view.findViewById(R.id.survey_title);
         this.branches = view.findViewById(R.id.branchOld);
-        this.departments = view.findViewById(R.id.department);
-        this.department = view.findViewById(R.id.department_list);
-        this.branch = view.findViewById(R.id.branch_list);
-        this.start = view.findViewById(R.id.start_survey);
         this.numberOfQuestions = view.findViewById(R.id.number_of_questions);
         this.numberOfRespondents = view.findViewById(R.id.number_of_respondents);
         this.surveyExpiry = view.findViewById(R.id.expiry_date);
     }
 
-    public void bind(DataItem item, SurveyPagedAdapter.OnSurveyItemClickedListener onSurveyItemClickedListener) {
+    public void bind(DataItem item) {
+        item.setChecked(false);
         survey.setText(item.getName());
         company.setText(item.getBusiness().getBusinessData().getName());
         surveyExpiry.setText(item.getEnds());
@@ -63,17 +62,14 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
         this.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSurveyItemClickedListener.onItemClicked(cardView, item);
-            }
-        });
-
-        this.start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSurveyItemClickedListener.onItemClicked(start, item);
+                //onSurveyItemClickedListener.onItemClicked(cardView, item);
+                //SurveysFragmentDirections.ActionBranches actionBranches = SurveysFragmentDirections.actionBranches(item);
+                //MainActivity.navController.navigate(actionBranches);
+                gotoQuestionnaire(item);
             }
         });
     }
+
 
     public static SurveyViewHolder create(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
@@ -82,82 +78,17 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
         return new SurveyViewHolder(view);
     }
 
-    public void bindDynamic(DataItem item) {
-        item.setChecked(!item.getChecked());
-        this.cardView.setChecked(item.getChecked());
-        if(this.cardView.isChecked()) {
-            renderBranches(item);
-            start.setVisibility(View.VISIBLE);
-        } else {
-            branch.setVisibility(View.GONE);
-            department.setVisibility(View.GONE);
-            start.setVisibility(View.GONE);
-        }
-    }
-
-    public void renderBranches(DataItem item) {
+    public void gotoQuestionnaire(DataItem item) {
         List<ChildrenDataItem> children = item.getBusiness().getBusinessData().getChildren().getData();
+        Log.d("FMDIGILAB", "NUMBER OF Branches : "+children.size());
         if(children.size() > 0) {
-            if(branches.getChildCount() > 0) {
-                branch.setVisibility(View.VISIBLE);
-                return;
-            }
-
-            for(ChildrenDataItem child : children) {
-                chipItem = new Chip(this.cardView.getContext());
-                Log.d("FMDIGITAL", child.getName());
-                chipItem.setText(child.getName());
-                chipItem.setCheckable(true);
-                chipItem.setCheckedIcon(
-                    this.cardView.getContext().getResources().getDrawable(
-                            R.drawable.ic_check_black_24dp
-                    )
-                );
-
-                chipItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        renderDepartments(child);
-                    }
-                });
-
-                branches.addView(chipItem);
-            }
-            branch.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void renderDepartments(ChildrenDataItem childObj) {
-        List<BranchDataItem> children = childObj.getChildren().getData();
-        if(children.size() > 0) {
-            if(departments.getChildCount() > 0) {
-                department.setVisibility(View.VISIBLE);
-                return;
-            }
-
-            for(BranchDataItem child : children) {
-                chipItem = new Chip(this.cardView.getContext());
-                Log.d("FMDIGITAL Dep", child.getName());
-                chipItem.setText(child.getName());
-                chipItem.setCheckable(true);
-
-                chipItem.setCheckedIcon(
-                        this.cardView.getContext().getResources().getDrawable(
-                                R.drawable.ic_check_black_24dp
-                        )
-                );
-                departments.addView(chipItem);
-            }
-            department.setVisibility(View.VISIBLE);
+            // goto select Branches and/or departments
+            SurveysFragmentDirections.ActionBranches actionBranches = SurveysFragmentDirections.actionBranches(item);
+            MainActivity.navController.navigate(actionBranches);
         } else {
-            departments.removeAllViews();
-            department.setVisibility(View.GONE);
+            // go straight to questionnaire
+            SurveysFragmentDirections.ActionStartSurvey actionStartSurvey = SurveysFragmentDirections.actionStartSurvey(item);
+            MainActivity.navController.navigate(actionStartSurvey);
         }
-    }
-
-    public void setVisibility(int VISIBILITY) {
-        this.branch.setVisibility(VISIBILITY);
-        this.department.setVisibility(VISIBILITY);
-        this.start.setVisibility(VISIBILITY);
     }
 }

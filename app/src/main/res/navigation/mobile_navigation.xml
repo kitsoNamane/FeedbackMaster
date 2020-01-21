@@ -11,14 +11,17 @@
         android:label="fragment_surveys"
         tools:layout="@layout/fragment_surveys" >
         <action
-            android:id="@+id/actionSurvey"
-            app:destination="@id/questionFragment" />
-        <action
             android:id="@+id/actionSignup"
             app:destination="@id/signUpFragment" />
         <action
             android:id="@+id/actionNetworkError"
             app:destination="@id/networkConnectivityFragment" />
+        <action
+            android:id="@+id/actionBranches"
+            app:destination="@id/branchesDepartmentsFragment" />
+        <action
+            android:id="@+id/actionStartSurvey"
+            app:destination="@id/questionFragment" />
     </fragment>
 
     <fragment
@@ -32,13 +35,12 @@
         android:name="sdk.kitso.feedbackmaster.survey.QuestionFragment"
         android:label="fragment_question">
         tools:layout="@layout/fragment_question"
-        <argument
-            android:name="surveyId"
-            app:argType="integer"
-        />
         <action
             android:id="@+id/actionCompleted"
             app:destination="@id/surveyCompletedFragment" />
+        <argument
+            android:name="currentQuestions"
+            app:argType="sdk.kitso.feedbackmaster.model.DataItem" />
     </fragment>
     <fragment
         android:id="@+id/surveyCompletedFragment"
@@ -68,5 +70,17 @@
             android:id="@+id/action_networkConnectivityFragment_pop"
             app:popUpTo="@+id/networkConnectivityFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/branchesDepartmentsFragment"
+        android:name="sdk.kitso.feedbackmaster.survey.BranchesDepartmentsFragment"
+        android:label="fragment_branches_departments"
+        tools:layout="@layout/fragment_branches_departments" >
+        <argument
+            android:name="currentSurvey"
+            app:argType="sdk.kitso.feedbackmaster.model.DataItem" />
+        <action
+            android:id="@+id/renderQuestion"
+            app:destination="@id/questionFragment" />
     </fragment>
 </navigation>
