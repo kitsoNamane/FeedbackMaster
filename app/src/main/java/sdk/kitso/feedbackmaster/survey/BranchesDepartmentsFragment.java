@@ -2,17 +2,17 @@ package sdk.kitso.feedbackmaster.survey;
 
 import android.os.Bundle;
 
-import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
@@ -41,11 +41,15 @@ public class BranchesDepartmentsFragment extends Fragment {
     private String mParam2;
     MaterialTextView company;
     MaterialTextView survey;
-    Group branch;
-    Group department;
-    ChipGroup branches;
-    ChipGroup departments;
+    MaterialTextView numberOfQuestions;
+    MaterialTextView numberOfRespondents;
+    MaterialTextView expiryDate;
+    FlexboxLayout selectedCategories;
+    FlexboxLayout getSelectedCategories;
     Chip chipItem;
+    Chip selectedChipItem;
+    DataItem item;
+    LayoutInflater layoutInflater;
     MaterialButton start;
 
     BranchesDepartmentsFragmentArgs branchesDepartmentsFragmentArgs;
@@ -87,15 +91,25 @@ public class BranchesDepartmentsFragment extends Fragment {
         branchesDepartmentsFragmentArgs = BranchesDepartmentsFragmentArgs.fromBundle(getArguments());
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_branches_departments, container, false);
-        this.company = view.findViewById(R.id.company_name);
-        this.survey = view.findViewById(R.id.survey_title);
-        this.branches = view.findViewById(R.id.branchOld);
-        this.departments = view.findViewById(R.id.department);
-        this.department = view.findViewById(R.id.department_list);
-        this.branch = view.findViewById(R.id.branch_list);
-        this.start = view.findViewById(R.id.start_survey);
+        company = view.findViewById(R.id.company_name);
+        survey = view.findViewById(R.id.survey_title);
+        numberOfQuestions = view.findViewById(R.id.number_of_questions);
+        numberOfRespondents = view.findViewById(R.id.number_of_respondents);
+        expiryDate = view.findViewById(R.id.expiry_date);
+        layoutInflater = this.getLayoutInflater();
+        selectedCategories = view.findViewById(R.id.selected_chip_group);
+        getSelectedCategories = view.findViewById(R.id.chip_group);
+        start = view.findViewById(R.id.start_survey);
+        item = branchesDepartmentsFragmentArgs.getCurrentSurvey();
 
-        renderBranches(branchesDepartmentsFragmentArgs.getCurrentSurvey());
+        survey.setText(this.item.getName());
+        company.setText(this.item.getBusiness().getBusinessData().getName());
+
+        expiryDate.setText(item.getEnds());
+        numberOfRespondents.setText(Integer.toString(item.getEntries().getTotal()));
+        numberOfQuestions.setText(Integer.toString(item.getQuestions().getNumberOfQuestion()));
+
+        renderBranches();
 
         this.start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,18 +124,19 @@ public class BranchesDepartmentsFragment extends Fragment {
         return view;
     }
 
-    public void renderBranches(DataItem item) {
+    public void renderBranches() {
         List<ChildrenDataItem> children = item.getBusiness().getBusinessData().getChildren().getData();
         if(children.size() > 0) {
-            if(branches.getChildCount() > 0) {
-                branch.setVisibility(View.VISIBLE);
-                return;
-            }
+            //if(branches.getChildCount() > 0) {
+            //    branch.setVisibility(View.VISIBLE);
+            //    return;
+            //}
 
             for(ChildrenDataItem child : children) {
-                chipItem = new Chip(this.getContext());
+                chipItem = (Chip) layoutInflater.inflate(R.layout.category_chip, getSelectedCategories, false);
                 Log.d("FMDIGITAL", child.getName());
                 chipItem.setText(child.getName());
+                /**
                 chipItem.setCheckable(true);
                 chipItem.setCheckedIcon(
                         this.getContext().getResources().getDrawable(
@@ -133,45 +148,77 @@ public class BranchesDepartmentsFragment extends Fragment {
                                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
                         )
                 );
+                 */
 
-                chipItem.setOnClickListener(v -> renderDepartments(child));
 
-                branches.addView(chipItem);
+                chipItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Chip selectedChip = (Chip) v;
+                        setSelectedCategories(selectedChip);
+                        BranchesDepartmentsFragment.this.renderDepartments(child);
+                    }
+                });
+                getSelectedCategories.addView(chipItem);
             }
-            branch.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void setSelectedCategories(Chip chip) {
+        selectedChipItem = (Chip) layoutInflater.inflate(R.layout.selected_category_chip, selectedCategories, false);
+        selectedChipItem.setText(chip.getText());
+        selectedCategories.addView(selectedChipItem);
     }
 
     public void renderDepartments(ChildrenDataItem childObj) {
         List<BranchDataItem> children = childObj.getChildren().getData();
+        getSelectedCategories.removeAllViews();
         if(children.size() > 0) {
-            if(departments.getChildCount() > 0) {
-                departments.removeAllViews();
-            }
+            //if(departments.getChildCount() > 0) {
+            //    departments.removeAllViews();
+            //}
 
             for(BranchDataItem child : children) {
-                chipItem = new Chip(this.getContext());
+                chipItem = (Chip) layoutInflater.inflate(R.layout.category_chip, getSelectedCategories, false);
                 Log.d("FMDIGITAL Dep", child.getName());
                 chipItem.setText(child.getName());
-                chipItem.setCheckable(true);
+                /**chipItem.setCheckable(true);
 
+                chipItem.setLayoutParams(
+                        new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                );
                 chipItem.setCheckedIcon(
                         this.getContext().getResources().getDrawable(
                                 R.drawable.ic_check_black_24dp
                         )
                 );
-                departments.addView(chipItem);
+                 */
+
+                chipItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Chip selectedChip = (Chip) v;
+                        selectedChipItem = (Chip) layoutInflater.inflate(R.layout.selected_category_chip, selectedCategories, false);
+                        selectedChipItem.setText(selectedChip.getText());
+                        selectedCategories.addView(selectedChipItem);
+                        getSelectedCategories.removeAllViews();
+                    }
+                });
+
+                getSelectedCategories.addView(chipItem);
             }
-            department.setVisibility(View.VISIBLE);
+            //department.setVisibility(View.VISIBLE);
         } else {
-            departments.removeAllViews();
-            department.setVisibility(View.GONE);
+            getSelectedCategories.removeAllViews();
+            //department.setVisibility(View.GONE);
         }
     }
 
     public void setVisibility(int VISIBILITY) {
-        this.branch.setVisibility(VISIBILITY);
-        this.department.setVisibility(VISIBILITY);
+        //this.branch.setVisibility(VISIBILITY);
+        //this.department.setVisibility(VISIBILITY);
         this.start.setVisibility(VISIBILITY);
     }
 

@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 
@@ -37,6 +40,7 @@ public class SurveysFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView.LayoutManager layoutManager;
+    private FlexboxLayoutManager flexboxLayoutManager;
     private static MaterialCardView reloadCard;
     private Chip reloadChip;
 
@@ -104,6 +108,9 @@ public class SurveysFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
+        //flexboxLayoutManager = new FlexboxLayoutManager(view.getContext());
+        //flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
+        //flexboxLayoutManager.setJustifyContent(JustifyContent.CENTER);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(MainActivity.pagedAdapter);
 

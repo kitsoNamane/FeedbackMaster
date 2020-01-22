@@ -35,8 +35,8 @@
     <string name="network_error_image">network error image</string>
     <string name="cellphone_image">Cellphone image</string>
     <string name="age_view">Age</string>
-    <string name="select_branches">Select Branches</string>
-    <string name="select_departments">Select Departments</string>
+    <string name="select_branches">Select Branch</string>
+    <string name="select_departments">Select Department</string>
     <string name="total_wins">Total Wins :</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="phone">Phone</string>

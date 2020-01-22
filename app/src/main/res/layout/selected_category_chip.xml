@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:closeIcon="@drawable/ic_close_black_18dp"
+    app:closeIconVisible="true"
+    android:text="select me to close icon"
+    android:layout_height="match_parent">
+</com.google.android.material.chip.Chip>
