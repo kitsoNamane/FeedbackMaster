@@ -150,7 +150,6 @@ public class BranchesDepartmentsFragment extends Fragment {
                 );
                  */
 
-
                 chipItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -167,6 +166,14 @@ public class BranchesDepartmentsFragment extends Fragment {
     public void setSelectedCategories(Chip chip) {
         selectedChipItem = (Chip) layoutInflater.inflate(R.layout.selected_category_chip, selectedCategories, false);
         selectedChipItem.setText(chip.getText());
+        selectedChipItem.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedCategories.removeAllViews();
+                getSelectedCategories.removeAllViews();
+                renderBranches();
+            }
+        });
         selectedCategories.addView(selectedChipItem);
     }
 
@@ -202,6 +209,13 @@ public class BranchesDepartmentsFragment extends Fragment {
                         Chip selectedChip = (Chip) v;
                         selectedChipItem = (Chip) layoutInflater.inflate(R.layout.selected_category_chip, selectedCategories, false);
                         selectedChipItem.setText(selectedChip.getText());
+                        selectedChipItem.setOnCloseIconClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                selectedCategories.removeView(v);
+                                renderDepartments(childObj);
+                            }
+                        });
                         selectedCategories.addView(selectedChipItem);
                         getSelectedCategories.removeAllViews();
                     }
