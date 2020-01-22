@@ -53,19 +53,9 @@ public class Survey {
     }
 
     @Override
-<<<<<<< HEAD:app/src/main/java/sdk/kitso/feedbackmaster/db/Survey.java
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        return false;
-    }
-
-=======
     public boolean equals(Object other) {
         return this == other;
     }
->>>>>>> pagination:app/src/main/java/sdk/kitso/feedbackmaster/model/Survey.java
 }
 
 

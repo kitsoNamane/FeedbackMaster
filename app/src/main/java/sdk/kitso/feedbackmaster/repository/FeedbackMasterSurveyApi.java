@@ -2,14 +2,6 @@ package sdk.kitso.feedbackmaster.repository;
 
 import android.content.Context;
 
-<<<<<<< HEAD
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-
-public class FeedbackMasterSurveyApi {
-=======
 import com.google.gson.GsonBuilder;
 
 import okhttp3.OkHttpClient;
@@ -24,7 +16,6 @@ public class FeedbackMasterSurveyApi {
         return GsonConverterFactory.create(gsonBuilder.create());
     }
 
->>>>>>> pagination
     public static FeedbackMasterSurveyApiService getService(String device_uuid, Context context) {
         DeviceUUIDInterceptor deviceUUIDInterceptor = new DeviceUUIDInterceptor(device_uuid);
         ConnectivityInterceptor connectivityInterceptor = new ConnectivityInterceptor(context);
@@ -34,18 +25,10 @@ public class FeedbackMasterSurveyApi {
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .client(httpClient)
-<<<<<<< HEAD
-                .baseUrl("http://localhost:8000")
-=======
                 .baseUrl("http://192.168.1.101:8000/api/v1/")
                 //.addConverterFactory(customConverterFactory())
->>>>>>> pagination
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(FeedbackMasterSurveyApiService.class);
     }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> pagination

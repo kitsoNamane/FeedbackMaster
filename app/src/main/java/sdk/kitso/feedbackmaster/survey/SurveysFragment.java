@@ -2,11 +2,7 @@ package sdk.kitso.feedbackmaster.survey;
 
 import android.content.Context;
 import android.os.Bundle;
-<<<<<<< HEAD
-import android.provider.Settings;
-=======
 import android.util.Log;
->>>>>>> pagination
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,27 +16,14 @@ import com.google.android.material.chip.Chip;
 
 
 import androidx.fragment.app.Fragment;
-<<<<<<< HEAD
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
-=======
->>>>>>> pagination
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
-<<<<<<< HEAD
-import sdk.kitso.feedbackmaster.db.QuestionDB;
-import sdk.kitso.feedbackmaster.db.Survey;
-import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataSource;
-import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApi;
-import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApiService;
-=======
 import sdk.kitso.feedbackmaster.Utils;
 import sdk.kitso.feedbackmaster.model.Profile;
->>>>>>> pagination
 
 
 /**
@@ -57,20 +40,9 @@ public class SurveysFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView.LayoutManager layoutManager;
-<<<<<<< HEAD
-    private SurveyAdapter adapter;
-    private SurveyPagedAdapter pagedAdapter;
-    private FeedbackMasterSurveyApiService apiService;
-    public static FeedbackMasterNetworkDataSource dataSourceImplementation;
-    private MockData mock;
-    private SurveyViewModel surveyViewModel;
-    public static QuestionDB questionDB;
-    SurveyAdapter.SurveyViewHolder holder;
-=======
     private FlexboxLayoutManager flexboxLayoutManager;
     private static MaterialCardView reloadCard;
     private Chip reloadChip;
->>>>>>> pagination
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -101,42 +73,17 @@ public class SurveysFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD
-        questionDB = Room.databaseBuilder(this.getContext().getApplicationContext(), QuestionDB.class, "questions")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries().build();
-        String androidId = Settings.Secure.getString(this.getActivity().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-        apiService = new FeedbackMasterSurveyApi().getService(androidId, getContext());
-=======
         onNetworkState(this.getContext());
->>>>>>> pagination
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-<<<<<<< HEAD
-        //if(questionDB.questionDao().getQuestions(0).size() <= 0) {
-        //    mock.generateQuestions();
-        //}
-        List<Survey> surveys = MainActivity.surveyDB.surveyDao().getSurveys();
-        surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
-
-        surveyViewModel.init(androidId, getContext());
-        pagedAdapter = new SurveyPagedAdapter();
-        surveyViewModel.surveys.observe(this, it->{
-            pagedAdapter.submitList(it);
-        });
-        adapter = new SurveyAdapter(surveys, this);
-        recyclerView.setAdapter(pagedAdapter);
-=======
     }
 
     public static void retry() {
         MainActivity.surveyViewModel.retry();
         Log.d("FMDIGILAB 16", "RETYRING");
->>>>>>> pagination
     }
 
     @Override
@@ -165,12 +112,8 @@ public class SurveysFragment extends Fragment {
         //flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
         //flexboxLayoutManager.setJustifyContent(JustifyContent.CENTER);
         recyclerView.setLayoutManager(layoutManager);
-<<<<<<< HEAD
-        recyclerView.setAdapter(pagedAdapter);
-=======
         recyclerView.setAdapter(MainActivity.pagedAdapter);
 
->>>>>>> pagination
         return view;
     }
 

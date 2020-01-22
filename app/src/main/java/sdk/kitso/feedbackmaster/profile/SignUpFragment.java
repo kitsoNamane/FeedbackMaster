@@ -165,15 +165,10 @@ public class SignUpFragment extends Fragment {
         }
 
         if(isAgeValid == true && isGenderValid == true) {
-<<<<<<< HEAD:app/src/main/java/sdk/kitso/feedbackmaster/profile/AgeAndGenderFragment.java
-            ProfileSetup.profile.setProfile(true);
-            ProfileSetup.surveyDB.surveyDao().addProfile(ProfileSetup.profile);
-=======
             MainActivity.profile.setProfile(true);
             //Globals.exec.execute(()->{
             MainActivity.surveyDB.surveyDao().addProfile(MainActivity.profile);
             //});
->>>>>>> pagination:app/src/main/java/sdk/kitso/feedbackmaster/profile/SignUpFragment.java
         }
         // Binary End-Gate guarantees that we'll get the right results nomatter the combinations
         return isAgeValid && isGenderValid;

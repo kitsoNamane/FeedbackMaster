@@ -31,11 +31,7 @@ public interface SurveyDao {
     public List<Survey> getSurveys();
 
     @Query("select * from surveys")
-<<<<<<< HEAD:app/src/main/java/sdk/kitso/feedbackmaster/db/SurveyDao.java
-    public DataSource.Factory<Integer, Survey> getAllSurveys();
-=======
     DataSource.Factory<Integer, Survey> getAllSurveys();
->>>>>>> pagination:app/src/main/java/sdk/kitso/feedbackmaster/model/SurveyDao.java
 
     @Query("SELECT * from surveys where id = :surveyId")
     public List<SurveyAndAllBranches> getBranches(int surveyId);
