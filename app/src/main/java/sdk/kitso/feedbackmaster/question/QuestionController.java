@@ -39,6 +39,7 @@ public class QuestionController {
     public QuestionDataItem nextQuestion() {
         this.listIterator += 1;
         if(this.listIterator < this.maxQuestions) {
+            Log.d("FMDIGILAB", "Iterator : "+this.listIterator+" MaxQ : "+this.maxQuestions);
             this.currentQuestion = this.questions.get(this.listIterator);
             return this.currentQuestion;
         }

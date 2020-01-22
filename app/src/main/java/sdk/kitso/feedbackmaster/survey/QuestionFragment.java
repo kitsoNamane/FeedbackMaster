@@ -116,15 +116,15 @@ public class QuestionFragment extends Fragment {
                 case R.id.question_next:
                     questionController.nextQuestion();
                     if(questionController.currentQuestion == null) {
-                        //Navigation.findNavController(view).navigate(QuestionFragmentDirections.actionCompleted());
                         MainActivity.navController.navigate(QuestionFragmentDirections.actionCompleted());
                         break;
                     }
-                    questionTitle.setText(questionController.nextQuestion().getCaption());
+                    questionTitle.setText(questionController.currentQuestion.getCaption());
                     renderQuestion();
                     break;
                 case R.id.previous_question:
-                    questionTitle.setText(questionController.nextQuestion().getCaption());
+                    questionController.previousQuestion();
+                    questionTitle.setText(questionController.currentQuestion.getCaption());
                     renderQuestion();
                     break;
                 case R.id.dummy:
