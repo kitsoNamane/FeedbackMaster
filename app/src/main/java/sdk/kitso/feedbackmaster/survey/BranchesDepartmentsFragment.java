@@ -128,6 +128,11 @@ public class BranchesDepartmentsFragment extends Fragment {
                                 R.drawable.ic_check_black_24dp
                         )
                 );
+                chipItem.setLayoutParams(
+                        new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                );
 
                 chipItem.setOnClickListener(v -> renderDepartments(child));
 

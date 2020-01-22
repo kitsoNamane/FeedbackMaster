@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
+import com.mifmif.common.regex.Main;
 
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.Globals;
@@ -37,7 +38,6 @@ public class ProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Profile profile;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -70,7 +70,6 @@ public class ProfileFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
     }
 
     @Override
@@ -81,16 +80,11 @@ public class ProfileFragment extends Fragment {
         editUser = view.findViewById(R.id.edit_profile);
         viewAge = view.findViewById(R.id.age_input);
         viewGender = view.findViewById(R.id.gender_view);
-        viewPhone.setText(Integer.toString(profile.getPhone()));
-        viewAge.setText(Integer.toString(profile.getAge()));
-        viewGender.setText(profile.getGender());
+        viewPhone.setText(Integer.toString(MainActivity.profile.getPhone()));
+        viewAge.setText(Integer.toString(MainActivity.profile.getAge()));
+        viewGender.setText(MainActivity.profile.getGender());
 
-        editUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Go to edit page", Toast.LENGTH_LONG).show();
-            }
-        });
+        editUser.setOnClickListener(v -> Toast.makeText(getContext(), "Go to edit page", Toast.LENGTH_LONG).show());
         return view;
     }
 

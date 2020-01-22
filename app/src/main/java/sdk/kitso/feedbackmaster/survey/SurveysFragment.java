@@ -74,6 +74,7 @@ public class SurveysFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     public static void retry() {
@@ -95,10 +96,11 @@ public class SurveysFragment extends Fragment {
             }
         });
 
-        //profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
-        if(MainActivity.profile == null) {
+        if(MainActivity.profile.getPhone() == 0) {
             MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
         }
+
+        //profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
 
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());

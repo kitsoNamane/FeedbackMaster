@@ -37,7 +37,6 @@ public class SignUpFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Profile profile;
     private TextInputEditText ageInput;
     private ChipGroup gender;
     private Chip male;
@@ -78,7 +77,7 @@ public class SignUpFragment extends Fragment {
         }
         //profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
         if(MainActivity.profile == null) {
-            profile = new Profile();
+            MainActivity.profile = new Profile();
         }
     }
 
@@ -116,7 +115,7 @@ public class SignUpFragment extends Fragment {
         Toast.makeText(this.getContext(), "Phone :"+phone+" "+Integer.toString(phone.length()), Toast.LENGTH_LONG).show();
         if(!phone.isEmpty()==true && phone.length()==8) {
             try {
-                profile.setPhone(new Integer(phone));
+                MainActivity.profile.setPhone(new Integer(phone));
             } catch (Exception e) {
                 textInputEditText.setError("Number Invalid");
                 e.printStackTrace();
@@ -134,7 +133,7 @@ public class SignUpFragment extends Fragment {
         boolean isGenderValid = false;
         if(!age.isEmpty()) {
             try {
-                profile.setAge(new Integer(age));
+                MainActivity.profile.setAge(new Integer(age));
             } catch (Exception e) {
                 textInputEditText.setError("Age Invalid");
                 e.printStackTrace();
@@ -151,7 +150,7 @@ public class SignUpFragment extends Fragment {
             //genderState = genderId.getChipText().toString();
             genderState = genderId.getText().toString();
             try{
-                profile.setGender(genderState);
+                MainActivity.profile.setGender(genderState);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -166,9 +165,9 @@ public class SignUpFragment extends Fragment {
         }
 
         if(isAgeValid == true && isGenderValid == true) {
-            profile.setProfile(true);
+            MainActivity.profile.setProfile(true);
             //Globals.exec.execute(()->{
-            MainActivity.surveyDB.surveyDao().addProfile(profile);
+            MainActivity.surveyDB.surveyDao().addProfile(MainActivity.profile);
             //});
         }
         // Binary End-Gate guarantees that we'll get the right results nomatter the combinations
