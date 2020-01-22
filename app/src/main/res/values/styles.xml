@@ -11,7 +11,12 @@
         <item name="materialCardViewStyle">
             @style/Widget.MaterialComponents.CardView
         </item>
+
+        <item name="chipGroupStyle">
+            @style/Widget.MaterialComponents.Chip.Filter
+        </item>
     </style>
+
 
     <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>

@@ -1,5 +1,6 @@
 package sdk.kitso.feedbackmaster.repository;
 
+<<<<<<< HEAD
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -18,4 +19,15 @@ import sdk.kitso.feedbackmaster.db.Survey;
 public interface FeedbackMasterSurveyApiService {
     @POST("/api/v1/surveys")
     Single<Response> getNextSurveys(@Query("page") int pageNumber);
+=======
+import retrofit2.Call;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
+import sdk.kitso.feedbackmaster.model.Response;
+
+public interface FeedbackMasterSurveyApiService {
+    @POST("surveys")
+    Call<Response> getNextSurveys(@Query("page") int pageNumber);
+
+>>>>>>> pagination
 }

@@ -4,25 +4,16 @@
     android:layout_width="match_parent"
     android:id="@+id/survey_card"
     android:layout_height="wrap_content"
-    android:layout_marginStart="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginTop="5dp"
-    android:layout_marginEnd="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginBottom="5dp"
     android:checkable="true"
     android:clickable="true"
-    android:focusable="true"
-    app:cardCornerRadius="5dp"
-    app:cardElevation="3dp"
-    app:cardMaxElevation="6dp">
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/company_name"
+            android:id="@+id/survey_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -38,19 +29,19 @@
         </com.google.android.material.textview.MaterialTextView>
 
         <View
-            android:id="@+id/divider"
+            android:id="@+id/divider1"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:background="?android:attr/listDivider"
-            app:layout_constraintBottom_toTopOf="@+id/survey_title"
+            app:layout_constraintBottom_toTopOf="@+id/company_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/company_name" />
+            app:layout_constraintTop_toBottomOf="@+id/survey_title" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/survey_title"
+            android:id="@+id/company_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -62,11 +53,11 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/company_name">
+            app:layout_constraintTop_toBottomOf="@+id/survey_title">
         </com.google.android.material.textview.MaterialTextView>
 
         <RadioGroup
-            android:id="@+id/branch"
+            android:id="@+id/branchOld"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -76,7 +67,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/survey_title">
+            app:layout_constraintTop_toBottomOf="@+id/company_name">
 
             <TextView
                 android:id="@+id/select_branch"
@@ -103,7 +94,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/branch">
+            app:layout_constraintTop_toBottomOf="@+id/branchOld">
 
             <TextView
                 android:id="@+id/select_department"

@@ -17,7 +17,11 @@ public class DeviceUUIDInterceptor implements Interceptor {
         HttpUrl url = chain.request()
                 .url()
                 .newBuilder()
+<<<<<<< HEAD
                 .addQueryParameter("device_uuid", DEVICE_UUID)
+=======
+                .addQueryParameter("device", DEVICE_UUID)
+>>>>>>> pagination
                 .build();
 
         Request request = chain.request()

@@ -1,46 +1,63 @@
 package sdk.kitso.feedbackmaster.survey;
 
+import android.content.Context;
 import android.os.Bundle;
+<<<<<<< HEAD
 import android.provider.Settings;
+=======
+import android.util.Log;
+>>>>>>> pagination
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import java.util.List;
+
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.chip.Chip;
+
 
 import androidx.fragment.app.Fragment;
+<<<<<<< HEAD
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
+=======
+>>>>>>> pagination
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
-import sdk.kitso.feedbackmaster.MockData;
+import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
+<<<<<<< HEAD
 import sdk.kitso.feedbackmaster.db.QuestionDB;
 import sdk.kitso.feedbackmaster.db.Survey;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataSource;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApi;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApiService;
+=======
+import sdk.kitso.feedbackmaster.Utils;
+import sdk.kitso.feedbackmaster.model.Profile;
+>>>>>>> pagination
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SurveysFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link SurveysFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyItemClickedListener  {
+public class SurveysFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    public static RecyclerView recyclerView;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    public static RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
+<<<<<<< HEAD
     private SurveyAdapter adapter;
     private SurveyPagedAdapter pagedAdapter;
     private FeedbackMasterSurveyApiService apiService;
@@ -49,6 +66,11 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
     private SurveyViewModel surveyViewModel;
     public static QuestionDB questionDB;
     SurveyAdapter.SurveyViewHolder holder;
+=======
+    private FlexboxLayoutManager flexboxLayoutManager;
+    private static MaterialCardView reloadCard;
+    private Chip reloadChip;
+>>>>>>> pagination
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -79,26 +101,22 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         questionDB = Room.databaseBuilder(this.getContext().getApplicationContext(), QuestionDB.class, "questions")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries().build();
         String androidId = Settings.Secure.getString(this.getActivity().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         apiService = new FeedbackMasterSurveyApi().getService(androidId, getContext());
+=======
+        onNetworkState(this.getContext());
+>>>>>>> pagination
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        mock = new MockData(this.getContext());
-        if(MainActivity.surveyDB.surveyDao().getSurveys().size() <= 0) {
-            Globals.executor.execute(()->{
-                mock.generateSurveys(100);
-            });
-            Globals.executor.execute(()->{
-                mock.generateOptions();
-            });
-        }
 
+<<<<<<< HEAD
         //if(questionDB.questionDao().getQuestions(0).size() <= 0) {
         //    mock.generateQuestions();
         //}
@@ -112,38 +130,64 @@ public class SurveysFragment extends Fragment implements SurveyAdapter.OnSurveyI
         });
         adapter = new SurveyAdapter(surveys, this);
         recyclerView.setAdapter(pagedAdapter);
+=======
+    }
+
+    public static void retry() {
+        MainActivity.surveyViewModel.retry();
+        Log.d("FMDIGILAB 16", "RETYRING");
+>>>>>>> pagination
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_surveys, container, false);
+
+        reloadCard = view.findViewById(R.id.reloadCard);
+        reloadChip = view.findViewById(R.id.load_more);
+        reloadChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                retry();
+            }
+        });
+
+        if(MainActivity.profile.getPhone() == 0) {
+            MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
+        }
+
+        //profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
+
         recyclerView = view.findViewById(R.id.survey_list);
-        recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(view.getContext());
+        //flexboxLayoutManager = new FlexboxLayoutManager(view.getContext());
+        //flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
+        //flexboxLayoutManager.setJustifyContent(JustifyContent.CENTER);
         recyclerView.setLayoutManager(layoutManager);
+<<<<<<< HEAD
         recyclerView.setAdapter(pagedAdapter);
+=======
+        recyclerView.setAdapter(MainActivity.pagedAdapter);
+
+>>>>>>> pagination
         return view;
     }
 
-    @Override
-    public void onItemClicked(View view, Survey survey) {
-        switch (view.getId()) {
-        case(R.id.survey_card):
-            holder = (SurveyAdapter.SurveyViewHolder) recyclerView.findContainingViewHolder(view);
-            adapter.bindDynamicContent(holder, survey);
-            break;
-        case(R.id.start_survey):
-            SurveysFragmentDirections.ActionSurvey actionSurvey = SurveysFragmentDirections.actionSurvey(survey.getId());
-            Toast.makeText(this.getContext(), "SurveyId :"+survey.getId(), Toast.LENGTH_LONG).show();
-            Navigation.findNavController(view).navigate(actionSurvey);
-            break;
-        default:
-            Toast.makeText(this.getContext(), "ButtonId :"+Integer.toString(R.id.start_survey)
-                    +" CardId :"+Integer.toString(R.id.survey_card)+" Got :"+Integer.toString(view.getId()),
-                    Toast.LENGTH_LONG
-            ).show();
+    public static void toggleReload(NetworkState.Status status) {
+        if(status == NetworkState.Status.FAILED) {
+            reloadCard.setVisibility(View.VISIBLE);
+            Log.d("FMDIGILAB 14", "LiveUpdate");
+        } else {
+            Log.d("FMDIGILAB 15", "LiveUpdate");
+            reloadCard.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void onNetworkState(Context context) {
+        if(!Utils.isOnline(context)) {
+            MainActivity.navController.navigate(SurveysFragmentDirections.actionNetworkError());
         }
 
     }

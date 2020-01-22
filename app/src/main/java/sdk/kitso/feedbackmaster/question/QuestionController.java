@@ -1,30 +1,30 @@
 package sdk.kitso.feedbackmaster.question;
 
+import android.util.Log;
+
 import java.util.List;
 
-import sdk.kitso.feedbackmaster.db.MultipleChoiceOption;
-import sdk.kitso.feedbackmaster.db.Question;
-import sdk.kitso.feedbackmaster.db.QuestionsAndAllOptions;
+import sdk.kitso.feedbackmaster.model.Question;
+import sdk.kitso.feedbackmaster.model.QuestionDataItem;
+import sdk.kitso.feedbackmaster.model.Questions;
 import sdk.kitso.feedbackmaster.survey.SurveysFragment;
 
 // Make it a Singleton: If it's already created re-use the instantiated one
 public class QuestionController {
     private int maxQuestions;
     private static QuestionController instance;
-    public Question currentQuestion;
-    private List<Question> questions;
+    public QuestionDataItem currentQuestion;
+    private List<QuestionDataItem> questions;
     public int listIterator;
-    public List<QuestionsAndAllOptions> options;
 
     private QuestionController() {
-        currentQuestion = new Question();
+        currentQuestion = new QuestionDataItem();
     }
 
-    public void setQuestions(int surveyId) {
-        this.questions = SurveysFragment.questionDB.questionDao()
-                .getQuestions(surveyId);
-        //Log.i("Size : "+this.questions.size()+" SurveyId : "+surveyId, "Help");
+    public void setQuestions(List<QuestionDataItem> questions) {
+        this.questions = questions;
         this.maxQuestions = this.questions.size();
+        Log.d("FMDIGILAB", "MAX Questions : "+this.maxQuestions);
         this.listIterator = -1;
     }
 
@@ -35,31 +35,23 @@ public class QuestionController {
         return instance;
     }
 
-    public List<MultipleChoiceOption> nextOption() {
-        if(this.options == null || this.options.size() <= 0) {
-            return null;
-        }
-        return null;
-    }
 
-    public Question nextQuestion() {
+    public QuestionDataItem nextQuestion() {
         this.listIterator += 1;
         if(this.listIterator < this.maxQuestions) {
+            Log.d("FMDIGILAB", "Iterator : "+this.listIterator+" MaxQ : "+this.maxQuestions);
             this.currentQuestion = this.questions.get(this.listIterator);
-            this.options = SurveysFragment.questionDB.questionDao()
-                    .getOptions(this.currentQuestion.getId());
             return this.currentQuestion;
         }
         this.listIterator -= 1;
+        this.currentQuestion = null;
         return this.currentQuestion;
     }
 
-    public Question previousQuestion() {
+    public QuestionDataItem previousQuestion() {
         this.listIterator -= 1;
         if(this.listIterator >= 0) {
             this.currentQuestion = this.questions.get(this.listIterator);
-            this.options = SurveysFragment.questionDB.questionDao()
-                    .getOptions(this.currentQuestion.getId());
             return this.currentQuestion;
         }
         this.listIterator += 1;
