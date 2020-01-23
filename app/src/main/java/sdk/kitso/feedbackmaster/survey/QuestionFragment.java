@@ -116,6 +116,12 @@ public class QuestionFragment extends Fragment {
                 case R.id.question_next:
                     questionController.nextQuestion();
                     if(questionController.currentQuestion == null) {
+                        MainActivity.profile.setNumberOfSurveysCompleted(
+                                MainActivity.profile.getNumberOfSurveysCompleted() + 1
+
+                        );
+                        MainActivity.surveyDB.surveyDao().addProfile(MainActivity.profile);
+
                         MainActivity.navController.navigate(QuestionFragmentDirections.actionCompleted());
                         break;
                     }

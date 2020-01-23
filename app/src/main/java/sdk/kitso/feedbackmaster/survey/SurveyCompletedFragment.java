@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import sdk.kitso.feedbackmaster.Globals;
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 
 import android.view.LayoutInflater;
@@ -11,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textview.MaterialTextView;
+
+import java.util.Locale;
 
 
 /**
@@ -24,6 +29,8 @@ public class SurveyCompletedFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     MaterialButton goHome;
+    MaterialTextView completedSurveys;
+    MaterialTextView totalWins;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -69,12 +76,15 @@ public class SurveyCompletedFragment extends Fragment {
         // Inflate the layout for this fragment
         View view  = inflater.inflate(R.layout.fragment_survey_completed, container, false);
         goHome = view.findViewById(R.id.go_home_text);
-        goHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(SurveyCompletedFragmentDirections.actionHome());
-            }
-        });
+        completedSurveys = view.findViewById(R.id.surveys_completed);
+        totalWins = view.findViewById(R.id.total_wins);
+        completedSurveys.setText(
+                String.format(Locale.getDefault(), "%d",
+                        MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getNumberOfSurveysCompleted()
+                )
+        );
+        totalWins.setText("0");
+        goHome.setOnClickListener(v -> Navigation.findNavController(v).navigate(SurveyCompletedFragmentDirections.actionHome()));
 
         return view;
     }

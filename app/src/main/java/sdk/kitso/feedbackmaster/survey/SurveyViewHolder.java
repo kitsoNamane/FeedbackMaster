@@ -62,14 +62,14 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
     public void gotoQuestionnaire(DataItem item) {
         List<ChildrenDataItem> children = item.getBusiness().getBusinessData().getChildren().getData();
         Log.d("FMDIGILAB", "NUMBER OF Branches : "+children.size());
-        if(children.size() > 0) {
+        //if(children.size() > 0) {
             // goto select Branches and/or departments
-            SurveysFragmentDirections.ActionBranches actionBranches = SurveysFragmentDirections.actionBranches(item);
-            MainActivity.navController.navigate(actionBranches);
-        } else {
+        SurveysFragmentDirections.ActionBranches actionBranches = SurveysFragmentDirections.actionBranches(item);
+        MainActivity.navController.navigate(actionBranches);
+        //} else {
             // go straight to questionnaire
-            SurveysFragmentDirections.ActionStartSurvey actionStartSurvey = SurveysFragmentDirections.actionStartSurvey(item);
-            MainActivity.navController.navigate(actionStartSurvey);
-        }
+        //    SurveysFragmentDirections.ActionStartSurvey actionStartSurvey = SurveysFragmentDirections.actionStartSurvey(item);
+        //    MainActivity.navController.navigate(actionStartSurvey);
+        //}
     }
 }

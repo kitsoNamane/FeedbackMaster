@@ -30,7 +30,7 @@ public class Questionnaire implements Serializable {
 	@Override
  	public String toString(){
 		return 
-			"Questionnaire{" + 
+			"QuestionQuestionnaire{" +
 			"has = '" + has + '\'' + 
 			",max = '" + max + '\'' + 
 			"}";

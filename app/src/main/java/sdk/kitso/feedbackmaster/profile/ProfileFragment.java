@@ -10,6 +10,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.mifmif.common.regex.Main;
 
+import java.util.Locale;
+
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
@@ -32,6 +34,8 @@ public class ProfileFragment extends Fragment {
     MaterialTextView viewPhone;
     MaterialTextView viewAge;
     MaterialTextView viewGender;
+    MaterialTextView completedSurveys;
+    MaterialTextView totalWins;
     MaterialButton editUser;
 
     // TODO: Rename and change types of parameters
@@ -83,6 +87,16 @@ public class ProfileFragment extends Fragment {
         viewPhone.setText(Integer.toString(MainActivity.profile.getPhone()));
         viewAge.setText(Integer.toString(MainActivity.profile.getAge()));
         viewGender.setText(MainActivity.profile.getGender());
+
+        completedSurveys = view.findViewById(R.id.surveys_completed);
+        totalWins = view.findViewById(R.id.total_wins);
+
+        completedSurveys.setText(
+                String.format(Locale.getDefault(),"%d",
+                        MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getNumberOfSurveysCompleted()
+                )
+        );
+        totalWins.setText("0");
 
         editUser.setOnClickListener(v -> Toast.makeText(getContext(), "Go to edit page", Toast.LENGTH_LONG).show());
         return view;

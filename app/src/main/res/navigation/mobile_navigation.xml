@@ -19,9 +19,6 @@
         <action
             android:id="@+id/actionBranches"
             app:destination="@id/branchesDepartmentsFragment" />
-        <action
-            android:id="@+id/actionStartSurvey"
-            app:destination="@id/questionFragment" />
     </fragment>
 
     <fragment
@@ -41,6 +38,14 @@
         <argument
             android:name="currentQuestions"
             app:argType="sdk.kitso.feedbackmaster.model.DataItem" />
+        <argument
+            android:name="surveyReference"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="businessReference"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/surveyCompletedFragment"
