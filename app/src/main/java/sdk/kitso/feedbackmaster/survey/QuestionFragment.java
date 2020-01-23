@@ -1,27 +1,20 @@
 package sdk.kitso.feedbackmaster.survey;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textview.MaterialTextView;
 
 import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
-import sdk.kitso.feedbackmaster.MyListAdapter;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.model.Result;
 import sdk.kitso.feedbackmaster.question.QuestionController;
 
 
@@ -41,6 +34,7 @@ public class QuestionFragment extends Fragment {
     QuestionFragmentArgs questionFragmentArgs;
     BottomNavigationView questionNav;
     FrameLayout questionView;
+    private Result getQuestions;
     MaterialTextView questionTitle;
     ListView group;
     View questionContent;
@@ -92,25 +86,62 @@ public class QuestionFragment extends Fragment {
         questionNav = view.findViewById(R.id.question_nav_view);
         questionView = view.findViewById(R.id.question_showcase);
         questionNav.setSelectedItemId(R.id.dummy);
-        questionController.setQuestions(questionFragmentArgs.getCurrentQuestions().getQuestions().getData());
         questionTitle = view.findViewById(R.id.question_title);
+        MainActivity.questionsApi.getQuestionsFromServer(
+            questionFragmentArgs.getSurveyReference(),
+                questionFragmentArgs.getBusinessReference()
+        );
 
-        questionTitle.setText(questionController.nextQuestion().getCaption());
-        /**questionTitle.setText(questionController.nextQuestion().getQuestion());
-        Toast.makeText(this.getContext(), "OPTIONS : "+questionController.options.size(), Toast.LENGTH_LONG).show();
-        questionNav.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
-            @Override
-            public void onNavigationItemReselected(@NonNull MenuItem item) {
-                // Do nothing for now
+        MainActivity.questionsApi.getNetworkState().observe(this, networkState -> {
+            switch (networkState.getStatus()) {
+                case FAILED:
+                    disableBottomNavigation();
+                    break;
+                case RUNNING:
+                    // render loading screen
+                    disableBottomNavigation();
+                    break;
+                case SUCCESS:
+                default:
+                    // stop rendering loading animation
+                    enableBottomNavigation();
             }
         });
-         */
 
+        MainActivity.questionsApi.getQuestionnaire().observe(this, questionnaire->{
+            if(questionnaire != null) {
+                // make question view visible
+                questionController.setQuestions(questionFragmentArgs.getCurrentQuestions().getQuestions().getData());
+                questionTitle.setText(questionController.nextQuestion().getCaption());
+                renderQuestion();
+            }
+        });
+
+        return view;
+    }
+
+
+    public View setQuestionContent(@LayoutRes int i) {
+       return getLayoutInflater().inflate(i, questionView, false);
+    }
+
+    public void disableBottomNavigation() {
         questionNav.setOnNavigationItemReselectedListener(item -> {
             // Do nothing for now
         });
 
-        renderQuestion();
+        questionNav.setOnNavigationItemSelectedListener(item-> {
+            // Do nothing
+            return false;
+        });
+    }
+
+    public void enableBottomNavigation() {
+        questionNav.setOnNavigationItemReselectedListener(item -> {
+            // Do nothing for now
+        });
+
+        //renderQuestion();
         questionNav.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.question_next:
@@ -140,24 +171,6 @@ public class QuestionFragment extends Fragment {
             }
             return false;
         });
-
-        //MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
-        //BottomNavigationView navView = view.findViewById(R.id.nav_view);
-        //View decorView = this.getWindow().getDecorView();
-        // Hide both the navigation bar and the status bar.
-        // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
-        // a general rule, you should design your app to hide the status bar whenever you
-        // hide the navigation bar.
-        //int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        //        | View.SYSTEM_UI_FLAG_FULLSCREEN;
-        //decorView.setSystemUiVisibility(uiOptions);
-        //toolbar.setVisibility(View.GONE);
-        // navView.setVisibility(View.GONE);
-        return view;
-    }
-
-    public View setQuestionContent(@LayoutRes int i) {
-       return getLayoutInflater().inflate(i, questionView, false);
     }
 
     public void renderQuestion() {
