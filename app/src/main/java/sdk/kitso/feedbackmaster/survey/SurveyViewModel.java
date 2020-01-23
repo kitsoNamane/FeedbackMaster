@@ -8,6 +8,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.paging.DataSource;
@@ -16,12 +17,15 @@ import androidx.paging.PagedList;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.DataItem;
+import sdk.kitso.feedbackmaster.model.Result;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataFactory;
+import sdk.kitso.feedbackmaster.repository.FeedbackMasterQuestions;
 
 public class SurveyViewModel extends ViewModel {
     private Executor executor;
 
     private LiveData<NetworkState> networkState;
+    private MutableLiveData<Result> questionnaire;
     private LiveData<PagedList<DataItem>> surveyLiveData;
 
     private FeedbackMasterNetworkDataFactory feedbackMasterNetworkDataFactory;
@@ -67,5 +71,9 @@ public class SurveyViewModel extends ViewModel {
      */
     public LiveData<PagedList<DataItem>> getSurveyLiveData() {
         return surveyLiveData;
+    }
+
+    public MutableLiveData<Result> getQuestionnaire() {
+        return questionnaire;
     }
 }

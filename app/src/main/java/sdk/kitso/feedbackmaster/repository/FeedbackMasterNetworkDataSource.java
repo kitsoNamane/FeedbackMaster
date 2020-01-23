@@ -15,15 +15,15 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
     private static final String TAG = FeedbackMasterNetworkDataSource.class.getSimpleName();
     private FeedbackMasterSurveyApiService apiService;
 
-    private MutableLiveData networkState;
+    private MutableLiveData<NetworkState> networkState;
+    private MutableLiveData<NetworkState> initialLoading;
     public Runnable reload;
-    private MutableLiveData initialLoading;
 
 
     public FeedbackMasterNetworkDataSource(FeedbackMasterSurveyApiService api) {
         this.apiService = api;
         networkState = new MutableLiveData<NetworkState>();
-        initialLoading = new MutableLiveData<>();
+        initialLoading = new MutableLiveData<NetworkState>();
     }
 
 
@@ -35,6 +35,8 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
         return initialLoading;
     }
 
+
+
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> loadInitialParams, @NonNull LoadInitialCallback<Integer, DataItem> loadInitialCallback) {
         initialLoading.postValue(NetworkState.LOADING);
@@ -45,7 +47,6 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
             @Override
             public void onResponse(Call<sdk.kitso.feedbackmaster.model.Response> call, Response<sdk.kitso.feedbackmaster.model.Response> response) {
                 if(response.isSuccessful()) {
-                    //SystemClock.sleep(3000);
                     Log.d("FMDIGILAB 2", response.message());
                     loadInitialCallback.onResult(response.body().getData().getDataItemList(), null, 2);
                     initialLoading.postValue(NetworkState.LOADED);
@@ -65,7 +66,6 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
                 reload = () -> loadInitial(loadInitialParams, loadInitialCallback);
             }
         });
-        //Log.d("FMDIGILAB 18", networkState.getValue().getMsg());
     }
 
     @Override
@@ -101,9 +101,5 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
               }
           }
         );
-    }
-
-    public void retry() {
-
     }
 }
