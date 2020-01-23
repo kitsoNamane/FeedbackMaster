@@ -13,11 +13,10 @@ import androidx.lifecycle.ViewModel;
 import androidx.paging.DataSource;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.DataItem;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataFactory;
-import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApi;
-import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApiService;
 
 public class SurveyViewModel extends ViewModel {
     private Executor executor;
@@ -25,17 +24,15 @@ public class SurveyViewModel extends ViewModel {
     private LiveData<NetworkState> networkState;
     private LiveData<PagedList<DataItem>> surveyLiveData;
 
-    private FeedbackMasterSurveyApiService feedbackMasterSurveyApiService;
     private FeedbackMasterNetworkDataFactory feedbackMasterNetworkDataFactory;
 
     private DataSource<Integer, DataItem> mostRecentDataSource;
 
     private int pageSize = 10;
 
-    public void init(String device_uuid, Context context) {
+    public void init() {
         executor = Executors.newFixedThreadPool(5);
-        feedbackMasterSurveyApiService = FeedbackMasterSurveyApi.getService(device_uuid, context);
-        feedbackMasterNetworkDataFactory = new FeedbackMasterNetworkDataFactory(feedbackMasterSurveyApiService);
+        feedbackMasterNetworkDataFactory = new FeedbackMasterNetworkDataFactory(MainActivity.feedbackMasterSurveyApiService);
         mostRecentDataSource = feedbackMasterNetworkDataFactory.create();
         networkState = Transformations.switchMap(
                 feedbackMasterNetworkDataFactory.getMutableLiveData(), dataSource-> dataSource.getNetworkState()

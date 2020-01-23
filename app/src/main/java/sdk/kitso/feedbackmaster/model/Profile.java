@@ -16,6 +16,9 @@ public class Profile {
     @ColumnInfo(name = "profile_set")
     private boolean profile = false;
 
+    @ColumnInfo(name = "surveys_completed")
+    private int numberOfSurveysCompleted;
+
     @ColumnInfo(name = "gender")
     private String gender;
 
@@ -36,6 +39,13 @@ public class Profile {
     }
     public void setProfile(boolean profile) {
         this.profile = profile;
+    }
+    public void setNumberOfSurveysCompleted(int numberOfSurveysCompleted) {
+        this.numberOfSurveysCompleted = numberOfSurveysCompleted;
+    }
+
+    public int getNumberOfSurveysCompleted() {
+        return numberOfSurveysCompleted;
     }
 
     public int getPhone() {

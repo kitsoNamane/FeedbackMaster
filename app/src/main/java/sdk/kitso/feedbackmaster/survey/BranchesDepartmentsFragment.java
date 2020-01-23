@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.button.MaterialButton;
@@ -44,6 +43,7 @@ public class BranchesDepartmentsFragment extends Fragment {
     MaterialTextView numberOfQuestions;
     MaterialTextView numberOfRespondents;
     MaterialTextView expiryDate;
+    MaterialTextView categoryHelpText;
     FlexboxLayout selectedCategories;
     FlexboxLayout getSelectedCategories;
     Chip chipItem;
@@ -53,6 +53,10 @@ public class BranchesDepartmentsFragment extends Fragment {
     MaterialButton start;
 
     BranchesDepartmentsFragmentArgs branchesDepartmentsFragmentArgs;
+
+    String surveyReference;
+    String businessReference;
+
 
     public BranchesDepartmentsFragment() {
         // Required empty public constructor
@@ -93,6 +97,7 @@ public class BranchesDepartmentsFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_branches_departments, container, false);
         company = view.findViewById(R.id.company_name);
         survey = view.findViewById(R.id.survey_title);
+        categoryHelpText = view.findViewById(R.id.category_help_text);
         numberOfQuestions = view.findViewById(R.id.number_of_questions);
         numberOfRespondents = view.findViewById(R.id.number_of_respondents);
         expiryDate = view.findViewById(R.id.expiry_date);
@@ -109,16 +114,18 @@ public class BranchesDepartmentsFragment extends Fragment {
         numberOfRespondents.setText(Integer.toString(item.getEntries().getTotal()));
         numberOfQuestions.setText(Integer.toString(item.getQuestions().getNumberOfQuestion()));
 
+        if(surveyReference == null && businessReference == null) {
+            this.start.setVisibility(View.GONE);
+        }
+
+        surveyReference = item.getReference();
         renderBranches();
 
-        this.start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BranchesDepartmentsFragmentDirections.ActionBeginSurvey actionBeginSurvey = BranchesDepartmentsFragmentDirections.actionBeginSurvey(
-                        branchesDepartmentsFragmentArgs.getCurrentSurvey()
-                );
-                MainActivity.navController.navigate(actionBeginSurvey);
-            }
+        this.start.setOnClickListener(v -> {
+            BranchesDepartmentsFragmentDirections.ActionBeginSurvey actionBeginSurvey = BranchesDepartmentsFragmentDirections.actionBeginSurvey(
+                    branchesDepartmentsFragmentArgs.getCurrentSurvey(), surveyReference, businessReference
+            );
+            MainActivity.navController.navigate(actionBeginSurvey);
         });
 
         return view;
@@ -127,46 +134,43 @@ public class BranchesDepartmentsFragment extends Fragment {
     public void renderBranches() {
         List<ChildrenDataItem> children = item.getBusiness().getBusinessData().getChildren().getData();
         if(children.size() > 0) {
-            //if(branches.getChildCount() > 0) {
-            //    branch.setVisibility(View.VISIBLE);
-            //    return;
-            //}
-
             for(ChildrenDataItem child : children) {
                 chipItem = (Chip) layoutInflater.inflate(R.layout.category_chip, getSelectedCategories, false);
                 Log.d("FMDIGITAL", child.getName());
                 chipItem.setText(child.getName());
-                /**
-                chipItem.setCheckable(true);
-                chipItem.setCheckedIcon(
-                        this.getContext().getResources().getDrawable(
-                                R.drawable.ic_check_black_24dp
-                        )
-                );
-                chipItem.setLayoutParams(
-                        new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-                        )
-                );
-                 */
 
-
-                chipItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Chip selectedChip = (Chip) v;
-                        setSelectedCategories(selectedChip);
-                        BranchesDepartmentsFragment.this.renderDepartments(child);
+                chipItem.setOnClickListener(v -> {
+                    Chip selectedChip = (Chip) v;
+                    setSelectedCategories(selectedChip);
+                    if(child.getChildren().getData().size() <= 0) {
+                        businessReference = child.getRef();
+                        categoryHelpText.setText("Press Start Survey");
+                        start.setVisibility(View.VISIBLE);
                     }
+                    BranchesDepartmentsFragment.this.renderDepartments(child);
                 });
                 getSelectedCategories.addView(chipItem);
             }
+        } else {
+            businessReference = item.getBusiness().getBusinessData().getRef();
+            start.setVisibility(View.VISIBLE);
+            categoryHelpText.setText("Press Start Survey");
         }
     }
 
     public void setSelectedCategories(Chip chip) {
         selectedChipItem = (Chip) layoutInflater.inflate(R.layout.selected_category_chip, selectedCategories, false);
         selectedChipItem.setText(chip.getText());
+        selectedChipItem.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedCategories.removeAllViews();
+                start.setVisibility(View.GONE);
+                getSelectedCategories.removeAllViews();
+                categoryHelpText.setText("Do you want to give feedback to the following:");
+                renderBranches();
+            }
+        });
         selectedCategories.addView(selectedChipItem);
     }
 
@@ -174,52 +178,33 @@ public class BranchesDepartmentsFragment extends Fragment {
         List<BranchDataItem> children = childObj.getChildren().getData();
         getSelectedCategories.removeAllViews();
         if(children.size() > 0) {
-            //if(departments.getChildCount() > 0) {
-            //    departments.removeAllViews();
-            //}
-
             for(BranchDataItem child : children) {
                 chipItem = (Chip) layoutInflater.inflate(R.layout.category_chip, getSelectedCategories, false);
                 Log.d("FMDIGITAL Dep", child.getName());
                 chipItem.setText(child.getName());
-                /**chipItem.setCheckable(true);
+                chipItem.setOnClickListener(v -> {
+                    Chip selectedChip = (Chip) v;
+                    businessReference = child.getRef();
+                    categoryHelpText.setText("Press Start Survey");
+                    start.setVisibility(View.VISIBLE);
 
-                chipItem.setLayoutParams(
-                        new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-                        )
-                );
-                chipItem.setCheckedIcon(
-                        this.getContext().getResources().getDrawable(
-                                R.drawable.ic_check_black_24dp
-                        )
-                );
-                 */
-
-                chipItem.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Chip selectedChip = (Chip) v;
-                        selectedChipItem = (Chip) layoutInflater.inflate(R.layout.selected_category_chip, selectedCategories, false);
-                        selectedChipItem.setText(selectedChip.getText());
-                        selectedCategories.addView(selectedChipItem);
-                        getSelectedCategories.removeAllViews();
-                    }
+                    selectedChipItem = (Chip) layoutInflater.inflate(R.layout.selected_category_chip, selectedCategories, false);
+                    selectedChipItem.setText(selectedChip.getText());
+                    selectedChipItem.setOnCloseIconClickListener(v1 -> {
+                        selectedCategories.removeView(v1);
+                        categoryHelpText.setText("Do you want to give feedback to the following:");
+                        start.setVisibility(View.GONE);
+                        renderDepartments(childObj);
+                    });
+                    selectedCategories.addView(selectedChipItem);
+                    getSelectedCategories.removeAllViews();
                 });
 
                 getSelectedCategories.addView(chipItem);
             }
-            //department.setVisibility(View.VISIBLE);
         } else {
             getSelectedCategories.removeAllViews();
-            //department.setVisibility(View.GONE);
         }
-    }
-
-    public void setVisibility(int VISIBILITY) {
-        //this.branch.setVisibility(VISIBILITY);
-        //this.department.setVisibility(VISIBILITY);
-        this.start.setVisibility(VISIBILITY);
     }
 
     /**

@@ -19,8 +19,6 @@ public interface SurveyDao {
     @Insert
     void addDepartment(Department dept);
 
-
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addProfile(Profile profile);
 
