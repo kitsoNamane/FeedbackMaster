@@ -1,6 +1,7 @@
 package sdk.kitso.feedbackmaster.survey;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
+import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.Result;
@@ -108,12 +110,6 @@ public class QuestionFragment extends Fragment {
 
         MainActivity.surveyViewModel.getQuestionnaire().observe(this, questionnaire->{
             if(questionnaire != null) {
-                // make question view visible
-                //questionController.setQuestions(questionFragmentArgs.getCurrentQuestions().getQuestions().getData());
-                questionController.setQuestions(questionnaire.getQuestions());
-                questionTitle.setText(questionController.nextQuestion().getCaption());
-                renderQuestion();
-            } else if(questionnaire.getQuestionBusiness().getRef().equals(questionFragmentArgs.getBusinessReference()))  {
                 questionController.setQuestions(questionnaire.getQuestions());
                 questionTitle.setText(questionController.nextQuestion().getCaption());
                 renderQuestion();
@@ -185,61 +181,25 @@ public class QuestionFragment extends Fragment {
 
     public void renderQuestion() {
         View view = questionNav.findViewById(R.id.dummy);
+        Log.d("FMDIGILAB 23", questionController.currentQuestion.getRef());
         switch(questionController.currentQuestion.getAnswertype().getRef()){
             //case Globals.RATING_STARS:
-            case "rating":
-                questionContent = setQuestionContent(R.layout.rating_stars);
-                questionView.removeAllViews();
-                questionView.addView(questionContent);
+            case Globals.SINGLE_SELECT:
                 break;
-            /**case Globals.MULTIPLE_CHOICE:
-            case "single select":
-                questionContent = setQuestionContent(R.layout.multiple_choice);
-                group = questionContent.findViewById(R.id.multiply_options);
-                addOptions(group, ListView.CHOICE_MODE_SINGLE);
+            case Globals.MULTI_SELECT:
                 break;
-            case Globals.MULTIPLE_CHOICES:
-                questionContent = setQuestionContent(R.layout.multiple_choice);
-                group = questionContent.findViewById(R.id.multiply_options);
-                addOptions(group, ListView.CHOICE_MODE_MULTIPLE);
+            case Globals.OPEN_ENDED:
                 break;
-            case Globals.TRUE_FALSE:
-                questionContent = setQuestionContent(R.layout.true_or_false);
-                questionView.removeAllViews();
-                questionView.addView(questionContent);
-                break;
-            case Globals.SHORT_ANSWER:
-                questionContent = setQuestionContent(R.layout.short_answer);
-                questionView.removeAllViews();
-                questionView.addView(questionContent);
-                break;
-            case Globals.SCALE:
-                questionContent = getLayoutInflater().inflate(R.layout.rating_stars, questionView, false);
-                questionView.removeAllViews();
-                questionView.addView(questionContent);
-                break;
-             */
+            case Globals.RATING:
             default:
-                // multiple choice
-                questionContent = getLayoutInflater().inflate(R.layout.rating_stars, questionView, false);
-                questionView.addView(questionContent);
+                questionContent = setQuestionContent(R.layout.ten_rating_stars);
                 questionView.removeAllViews();
-                //questionTitle.setText(questionController.nextQuestion().getQuestion().);
-                //questionTitle.setText(questionController.nextQuestion().getCaption());
+                questionView.addView(questionContent);
         }
     }
 
+
     /**
-    public void addOptions(ListView myGroup, int CHOICE_MODE) {
-        myGroup.setAdapter(new MyListAdapter(this.getContext(), questionController.options.get(0).getOptions()));
-        myGroup.setDivider(null);
-        myGroup.setChoiceMode(CHOICE_MODE);
-        Toast.makeText(this.getContext(), "COWS : "+questionController.options.get(0).getOptions().size(), Toast.LENGTH_LONG).show();
-        questionView.removeAllViews();
-        questionView.addView(questionContent);
-    }
-
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

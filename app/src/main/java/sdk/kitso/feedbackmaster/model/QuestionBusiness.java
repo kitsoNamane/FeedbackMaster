@@ -11,13 +11,13 @@ public class QuestionBusiness {
 	private String code;
 
 	@SerializedName("latitude")
-	private int latitude;
+	private double latitude;
 
 	@SerializedName("name")
 	private String name;
 
 	@SerializedName("longitude")
-	private int longitude;
+	private double longitude;
 
 	public void setRef(String ref){
 		this.ref = ref;
@@ -35,11 +35,11 @@ public class QuestionBusiness {
 		return code;
 	}
 
-	public void setLatitude(int latitude){
+	public void setLatitude(double latitude){
 		this.latitude = latitude;
 	}
 
-	public int getLatitude(){
+	public double getLatitude(){
 		return latitude;
 	}
 
@@ -51,11 +51,11 @@ public class QuestionBusiness {
 		return name;
 	}
 
-	public void setLongitude(int longitude){
+	public void setLongitude(double longitude){
 		this.longitude = longitude;
 	}
 
-	public int getLongitude(){
+	public double getLongitude(){
 		return longitude;
 	}
 
