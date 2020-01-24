@@ -2,6 +2,8 @@ package sdk.kitso.feedbackmaster.repository;
 
 import android.util.Log;
 
+import java.util.Objects;
+
 import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,7 +16,7 @@ import sdk.kitso.feedbackmaster.model.Result;
 public class FeedbackMasterQuestions {
 
     public static FeedbackMasterQuestions instance;
-    private Runnable reload;
+    public Runnable reload;
     private MutableLiveData<NetworkState> networkState;
     private MutableLiveData<Result> questionnaire;
 
@@ -31,25 +33,30 @@ public class FeedbackMasterQuestions {
     }
 
     public void getQuestionsFromServer(String surveyReference, String businessReference) {
-        //initialLoading.postValue(NetworkState.LOADING);
+        if(questionnaire.getValue() == null) {
+            _getQuestionsFromServer(surveyReference, businessReference);
+        } else if(!questionnaire.getValue().getQuestionBusiness().getRef()
+                .equals(businessReference)
+        ) {
+            _getQuestionsFromServer(surveyReference, businessReference);
+        }
+    }
+
+    private void _getQuestionsFromServer(String surveyReference, String businessReference) {
         networkState.postValue(NetworkState.LOADING);
         MainActivity.feedbackMasterSurveyApiService.getQuestions(surveyReference, businessReference).enqueue(new Callback<QuestionResponse>() {
             @Override
             public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
                 if(response.isSuccessful()) {
-                    //SystemClock.sleep(3000);
                     Log.d("FMDIGILAB 20", response.message());
-                    //loadInitialCallback.onResult(response.body().getData().getDataItemList(), null, 2);
-                    //Result result = response.body().getResult();
                     questionnaire.postValue(response.body().getResult());
-                    //initialLoading.postValue(NetworkState.LOADED);
-                    //networkState.postValue(NetworkState.LOADED);
-         //           initialLoading.postValue(NetworkState.LOADED);
+                    //Log.d("FMDIGILAB 22", questionnaire.getValue().toString());
+                    Log.d("FMDIGILAB 23", response.body().getResult().toString());
                     networkState.postValue(NetworkState.LOADED);
                 } else {
                     Log.d("FMDIGILAB 20", response.message());
-                   networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                     questionnaire.postValue(null);
+                    networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                     reload = () -> getQuestionsFromServer(surveyReference, businessReference);
                 }
             }
@@ -58,9 +65,9 @@ public class FeedbackMasterQuestions {
             public void onFailure(Call<QuestionResponse> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
                 Log.d("FMDIGILAB 20", errorMessage);
+                questionnaire.postValue(null);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 reload = () -> getQuestionsFromServer(surveyReference, businessReference);
-                questionnaire.postValue(null);
             }
         });
     }

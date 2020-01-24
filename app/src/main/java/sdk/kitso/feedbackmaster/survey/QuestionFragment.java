@@ -87,12 +87,10 @@ public class QuestionFragment extends Fragment {
         questionView = view.findViewById(R.id.question_showcase);
         questionNav.setSelectedItemId(R.id.dummy);
         questionTitle = view.findViewById(R.id.question_title);
-        MainActivity.questionsApi.getQuestionsFromServer(
-            questionFragmentArgs.getSurveyReference(),
-                questionFragmentArgs.getBusinessReference()
-        );
 
-        MainActivity.questionsApi.getNetworkState().observe(this, networkState -> {
+        getQuestions();
+
+        MainActivity.surveyViewModel.getNetworkState().observe(this, networkState -> {
             switch (networkState.getStatus()) {
                 case FAILED:
                     disableBottomNavigation();
@@ -108,9 +106,13 @@ public class QuestionFragment extends Fragment {
             }
         });
 
-        MainActivity.questionsApi.getQuestionnaire().observe(this, questionnaire->{
+        MainActivity.surveyViewModel.getQuestionnaire().observe(this, questionnaire->{
             if(questionnaire != null) {
                 // make question view visible
+                questionController.setQuestions(questionFragmentArgs.getCurrentQuestions().getQuestions().getData());
+                questionTitle.setText(questionController.nextQuestion().getCaption());
+                renderQuestion();
+            } else if(questionnaire.getQuestionBusiness().getRef().equals(questionFragmentArgs.getBusinessReference()))  {
                 questionController.setQuestions(questionFragmentArgs.getCurrentQuestions().getQuestions().getData());
                 questionTitle.setText(questionController.nextQuestion().getCaption());
                 renderQuestion();
@@ -118,6 +120,13 @@ public class QuestionFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void getQuestions() {
+        MainActivity.surveyViewModel.getQuestionsFromServer(
+                questionFragmentArgs.getSurveyReference(),
+                questionFragmentArgs.getBusinessReference()
+        );
     }
 
 

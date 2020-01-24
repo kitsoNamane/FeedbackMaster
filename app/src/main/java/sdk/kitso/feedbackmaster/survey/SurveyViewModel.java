@@ -25,10 +25,11 @@ public class SurveyViewModel extends ViewModel {
     private Executor executor;
 
     private LiveData<NetworkState> networkState;
-    private MutableLiveData<Result> questionnaire;
     private LiveData<PagedList<DataItem>> surveyLiveData;
+    private LiveData<Result> questionnaire;
 
     private FeedbackMasterNetworkDataFactory feedbackMasterNetworkDataFactory;
+    private FeedbackMasterQuestions questionsApi;
 
     private DataSource<Integer, DataItem> mostRecentDataSource;
 
@@ -42,6 +43,7 @@ public class SurveyViewModel extends ViewModel {
                 feedbackMasterNetworkDataFactory.getMutableLiveData(), dataSource-> dataSource.getNetworkState()
         );
 
+        questionsApi = FeedbackMasterQuestions.getInstance();
         PagedList.Config config = new PagedList.Config.Builder()
                 .setPageSize(pageSize)
                 .setInitialLoadSizeHint(200)
@@ -55,6 +57,19 @@ public class SurveyViewModel extends ViewModel {
     public void retry() {
         Thread thread = new Thread(
                Objects.requireNonNull(feedbackMasterNetworkDataFactory.getMutableLiveData().getValue()).reload
+        );
+        thread.start();
+    }
+
+    public void getQuestionsFromServer(String surveyReference, String businessReference) {
+        questionsApi.getQuestionsFromServer(surveyReference, businessReference);
+        networkState = questionsApi.getNetworkState();
+        questionnaire = questionsApi.getQuestionnaire();
+    }
+
+    public void setQuestionnaireRetry() {
+        Thread thread = new Thread(
+                questionsApi.reload
         );
         thread.start();
     }
@@ -73,7 +88,7 @@ public class SurveyViewModel extends ViewModel {
         return surveyLiveData;
     }
 
-    public MutableLiveData<Result> getQuestionnaire() {
+    public LiveData<Result> getQuestionnaire() {
         return questionnaire;
     }
 }

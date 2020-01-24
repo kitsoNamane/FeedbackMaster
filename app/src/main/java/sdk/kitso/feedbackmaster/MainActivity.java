@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     public static SurveyPagedAdapter pagedAdapter;
     public static Profile profile;
     public static FeedbackMasterSurveyApiService feedbackMasterSurveyApiService;
-    public static FeedbackMasterQuestions questionsApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
 
         feedbackMasterSurveyApiService = FeedbackMasterSurveyApi.getService(androidId, this);
-        questionsApi = FeedbackMasterQuestions.getInstance();
         surveyViewModel.init();
 
         pagedAdapter = new SurveyPagedAdapter();

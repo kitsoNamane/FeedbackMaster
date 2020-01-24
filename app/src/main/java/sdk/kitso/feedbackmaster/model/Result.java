@@ -1,17 +1,22 @@
 package sdk.kitso.feedbackmaster.model;
 
 import java.util.List;
+
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Result{
 
-	@SerializedName("questionQuestionnaire")
+	@SerializedName("questionnaire")
+	@Expose
 	private QuestionQuestionnaire questionQuestionnaire;
 
-	@SerializedName("questionBusiness")
+	@SerializedName("business")
+	@Expose
 	private QuestionBusiness questionBusiness;
 
 	@SerializedName("questions")
+	@Expose
 	private List<QuestionsItem> questions;
 
 	public void setQuestionQuestionnaire(QuestionQuestionnaire questionQuestionnaire){
