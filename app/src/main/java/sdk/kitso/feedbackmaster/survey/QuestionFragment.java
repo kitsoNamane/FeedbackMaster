@@ -109,11 +109,12 @@ public class QuestionFragment extends Fragment {
         MainActivity.surveyViewModel.getQuestionnaire().observe(this, questionnaire->{
             if(questionnaire != null) {
                 // make question view visible
-                questionController.setQuestions(questionFragmentArgs.getCurrentQuestions().getQuestions().getData());
+                //questionController.setQuestions(questionFragmentArgs.getCurrentQuestions().getQuestions().getData());
+                questionController.setQuestions(questionnaire.getQuestions());
                 questionTitle.setText(questionController.nextQuestion().getCaption());
                 renderQuestion();
             } else if(questionnaire.getQuestionBusiness().getRef().equals(questionFragmentArgs.getBusinessReference()))  {
-                questionController.setQuestions(questionFragmentArgs.getCurrentQuestions().getQuestions().getData());
+                questionController.setQuestions(questionnaire.getQuestions());
                 questionTitle.setText(questionController.nextQuestion().getCaption());
                 renderQuestion();
             }
@@ -184,7 +185,7 @@ public class QuestionFragment extends Fragment {
 
     public void renderQuestion() {
         View view = questionNav.findViewById(R.id.dummy);
-        switch(questionController.currentQuestion.getQuestionType().getQuestionData().getName()) {
+        switch(questionController.currentQuestion.getAnswertype().getRef()){
             //case Globals.RATING_STARS:
             case "rating":
                 questionContent = setQuestionContent(R.layout.rating_stars);
@@ -224,7 +225,7 @@ public class QuestionFragment extends Fragment {
                 questionView.addView(questionContent);
                 questionView.removeAllViews();
                 //questionTitle.setText(questionController.nextQuestion().getQuestion().);
-                questionTitle.setText(questionController.nextQuestion().getCaption());
+                //questionTitle.setText(questionController.nextQuestion().getCaption());
         }
     }
 

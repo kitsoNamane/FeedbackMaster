@@ -114,26 +114,6 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.SurveyView
     public void bindDynamicContent(SurveyViewHolder holder, Survey survey) {
         survey.setChecked(!survey.getChecked());
         holder.cardView.setChecked(survey.getChecked());
-        if (holder.cardView.isChecked() == true && holder.departments.getChildCount() <= 2) {
-            branches_list = MainActivity.surveyDB.surveyDao().getBranches(survey.getId());
-            depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
-            // Currently O(X^2) complexity
-            // find way to speed it up to O(X) complexity
-            for (int j = 0; j < branches_list.get(0).getBranchOlds().size(); j++) {
-                checkBox = new RadioButton(holder.cardView.getContext());
-                checkBox.setText(branches_list.get(0).getBranchOlds().get(j).getBranch());
-                checkBox.setTextSize(Float.parseFloat("16"));
-                checkBox.setPadding(10, 10, 10, 10);
-                holder.branches.addView(checkBox);
-            }
-            for (int j = 0; j < depts.get(0).getDepartments().size(); j++) {
-                checkBox = new RadioButton(holder.cardView.getContext());
-                checkBox.setText(depts.get(0).getDepartments().get(j).getDept());
-                checkBox.setTextSize(Float.parseFloat("16"));
-                checkBox.setPadding(10, 10, 10, 10);
-                holder.departments.addView(checkBox);
-            }
-        }
         if (holder.cardView.isChecked()) {
             setVisibility(holder, View.VISIBLE);
         } else {

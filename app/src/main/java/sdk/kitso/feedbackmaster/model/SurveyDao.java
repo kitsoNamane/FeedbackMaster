@@ -30,13 +30,5 @@ public interface SurveyDao {
 
     @Query("select * from surveys")
     DataSource.Factory<Integer, Survey> getAllSurveys();
-
-    @Query("SELECT * from surveys where id = :surveyId")
-    public List<SurveyAndAllBranches> getBranches(int surveyId);
-
-    @Query("SELECT * from surveys where id = :surveyId")
-    public List<SurveyAndAllDepartments> getDepartments(int surveyId);
-
-
 }
 

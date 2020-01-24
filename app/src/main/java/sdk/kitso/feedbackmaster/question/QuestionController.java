@@ -1,27 +1,23 @@
 package sdk.kitso.feedbackmaster.question;
 
 import android.util.Log;
-
 import java.util.List;
 
-import sdk.kitso.feedbackmaster.model.Question;
-import sdk.kitso.feedbackmaster.model.QuestionDataItem;
-import sdk.kitso.feedbackmaster.model.Questions;
-import sdk.kitso.feedbackmaster.survey.SurveysFragment;
+import sdk.kitso.feedbackmaster.model.QuestionsItem;
 
 // Make it a Singleton: If it's already created re-use the instantiated one
 public class QuestionController {
     private int maxQuestions;
     private static QuestionController instance;
-    public QuestionDataItem currentQuestion;
-    private List<QuestionDataItem> questions;
+    public QuestionsItem currentQuestion;
+    private List<QuestionsItem> questions;
     public int listIterator;
 
     private QuestionController() {
-        currentQuestion = new QuestionDataItem();
+        currentQuestion = new QuestionsItem();
     }
 
-    public void setQuestions(List<QuestionDataItem> questions) {
+    public void setQuestions(List<QuestionsItem> questions) {
         this.questions = questions;
         this.maxQuestions = this.questions.size();
         Log.d("FMDIGILAB", "MAX Questions : "+this.maxQuestions);
@@ -35,8 +31,7 @@ public class QuestionController {
         return instance;
     }
 
-
-    public QuestionDataItem nextQuestion() {
+    public QuestionsItem nextQuestion() {
         this.listIterator += 1;
         if(this.listIterator < this.maxQuestions) {
             Log.d("FMDIGILAB", "Iterator : "+this.listIterator+" MaxQ : "+this.maxQuestions);
@@ -48,7 +43,7 @@ public class QuestionController {
         return this.currentQuestion;
     }
 
-    public QuestionDataItem previousQuestion() {
+    public QuestionsItem previousQuestion() {
         this.listIterator -= 1;
         if(this.listIterator >= 0) {
             this.currentQuestion = this.questions.get(this.listIterator);

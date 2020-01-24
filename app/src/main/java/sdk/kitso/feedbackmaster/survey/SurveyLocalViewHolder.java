@@ -74,29 +74,7 @@ public class SurveyLocalViewHolder extends RecyclerView.ViewHolder {
     public void bindDynamicContent(Survey survey) {
         survey.setChecked(!survey.getChecked());
         this.cardView.setChecked(survey.getChecked());
-        if (this.cardView.isChecked() == true && this.departments.getChildCount() <= 2) {
-            branches_list = MainActivity.surveyDB.surveyDao().getBranches(survey.getId());
-            depts = MainActivity.surveyDB.surveyDao().getDepartments(survey.getId());
-            // Currently O(X^2) complexity
-            // find way to speed it up to O(X) complexity
-            for (int j = 0; j < branches_list.get(0).getBranchOlds().size(); j++) {
-                chipItem = new Chip(this.cardView.getContext());
-                chipItem.setText(branches_list.get(0).getBranchOlds().get(j).getBranch());
-                chipItem.setCheckable(true);
-                chipItem.setCheckedIcon(this.cardView.getContext().getResources().getDrawable(R.drawable.ic_check_black_24dp));
-                chipItem.setTextSize(Float.parseFloat("16"));
-                //chipItem.setPadding(10, 10, 10, 10);
-                this.branches.addView(chipItem);
-            }
-            for (int j = 0; j < depts.get(0).getDepartments().size(); j++) {
-                chipItem = new Chip(this.cardView.getContext());
-                chipItem.setText(depts.get(0).getDepartments().get(j).getDept());
-                chipItem.setCheckable(true);
-                chipItem.setCheckedIcon(this.cardView.getContext().getResources().getDrawable(R.drawable.ic_check_black_24dp));
-                chipItem.setTextSize(Float.parseFloat("16"));
-                this.departments.addView(chipItem);
-            }
-        }
+        
         if (this.cardView.isChecked()) {
             setVisibility(View.VISIBLE);
         } else {
