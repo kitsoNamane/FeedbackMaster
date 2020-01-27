@@ -2,8 +2,6 @@ package sdk.kitso.feedbackmaster.repository;
 
 import android.util.Log;
 
-import java.util.Objects;
-
 import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -11,6 +9,7 @@ import retrofit2.Response;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.QuestionResponse;
+import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.kitso.feedbackmaster.model.Result;
 
 public class FeedbackMasterQuestions {
@@ -30,6 +29,36 @@ public class FeedbackMasterQuestions {
             instance = new FeedbackMasterQuestions();
         }
         return instance;
+    }
+
+    public void sendQuestionsToServer(QuestionnaireAnswer questionnaireAnswer) {
+        networkState.postValue(NetworkState.LOADING);
+        MainActivity.feedbackMasterSurveyApiService.sendAnswer(questionnaireAnswer).enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if(response.isSuccessful()) {
+                    Log.d("FMDIGILAB 26", response.message());
+                    //questionnaire.postValue(response.body().getResult());
+                    //Log.d("FMDIGILAB 22", questionnaire.getValue().toString());
+                    Log.d("FMDIGILAB 26", response.body().toString());
+                    networkState.postValue(NetworkState.LOADED);
+                } else {
+                    Log.d("FMDIGILAB 26", response.message());
+                    //questionnaire.postValue(null);
+                    networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                    reload = () -> sendQuestionsToServer(questionnaireAnswer);
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable throwable) {
+                String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
+                Log.d("FMDIGILAB 26", errorMessage);
+                questionnaire.postValue(null);
+                networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+                reload = () -> sendQuestionsToServer(questionnaireAnswer);
+            }
+        });
     }
 
     public void getQuestionsFromServer(String surveyReference, String businessReference) {

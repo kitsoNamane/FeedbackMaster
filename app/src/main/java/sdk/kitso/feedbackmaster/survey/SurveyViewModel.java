@@ -1,14 +1,10 @@
 package sdk.kitso.feedbackmaster.survey;
 
-import android.content.Context;
-import android.util.Log;
-
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.paging.DataSource;
@@ -17,6 +13,7 @@ import androidx.paging.PagedList;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.DataItem;
+import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.kitso.feedbackmaster.model.Result;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataFactory;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterQuestions;
@@ -63,6 +60,12 @@ public class SurveyViewModel extends ViewModel {
 
     public void getQuestionsFromServer(String surveyReference, String businessReference) {
         questionsApi.getQuestionsFromServer(surveyReference, businessReference);
+        networkState = questionsApi.getNetworkState();
+        questionnaire = questionsApi.getQuestionnaire();
+    }
+
+    public void sendAnswerToServer(QuestionnaireAnswer answer) {
+        questionsApi.sendQuestionsToServer(answer);
         networkState = questionsApi.getNetworkState();
         questionnaire = questionsApi.getQuestionnaire();
     }

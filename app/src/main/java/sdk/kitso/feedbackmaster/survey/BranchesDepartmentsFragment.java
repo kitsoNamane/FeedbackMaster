@@ -1,9 +1,6 @@
 package sdk.kitso.feedbackmaster.survey;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +13,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.BranchDataItem;
@@ -93,7 +91,6 @@ public class BranchesDepartmentsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         branchesDepartmentsFragmentArgs = BranchesDepartmentsFragmentArgs.fromBundle(getArguments());
-        // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_branches_departments, container, false);
         company = view.findViewById(R.id.company_name);
         survey = view.findViewById(R.id.survey_title);
@@ -122,6 +119,9 @@ public class BranchesDepartmentsFragment extends Fragment {
         renderBranches();
 
         this.start.setOnClickListener(v -> {
+            MainActivity.questionnaireAnswer.setBusiness(businessReference);
+            MainActivity.questionnaireAnswer.setCampaign(surveyReference);
+            MainActivity.questionnaireAnswer.setCountry(item.getBusiness().getBusinessData().getCountry().getCountryData().getKey());
             BranchesDepartmentsFragmentDirections.ActionBeginSurvey actionBeginSurvey = BranchesDepartmentsFragmentDirections.actionBeginSurvey(
                     branchesDepartmentsFragmentArgs.getCurrentSurvey(), surveyReference, businessReference
             );
@@ -206,43 +206,4 @@ public class BranchesDepartmentsFragment extends Fragment {
             getSelectedCategories.removeAllViews();
         }
     }
-
-    /**
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-     */
 }

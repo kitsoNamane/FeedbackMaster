@@ -21,7 +21,7 @@ public class QuestionDataItem {
 	@SerializedName("question")
 	private Question question;
 
-	@SerializedName("answer")
+	@SerializedName("questionnaireAnswer")
 	private String answer;
 
 	@SerializedName("created")
@@ -91,7 +91,7 @@ public class QuestionDataItem {
 			",caption = '" + caption + '\'' + 
 			",responses = '" + responses + '\'' + 
 			",question = '" + question + '\'' +
-			",answer = '" + answer + '\'' + 
+			",questionnaireAnswer = '" + answer + '\'' +
 			",created = '" + created + '\'' + 
 			"}";
 		}

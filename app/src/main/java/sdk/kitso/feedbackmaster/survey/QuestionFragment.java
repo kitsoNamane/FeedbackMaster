@@ -7,18 +7,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textview.MaterialTextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.model.Answer;
 import sdk.kitso.feedbackmaster.model.AnswersItem;
 import sdk.kitso.feedbackmaster.model.Result;
 import sdk.kitso.feedbackmaster.question.QuestionController;
@@ -46,7 +50,10 @@ public class QuestionFragment extends Fragment {
     View questionContent;
     FlexboxLayout multipleChoice;
     LayoutInflater layoutInflater;
+    MaterialButton nextQuestion;
+    List<Answer> answers;
     Chip chipItem;
+    Answer answer;
     Chip option;
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -92,27 +99,48 @@ public class QuestionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view =  inflater.inflate(R.layout.fragment_question, container, false);
-        questionNav = view.findViewById(R.id.question_nav_view);
+
         questionView = view.findViewById(R.id.question_showcase);
-        questionNav.setSelectedItemId(R.id.dummy);
         questionTitle = view.findViewById(R.id.question_title);
+        nextQuestion = view.findViewById(R.id.next_question);
+        nextQuestion.setVisibility(View.GONE);
         layoutInflater = this.getLayoutInflater();
+        answers = new ArrayList<>();
+
+        nextQuestion.setOnClickListener(v -> {
+            questionController.nextQuestion();
+            if(questionController.currentQuestion == null && answers != null && answers.size() > 0) {
+                MainActivity.questionnaireAnswer.setAnswers(answers);
+                MainActivity.questionnaireAnswer.setTimer("124");
+                MainActivity.questionnaireAnswer.showMe();
+                MainActivity.surveyViewModel.sendAnswerToServer(MainActivity.questionnaireAnswer);
+
+                MainActivity.profile.setNumberOfSurveysCompleted(
+                        MainActivity.profile.getNumberOfSurveysCompleted() + 1
+                );
+
+                MainActivity.surveyDB.surveyDao().addProfile(MainActivity.profile);
+                MainActivity.navController.navigate(QuestionFragmentDirections.actionCompleted());
+            } else if (questionController.currentQuestion != null) {
+                renderQuestion();
+            }
+        });
 
         getQuestions();
 
         MainActivity.surveyViewModel.getNetworkState().observe(this, networkState -> {
             switch (networkState.getStatus()) {
                 case FAILED:
-                    disableBottomNavigation();
+                    //disableBottomNavigation();
                     break;
                 case RUNNING:
                     // render loading screen
-                    disableBottomNavigation();
+                    //disableBottomNavigation();
                     break;
                 case SUCCESS:
                 default:
                     // stop rendering loading animation
-                    enableBottomNavigation();
+                    //enableBottomNavigation();
             }
         });
 
@@ -139,57 +167,10 @@ public class QuestionFragment extends Fragment {
        return getLayoutInflater().inflate(i, questionView, false);
     }
 
-    public void disableBottomNavigation() {
-        questionNav.setOnNavigationItemReselectedListener(item -> {
-            // Do nothing for now
-        });
-
-        questionNav.setOnNavigationItemSelectedListener(item-> {
-            // Do nothing
-            return false;
-        });
-    }
-
-    public void enableBottomNavigation() {
-        questionNav.setOnNavigationItemReselectedListener(item -> {
-            // Do nothing for now
-        });
-
-        //renderQuestion();
-        questionNav.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.question_next:
-                    questionController.nextQuestion();
-                    if(questionController.currentQuestion == null) {
-                        MainActivity.profile.setNumberOfSurveysCompleted(
-                                MainActivity.profile.getNumberOfSurveysCompleted() + 1
-
-                        );
-                        MainActivity.surveyDB.surveyDao().addProfile(MainActivity.profile);
-
-                        MainActivity.navController.navigate(QuestionFragmentDirections.actionCompleted());
-                        break;
-                    }
-                    questionTitle.setText(questionController.currentQuestion.getCaption());
-                    renderQuestion();
-                    break;
-                case R.id.previous_question:
-                    questionController.previousQuestion();
-                    questionTitle.setText(questionController.currentQuestion.getCaption());
-                    renderQuestion();
-                    break;
-                case R.id.dummy:
-                    break;
-                default:
-                    // Do something
-            }
-            return false;
-        });
-    }
-
     public void renderQuestion() {
-        View view = questionNav.findViewById(R.id.dummy);
+        //View view = questionNav.findViewById(R.id.dummy);
         Log.d("FMDIGILAB 24", questionController.currentQuestion.getSurveyQuestiontype().getRef());
+        questionTitle.setText(questionController.currentQuestion.getCaption());
         switch(questionController.currentQuestion.getSurveyQuestiontype().getRef()){
             case Globals.SINGLE_SELECT:
             case Globals.TRUE_OR_FALSE:
@@ -211,7 +192,11 @@ public class QuestionFragment extends Fragment {
                 break;
             case Globals.RATING:
             default:
-                questionContent = setQuestionContent(R.layout.ten_rating_stars);
+                if(questionController.currentQuestion.getAnswertype().getRef() == "one-to-five") {
+                    questionContent = setQuestionContent(R.layout.five_rating_stars);
+                } else {
+                    questionContent = setQuestionContent(R.layout.ten_rating_stars);
+                }
                 questionView.removeAllViews();
                 questionView.addView(questionContent);
         }
@@ -226,6 +211,9 @@ public class QuestionFragment extends Fragment {
                for(AnswersItem item: questionController.currentQuestion.getAnswers()) {
                    option = (Chip) layoutInflater.inflate(R.layout.category_chip, multipleChoice, false);
                    option.setText(item.getCaption());
+                   option.setOnClickListener(v -> displayContinueButton(isOptionSelected(multipleChoice)));
+                   option.setOnCheckedChangeListener((buttonView, isChecked) -> getSingleSelected(multipleChoice));
+                   multipleChoice.addView(option);
                    multipleChoice.addView(option);
                }
                break;
@@ -235,13 +223,12 @@ public class QuestionFragment extends Fragment {
                for(AnswersItem item: questionController.currentQuestion.getAnswers()) {
                    option = (Chip) layoutInflater.inflate(R.layout.category_chip, multipleChoice, false);
                    option.setText(item.getCaption());
-                   option.setOnClickListener(new View.OnClickListener() {
-                       @Override
-                       public void onClick(View v) {
-                          setSingleSelect(multipleChoice, (Chip)v);
-                          displayContinueButton(isSelected(multipleChoice));
-                       }
+                   option.setOnClickListener(v -> {
+                      setSingleSelect(multipleChoice, (Chip)v);
+                      Log.d("FMDIGILAB", "Option ID : "+v.getId());
+                      displayContinueButton(isOptionSelected(multipleChoice));
                    });
+                   option.setOnCheckedChangeListener((buttonView, isChecked) -> getSingleSelected(multipleChoice));
                    multipleChoice.addView(option);
                }
         }
@@ -250,14 +237,13 @@ public class QuestionFragment extends Fragment {
 
     public void displayContinueButton(boolean isQuestionAnswered) {
         if(isQuestionAnswered) {
-            //display next question
-            Toast.makeText(this.getContext(), "Answer Selected", Toast.LENGTH_LONG).show();
+            nextQuestion.setVisibility(View.VISIBLE);
         } else {
-            Toast.makeText(this.getContext(), "Answer Not Selected", Toast.LENGTH_LONG).show();
+            nextQuestion.setVisibility(View.GONE);
         }
     }
 
-    public boolean isSelected(FlexboxLayout options) {
+    public boolean isOptionSelected(FlexboxLayout options) {
         if(!(options instanceof ViewGroup)) {
             return false;
         }
@@ -269,6 +255,23 @@ public class QuestionFragment extends Fragment {
             }
         }
         return false;
+    }
+
+    public void getSingleSelected(FlexboxLayout options) {
+        List<AnswersItem> availableAnswers = questionController.currentQuestion.getAnswers();
+        for(int i = 0; i < options.getFlexItemCount(); i++) {
+            option = (Chip) options.getFlexItemAt(i);
+            if(option.isChecked()) {
+                answer = new Answer();
+                answer.setQuestion(questionController.currentQuestion.getRef());
+                answer.setAnswer(availableAnswers.get(i).getRef());
+                answers.add(answer);
+            } else if(!option.isChecked()) {
+                if(answers.size() > 0) {
+                    answers.remove(i);
+                }
+            }
+        }
     }
 
     public void setSingleSelect(FlexboxLayout options, Chip chip) {
@@ -283,43 +286,4 @@ public class QuestionFragment extends Fragment {
            }
         }
     }
-
-    /**
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-     */
 }

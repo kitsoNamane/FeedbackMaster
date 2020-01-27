@@ -16,8 +16,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
 import sdk.kitso.feedbackmaster.model.Profile;
+import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.kitso.feedbackmaster.model.SurveyDB;
-import sdk.kitso.feedbackmaster.repository.FeedbackMasterQuestions;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApi;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApiService;
 import sdk.kitso.feedbackmaster.survey.SurveyPagedAdapter;
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public static SurveyPagedAdapter pagedAdapter;
     public static Profile profile;
     public static FeedbackMasterSurveyApiService feedbackMasterSurveyApiService;
+    public static QuestionnaireAnswer questionnaireAnswer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
                 Settings.Secure.ANDROID_ID
         );
 
+        if(questionnaireAnswer == null) {
+            questionnaireAnswer = new QuestionnaireAnswer();
+        }
+
+        questionnaireAnswer.setDevice(androidId);
 
         surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
 
@@ -78,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         if(profile == null) {
             profile = new Profile();
         }
+
 
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

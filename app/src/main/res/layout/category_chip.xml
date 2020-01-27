@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:chipIcon="@drawable/ic_check_black_24dp"
-    app:chipIconVisible="false"
-    android:text="select me"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:checkable="true"
-    android:layout_height="match_parent">
-</com.google.android.material.chip.Chip>
+    android:text="select me"
+    app:chipIcon="@drawable/ic_check_black_24dp"
+    app:chipIconVisible="false"></com.google.android.material.chip.Chip>
