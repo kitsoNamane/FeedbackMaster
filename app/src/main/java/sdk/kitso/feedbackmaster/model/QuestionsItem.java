@@ -1,6 +1,8 @@
 package sdk.kitso.feedbackmaster.model;
 
 import java.util.List;
+
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class QuestionsItem{
@@ -9,15 +11,18 @@ public class QuestionsItem{
 	private String ref;
 
 	@SerializedName("answertype")
+	@Expose
 	private Answertype answertype;
 
 	@SerializedName("answers")
+	@Expose
 	private List<AnswersItem> answers;
 
 	@SerializedName("caption")
 	private String caption;
 
-	@SerializedName("surveyQuestiontype")
+	@SerializedName("questiontype")
+	@Expose
 	private SurveyQuestiontype surveyQuestiontype;
 
 	public void setRef(String ref){

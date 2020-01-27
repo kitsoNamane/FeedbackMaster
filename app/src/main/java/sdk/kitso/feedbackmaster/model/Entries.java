@@ -8,6 +8,9 @@ public class Entries implements Serializable {
 	@SerializedName("unique")
 	private int unique;
 
+	@SerializedName("anonymous")
+	private boolean anonymous;
+
 	@SerializedName("hoursdelay")
 	private int hoursdelay;
 
@@ -20,6 +23,14 @@ public class Entries implements Serializable {
 
 	public int getTotal() {
 		return total;
+	}
+
+	public void setAnonymous(boolean anonymous) {
+		this.anonymous = anonymous;
+	}
+
+	public boolean isAnonymous() {
+		return anonymous;
 	}
 
 	public void setUnique(int unique){

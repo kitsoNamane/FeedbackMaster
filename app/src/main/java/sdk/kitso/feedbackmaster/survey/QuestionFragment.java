@@ -7,8 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.textview.MaterialTextView;
 
 import androidx.annotation.LayoutRes;
@@ -16,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.model.AnswersItem;
 import sdk.kitso.feedbackmaster.model.Result;
 import sdk.kitso.feedbackmaster.question.QuestionController;
 
@@ -40,7 +44,10 @@ public class QuestionFragment extends Fragment {
     MaterialTextView questionTitle;
     ListView group;
     View questionContent;
-
+    FlexboxLayout multipleChoice;
+    LayoutInflater layoutInflater;
+    Chip chipItem;
+    Chip option;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -89,6 +96,7 @@ public class QuestionFragment extends Fragment {
         questionView = view.findViewById(R.id.question_showcase);
         questionNav.setSelectedItemId(R.id.dummy);
         questionTitle = view.findViewById(R.id.question_title);
+        layoutInflater = this.getLayoutInflater();
 
         getQuestions();
 
@@ -181,14 +189,25 @@ public class QuestionFragment extends Fragment {
 
     public void renderQuestion() {
         View view = questionNav.findViewById(R.id.dummy);
-        Log.d("FMDIGILAB 23", questionController.currentQuestion.getRef());
-        switch(questionController.currentQuestion.getAnswertype().getRef()){
-            //case Globals.RATING_STARS:
+        Log.d("FMDIGILAB 24", questionController.currentQuestion.getSurveyQuestiontype().getRef());
+        switch(questionController.currentQuestion.getSurveyQuestiontype().getRef()){
             case Globals.SINGLE_SELECT:
+            case Globals.TRUE_OR_FALSE:
+                // True or False is categorized as single-select
+                questionContent = setQuestionContent(R.layout.multiple_choice);
+                multipleChoice = (FlexboxLayout) questionContent;
+                questionView.removeAllViews();
+                addOptions(questionContent, Globals.SINGLE_SELECT);
                 break;
             case Globals.MULTI_SELECT:
+                questionContent = setQuestionContent(R.layout.multiple_choice);
+                questionView.removeAllViews();
+                addOptions(questionContent, Globals.MULTI_SELECT);
                 break;
             case Globals.OPEN_ENDED:
+                questionContent = setQuestionContent(R.layout.short_answer);
+                questionView.removeAllViews();
+                questionView.addView(questionContent);
                 break;
             case Globals.RATING:
             default:
@@ -198,6 +217,72 @@ public class QuestionFragment extends Fragment {
         }
     }
 
+    public void addOptions(View view, String QestionType) {
+        multipleChoice = (FlexboxLayout) view;
+
+        switch(QestionType) {
+           case Globals.MULTI_SELECT:
+               multipleChoice.removeAllViews();
+               for(AnswersItem item: questionController.currentQuestion.getAnswers()) {
+                   option = (Chip) layoutInflater.inflate(R.layout.category_chip, multipleChoice, false);
+                   option.setText(item.getCaption());
+                   multipleChoice.addView(option);
+               }
+               break;
+           case Globals.SINGLE_SELECT:
+           default:
+               multipleChoice.removeAllViews();
+               for(AnswersItem item: questionController.currentQuestion.getAnswers()) {
+                   option = (Chip) layoutInflater.inflate(R.layout.category_chip, multipleChoice, false);
+                   option.setText(item.getCaption());
+                   option.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                          setSingleSelect(multipleChoice, (Chip)v);
+                          displayContinueButton(isSelected(multipleChoice));
+                       }
+                   });
+                   multipleChoice.addView(option);
+               }
+        }
+        questionView.addView(multipleChoice);
+    }
+
+    public void displayContinueButton(boolean isQuestionAnswered) {
+        if(isQuestionAnswered) {
+            //display next question
+            Toast.makeText(this.getContext(), "Answer Selected", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this.getContext(), "Answer Not Selected", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public boolean isSelected(FlexboxLayout options) {
+        if(!(options instanceof ViewGroup)) {
+            return false;
+        }
+
+        for(int i = 0; i < options.getFlexItemCount(); i++) {
+            option = (Chip) options.getFlexItemAt(i);
+            if(option.isChecked()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setSingleSelect(FlexboxLayout options, Chip chip) {
+        if(!(options instanceof ViewGroup)) {
+            return;
+        }
+
+        for(int i = 0; i < options.getFlexItemCount(); i++) {
+           option = (Chip) options.getFlexItemAt(i);
+           if(option.getText() != chip.getText()) {
+               option.setChecked(false);
+           }
+        }
+    }
 
     /**
     // TODO: Rename method, update argument and hook method into UI event
