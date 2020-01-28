@@ -40,6 +40,15 @@ public class QuestionnaireAnswer {
     @SerializedName("k")
     private String country;
 
+    @SerializedName("start_date")
+    private String startDate;
+
+    @SerializedName("end_date")
+    private String endDate;
+
+    public QuestionnaireAnswer() {
+    }
+
     public String getMobileNumber() {
         return mobileNumber;
     }
@@ -87,6 +96,16 @@ public class QuestionnaireAnswer {
         this.answers.add(answer);
     }
 
+    public void removeNullAnswers() {
+        List<Answer> transfer = new ArrayList<>();
+        for(Answer answer: answers) {
+            if(answer.getAnswer() != null) {
+                transfer.add(answer);
+            }
+        }
+        answers = transfer;
+    }
+
     public String getDevice() {
         return device;
     }
@@ -131,5 +150,21 @@ public class QuestionnaireAnswer {
         for(Answer answer: answers) {
             Log.d("FMDIGILAB 27", "Answer : "+answer.getAnswer()+", Question : "+answer.getQuestion());
         }
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

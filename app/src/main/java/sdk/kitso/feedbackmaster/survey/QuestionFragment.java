@@ -1,20 +1,24 @@
 package sdk.kitso.feedbackmaster.survey;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ListView;
+import android.widget.RatingBar;
 
-import com.google.android.flexbox.FlexboxLayout;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.chip.Chip;
+import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.LayoutRes;
@@ -23,8 +27,8 @@ import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.Answer;
+import sdk.kitso.feedbackmaster.model.AnswerData;
 import sdk.kitso.feedbackmaster.model.AnswersItem;
-import sdk.kitso.feedbackmaster.model.Result;
 import sdk.kitso.feedbackmaster.question.QuestionController;
 
 
@@ -35,26 +39,29 @@ import sdk.kitso.feedbackmaster.question.QuestionController;
  * Use the {@link QuestionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QuestionFragment extends Fragment {
+public class QuestionFragment extends Fragment implements MaterialButtonToggleGroup.OnButtonCheckedListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     QuestionController questionController;
     QuestionFragmentArgs questionFragmentArgs;
-    BottomNavigationView questionNav;
     FrameLayout questionView;
-    private Result getQuestions;
     MaterialTextView questionTitle;
-    ListView group;
     View questionContent;
-    FlexboxLayout multipleChoice;
+    RatingBar ratingBar;
+    MaterialButtonToggleGroup multipleChoice;
     LayoutInflater layoutInflater;
     MaterialButton nextQuestion;
     List<Answer> answers;
-    Chip chipItem;
     Answer answer;
-    Chip option;
+    AnswerData answerData;
+    MaterialButton option;
+    TextInputEditText shortAnswer;
+    Calendar c = Calendar.getInstance();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    String start_date;
+    String end_date;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -106,12 +113,20 @@ public class QuestionFragment extends Fragment {
         nextQuestion.setVisibility(View.GONE);
         layoutInflater = this.getLayoutInflater();
         answers = new ArrayList<>();
+        answerData = new AnswerData();
 
         nextQuestion.setOnClickListener(v -> {
             questionController.nextQuestion();
             if(questionController.currentQuestion == null && answers != null && answers.size() > 0) {
+                end_date = dateFormat.format(c.getTime());
                 MainActivity.questionnaireAnswer.setAnswers(answers);
                 MainActivity.questionnaireAnswer.setTimer("124");
+                MainActivity.questionnaireAnswer.setMobileNumber(
+                       Integer.toString(MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getPhone())
+                );
+                MainActivity.questionnaireAnswer.setStartDate(start_date);
+                MainActivity.questionnaireAnswer.setEndDate(end_date);
+                MainActivity.questionnaireAnswer.removeNullAnswers();
                 MainActivity.questionnaireAnswer.showMe();
                 MainActivity.surveyViewModel.sendAnswerToServer(MainActivity.questionnaireAnswer);
 
@@ -152,6 +167,7 @@ public class QuestionFragment extends Fragment {
             }
         });
 
+        start_date = dateFormat.format(c.getTime());
         return view;
     }
 
@@ -169,70 +185,105 @@ public class QuestionFragment extends Fragment {
 
     public void renderQuestion() {
         //View view = questionNav.findViewById(R.id.dummy);
+        displayContinueButton(false);
         Log.d("FMDIGILAB 24", questionController.currentQuestion.getSurveyQuestiontype().getRef());
         questionTitle.setText(questionController.currentQuestion.getCaption());
         switch(questionController.currentQuestion.getSurveyQuestiontype().getRef()){
             case Globals.SINGLE_SELECT:
             case Globals.TRUE_OR_FALSE:
                 // True or False is categorized as single-select
-                questionContent = setQuestionContent(R.layout.multiple_choice);
-                multipleChoice = (FlexboxLayout) questionContent;
+                questionContent = setQuestionContent(R.layout.group_multiple_choice);
+                multipleChoice = (MaterialButtonToggleGroup) questionContent;
                 questionView.removeAllViews();
                 addOptions(questionContent, Globals.SINGLE_SELECT);
                 break;
             case Globals.MULTI_SELECT:
-                questionContent = setQuestionContent(R.layout.multiple_choice);
+                questionContent = setQuestionContent(R.layout.group_multiple_choice);
                 questionView.removeAllViews();
                 addOptions(questionContent, Globals.MULTI_SELECT);
                 break;
             case Globals.OPEN_ENDED:
                 questionContent = setQuestionContent(R.layout.short_answer);
+                shortAnswer = questionContent.findViewById(R.id.short_answer);
+                shortAnswer.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if(s.length() != 0) {
+                            answer = new Answer();
+                            answer.setQuestion(questionController.currentQuestion.getRef());
+                            answerData = new AnswerData();
+                            answerData.setRef("");
+                            answerData.setText(s.toString());
+                            answerData.setListItem("");
+                            answer.setAnswerData(answerData);
+                            answers.add(answer);
+                        }
+                        displayContinueButton(true);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+                });
                 questionView.removeAllViews();
                 questionView.addView(questionContent);
                 break;
             case Globals.RATING:
             default:
-                if(questionController.currentQuestion.getAnswertype().getRef() == "one-to-five") {
+                String questionType = questionController.currentQuestion.getAnswertype().getRef();
+                if(questionType.equals("one-to-five")) {
                     questionContent = setQuestionContent(R.layout.five_rating_stars);
-                } else {
+                    ratingBar = questionContent.findViewById(R.id.five_rating_bar);
+                } else if(questionType.equals("one-to-ten")){
                     questionContent = setQuestionContent(R.layout.ten_rating_stars);
+                    ratingBar = questionContent.findViewById(R.id.ten_rating_bar);
                 }
+                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar _ratingBar, float rating, boolean fromUser) {
+                        int index = (int)rating - 1;
+                        answer = new Answer();
+                        answer.setQuestion(questionController.currentQuestion.getRef());
+                        answerData = new AnswerData();
+                        answerData.setRef(questionController.availableAnswers.get(index).getRef());
+                        answerData.setText(questionController.availableAnswers.get(index).getCaption());
+                        answerData.setListItem(questionController.availableAnswers.get(index).getRef());
+                        answer.setAnswerData(answerData);
+                        answers.add(answer);
+                        displayContinueButton(true);
+                    }
+                });
                 questionView.removeAllViews();
                 questionView.addView(questionContent);
         }
     }
 
     public void addOptions(View view, String QestionType) {
-        multipleChoice = (FlexboxLayout) view;
+        multipleChoice = (MaterialButtonToggleGroup) view;
+        multipleChoice.setClickable(true);
+        List<AnswersItem> options = questionController.currentQuestion.getAnswers();
 
-        switch(QestionType) {
-           case Globals.MULTI_SELECT:
-               multipleChoice.removeAllViews();
-               for(AnswersItem item: questionController.currentQuestion.getAnswers()) {
-                   option = (Chip) layoutInflater.inflate(R.layout.category_chip, multipleChoice, false);
-                   option.setText(item.getCaption());
-                   option.setOnClickListener(v -> displayContinueButton(isOptionSelected(multipleChoice)));
-                   option.setOnCheckedChangeListener((buttonView, isChecked) -> getSingleSelected(multipleChoice));
-                   multipleChoice.addView(option);
-                   multipleChoice.addView(option);
-               }
-               break;
-           case Globals.SINGLE_SELECT:
-           default:
-               multipleChoice.removeAllViews();
-               for(AnswersItem item: questionController.currentQuestion.getAnswers()) {
-                   option = (Chip) layoutInflater.inflate(R.layout.category_chip, multipleChoice, false);
-                   option.setText(item.getCaption());
-                   option.setOnClickListener(v -> {
-                      setSingleSelect(multipleChoice, (Chip)v);
-                      Log.d("FMDIGILAB", "Option ID : "+v.getId());
-                      displayContinueButton(isOptionSelected(multipleChoice));
-                   });
-                   option.setOnCheckedChangeListener((buttonView, isChecked) -> getSingleSelected(multipleChoice));
-                   multipleChoice.addView(option);
-               }
+        multipleChoice.removeAllViews();
+        for(int i=0; i < options.size(); i++) {
+            option = (MaterialButton) layoutInflater.inflate(R.layout.option_item, multipleChoice, false);
+            option.setText(options.get(i).getCaption());
+            option.setId(i);
+            option.setOnClickListener(v -> onButtonChecked(multipleChoice, v.getId(), ((MaterialButton)v).isChecked()));
+            multipleChoice.addView(option);
         }
         questionView.addView(multipleChoice);
+
+        switch (QestionType) {
+            case Globals.MULTI_SELECT:
+                multipleChoice.setSingleSelection(false);
+            case Globals.SINGLE_SELECT:
+            default:
+                multipleChoice.setSingleSelection(true);
+        }
     }
 
     public void displayContinueButton(boolean isQuestionAnswered) {
@@ -243,47 +294,31 @@ public class QuestionFragment extends Fragment {
         }
     }
 
-    public boolean isOptionSelected(FlexboxLayout options) {
-        if(!(options instanceof ViewGroup)) {
-            return false;
-        }
+    @SuppressLint("ResourceType")
+    @Override
+    public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
+        List<Integer> selectedButtons = group.getCheckedButtonIds();
+        if(isChecked) {
+            answer = new Answer();
 
-        for(int i = 0; i < options.getFlexItemCount(); i++) {
-            option = (Chip) options.getFlexItemAt(i);
-            if(option.isChecked()) {
-                return true;
+            answer.setQuestion(questionController.currentQuestion.getRef());
+            answerData.setRef(questionController.availableAnswers.get(checkedId).getRef());
+            answerData.setText(questionController.availableAnswers.get(checkedId).getCaption());
+            answerData.setListItem(questionController.availableAnswers.get(checkedId).getRef());
+            answer.setAnswerData(answerData);
+            // hack for now
+            while(answers.size() < checkedId) {
+                answers.add(new Answer());
             }
-        }
-        return false;
-    }
-
-    public void getSingleSelected(FlexboxLayout options) {
-        List<AnswersItem> availableAnswers = questionController.currentQuestion.getAnswers();
-        for(int i = 0; i < options.getFlexItemCount(); i++) {
-            option = (Chip) options.getFlexItemAt(i);
-            if(option.isChecked()) {
-                answer = new Answer();
-                answer.setQuestion(questionController.currentQuestion.getRef());
-                answer.setAnswer(availableAnswers.get(i).getRef());
-                answers.add(answer);
-            } else if(!option.isChecked()) {
-                if(answers.size() > 0) {
-                    answers.remove(i);
-                }
-            }
-        }
-    }
-
-    public void setSingleSelect(FlexboxLayout options, Chip chip) {
-        if(!(options instanceof ViewGroup)) {
-            return;
+            answers.add(checkedId, answer);
+        } else {
+            answers.remove(checkedId);
         }
 
-        for(int i = 0; i < options.getFlexItemCount(); i++) {
-           option = (Chip) options.getFlexItemAt(i);
-           if(option.getText() != chip.getText()) {
-               option.setChecked(false);
-           }
+        if(selectedButtons.size() > 0) {
+            displayContinueButton(true);
+        } else {
+            displayContinueButton(false);
         }
     }
 }

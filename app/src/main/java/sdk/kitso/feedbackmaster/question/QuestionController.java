@@ -1,8 +1,10 @@
 package sdk.kitso.feedbackmaster.question;
 
 import android.util.Log;
+
 import java.util.List;
 
+import sdk.kitso.feedbackmaster.model.AnswersItem;
 import sdk.kitso.feedbackmaster.model.QuestionsItem;
 
 // Make it a Singleton: If it's already created re-use the instantiated one
@@ -10,6 +12,8 @@ public class QuestionController {
     private int maxQuestions;
     private static QuestionController instance;
     public QuestionsItem currentQuestion;
+
+    public List<AnswersItem> availableAnswers;
     private List<QuestionsItem> questions;
     public int listIterator;
 
@@ -36,6 +40,7 @@ public class QuestionController {
         if(this.listIterator < this.maxQuestions) {
             Log.d("FMDIGILAB", "Iterator : "+this.listIterator+" MaxQ : "+this.maxQuestions);
             this.currentQuestion = this.questions.get(this.listIterator);
+            availableAnswers = this.currentQuestion.getAnswers();
             return this.currentQuestion;
         }
         this.listIterator -= 1;
@@ -47,6 +52,7 @@ public class QuestionController {
         this.listIterator -= 1;
         if(this.listIterator >= 0) {
             this.currentQuestion = this.questions.get(this.listIterator);
+            availableAnswers = this.currentQuestion.getAnswers();
             return this.currentQuestion;
         }
         this.listIterator += 1;

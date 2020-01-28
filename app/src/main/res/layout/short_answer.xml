@@ -5,7 +5,6 @@
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/short_answer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
@@ -14,9 +13,11 @@
         android:textSize="24sp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/short_answer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center|center_horizontal"></com.google.android.material.textfield.TextInputEditText>
+            android:gravity="center|center_horizontal">
+        </com.google.android.material.textfield.TextInputEditText>
 
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

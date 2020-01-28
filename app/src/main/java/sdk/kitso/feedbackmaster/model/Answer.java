@@ -1,13 +1,17 @@
 package sdk.kitso.feedbackmaster.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import androidx.annotation.NonNull;
 
 public class Answer {
     @SerializedName("question")
     private String question;
 
     @SerializedName("answer")
-    private String answer;
+    @Expose
+    private AnswerData answerData;
 
     public String getQuestion() {
         return question;
@@ -17,12 +21,22 @@ public class Answer {
         this.question = question;
     }
 
-    public String getAnswer() {
-        return answer;
+    public AnswerData getAnswer() {
+        return answerData;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setAnswerData(AnswerData answerData) {
+        this.answerData = answerData;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return
+                "Answer{" +
+                        "question = '" + question + '\'' +
+                        ",answer = '" + answerData + '\'' +
+                        "}";
     }
 }
 
