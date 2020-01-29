@@ -87,18 +87,12 @@ public class SurveysFragment extends Fragment {
 
         reloadCard = view.findViewById(R.id.reloadCard);
         reloadChip = view.findViewById(R.id.load_more);
-        reloadChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                retry();
-            }
-        });
+        reloadChip.setOnClickListener(v -> retry());
 
         if(MainActivity.profile.getPhone() == 0) {
             MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
         }
 
-        //profile = MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
 
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
@@ -127,43 +121,4 @@ public class SurveysFragment extends Fragment {
             MainActivity.navController.navigate(SurveysFragmentDirections.actionNetworkError());
         }
     }
-
-    /**
-     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-     */
 }

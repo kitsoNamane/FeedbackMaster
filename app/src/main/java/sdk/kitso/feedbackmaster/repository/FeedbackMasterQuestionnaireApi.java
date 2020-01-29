@@ -13,21 +13,23 @@ import sdk.kitso.feedbackmaster.model.QuestionResponse;
 import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.kitso.feedbackmaster.model.Result;
 
-public class FeedbackMasterQuestions {
+public class FeedbackMasterQuestionnaireApi {
 
-    public static FeedbackMasterQuestions instance;
+    public static FeedbackMasterQuestionnaireApi instance;
     public Runnable reload;
     private MutableLiveData<NetworkState> networkState;
     private MutableLiveData<Result> questionnaire;
+    private MutableLiveData<AnswerResponse> answerResponse;
 
-    private FeedbackMasterQuestions() {
+    private FeedbackMasterQuestionnaireApi() {
         questionnaire = new MutableLiveData<>();
         networkState = new MutableLiveData<>();
+        answerResponse = new MutableLiveData<>();
     }
 
-    public static FeedbackMasterQuestions getInstance() {
+    public static FeedbackMasterQuestionnaireApi getInstance() {
         if(instance == null) {
-            instance = new FeedbackMasterQuestions();
+            instance = new FeedbackMasterQuestionnaireApi();
         }
         return instance;
     }
@@ -38,8 +40,9 @@ public class FeedbackMasterQuestions {
             @Override
             public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
                 if(response.isSuccessful()) {
-                    Log.d("FMDIGILAB 26", response.message());
-                    Log.d("FMDIGILAB 26", response.body().toString());
+                    Log.d("FMDIGILAB 25", response.message());
+                    Log.d("FMDIGILAB 25", response.body().toString());
+                    answerResponse.postValue(response.body());
                     networkState.postValue(NetworkState.LOADED);
                 } else {
                     Log.d("FMDIGILAB 26", response.message());
@@ -51,7 +54,7 @@ public class FeedbackMasterQuestions {
             @Override
             public void onFailure(Call<AnswerResponse> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
-                Log.d("FMDIGILAB 26", errorMessage);
+                Log.d("FMDIGILAB 27", errorMessage);
                 questionnaire.postValue(null);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 reload = () -> sendQuestionsToServer(questionnaireAnswer);

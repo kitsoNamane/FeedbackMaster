@@ -25,6 +25,7 @@ import java.util.List;
 
 import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
@@ -67,7 +68,7 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    SurveyViewModel surveyViewModel;
 
     public QuestionFragment() {
         // Required empty public constructor
@@ -89,6 +90,46 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
+
+        getQuestions();
+
+        surveyViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
+            switch (networkState.getStatus()) {
+                case FAILED:
+                    //disableBottomNavigation();
+                    break;
+                case RUNNING:
+                    // render loading screen
+                    //disableBottomNavigation();
+                    break;
+                case SUCCESS:
+                default:
+                    // stop rendering loading animation
+                    //enableBottomNavigation();
+            }
+        });
+
+        surveyViewModel.getQuestionnaire().observe(this, questionnaire->{
+            if(questionnaire != null) {
+                questionController.setQuestions(questionnaire.getQuestions());
+                questionTitle.setText(questionController.nextQuestion().getCaption());
+                renderQuestion();
+                start_date = dateFormat.format(c.getTime());
+                stopWatch.start();
+
+                new MaterialAlertDialogBuilder(this.getContext(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
+                        .setTitle("Title")
+                        .setMessage("Message")
+                        .setPositiveButton("Accept", /* listener = */ null).show();
+
+            }
+        });
     }
 
     @Override
@@ -152,46 +193,11 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
                 renderQuestion();
             }
         });
-
-        getQuestions();
-
-        MainActivity.surveyViewModel.getNetworkState().observe(this, networkState -> {
-            switch (networkState.getStatus()) {
-                case FAILED:
-                    //disableBottomNavigation();
-                    break;
-                case RUNNING:
-                    // render loading screen
-                    //disableBottomNavigation();
-                    break;
-                case SUCCESS:
-                default:
-                    // stop rendering loading animation
-                    //enableBottomNavigation();
-            }
-        });
-
-        MainActivity.surveyViewModel.getQuestionnaire().observe(this, questionnaire->{
-            if(questionnaire != null) {
-                questionController.setQuestions(questionnaire.getQuestions());
-                questionTitle.setText(questionController.nextQuestion().getCaption());
-                renderQuestion();
-                start_date = dateFormat.format(c.getTime());
-                stopWatch.start();
-
-                new MaterialAlertDialogBuilder(this.getContext(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
-                    .setTitle("Title")
-                    .setMessage("Message")
-                    .setPositiveButton("Accept", /* listener = */ null).show();
-
-            }
-        });
-
         return view;
     }
 
     public void getQuestions() {
-        MainActivity.surveyViewModel.getQuestionsFromServer(
+        surveyViewModel.getQuestionsFromServer(
                 questionFragmentArgs.getSurveyReference(),
                 questionFragmentArgs.getBusinessReference()
         );

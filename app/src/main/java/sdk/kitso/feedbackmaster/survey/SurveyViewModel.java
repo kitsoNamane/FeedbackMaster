@@ -16,7 +16,7 @@ import sdk.kitso.feedbackmaster.model.DataItem;
 import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.kitso.feedbackmaster.model.Result;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataFactory;
-import sdk.kitso.feedbackmaster.repository.FeedbackMasterQuestions;
+import sdk.kitso.feedbackmaster.repository.FeedbackMasterQuestionnaireApi;
 
 public class SurveyViewModel extends ViewModel {
     private Executor executor;
@@ -26,11 +26,15 @@ public class SurveyViewModel extends ViewModel {
     private LiveData<Result> questionnaire;
 
     private FeedbackMasterNetworkDataFactory feedbackMasterNetworkDataFactory;
-    private FeedbackMasterQuestions questionsApi;
+    private FeedbackMasterQuestionnaireApi questionsApi;
 
     private DataSource<Integer, DataItem> mostRecentDataSource;
 
     private int pageSize = 10;
+
+    public SurveyViewModel() {
+        questionsApi = FeedbackMasterQuestionnaireApi.getInstance();
+    }
 
     public void init() {
         executor = Executors.newFixedThreadPool(5);
@@ -40,7 +44,6 @@ public class SurveyViewModel extends ViewModel {
                 feedbackMasterNetworkDataFactory.getMutableLiveData(), dataSource-> dataSource.getNetworkState()
         );
 
-        questionsApi = FeedbackMasterQuestions.getInstance();
         PagedList.Config config = new PagedList.Config.Builder()
                 .setPageSize(pageSize)
                 .setInitialLoadSizeHint(200)

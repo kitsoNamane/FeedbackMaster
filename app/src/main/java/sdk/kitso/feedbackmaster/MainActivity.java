@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 // use the ID of the navigation graph not the ID of the Question fragment
                 case R.id.signUpFragment:
                 case R.id.questionFragment:
+                case R.id.surveyCompletedFragment:
                     navView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.GONE);
                     break;
