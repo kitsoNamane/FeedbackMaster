@@ -19,7 +19,7 @@ public class QuestionnaireAnswer {
     private String mobileNumber;
 
     @SerializedName("d")
-    private String timer;
+    private int timer;
 
     @SerializedName("e")
     @Expose
@@ -73,11 +73,11 @@ public class QuestionnaireAnswer {
         this.campaign = campaign;
     }
 
-    public String getTimer() {
+    public int getTimer() {
         return timer;
     }
 
-    public void setTimer(String timer) {
+    public void setTimer(int timer) {
         this.timer = timer;
     }
 

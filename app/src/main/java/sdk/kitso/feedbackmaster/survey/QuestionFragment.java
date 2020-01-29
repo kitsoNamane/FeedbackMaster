@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.RatingBar;
 
@@ -62,6 +63,7 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     String start_date;
     String end_date;
+    Chronometer stopWatch;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -110,17 +112,27 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
         questionView = view.findViewById(R.id.question_showcase);
         questionTitle = view.findViewById(R.id.question_title);
         nextQuestion = view.findViewById(R.id.next_question);
+        stopWatch = view.findViewById(R.id.stop_watch);
+
         nextQuestion.setVisibility(View.GONE);
         layoutInflater = this.getLayoutInflater();
         answers = new ArrayList<>();
         answerData = new AnswerData();
 
+        stopWatch.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                stopWatch = chronometer;
+            }
+        });
+
         nextQuestion.setOnClickListener(v -> {
             questionController.nextQuestion();
             if(questionController.currentQuestion == null && answers != null && answers.size() > 0) {
+                stopWatch.stop();
                 end_date = dateFormat.format(c.getTime());
                 MainActivity.questionnaireAnswer.setAnswers(answers);
-                MainActivity.questionnaireAnswer.setTimer("124");
+                MainActivity.questionnaireAnswer.setTimer(getTimer(stopWatch.getText().toString()));
                 MainActivity.questionnaireAnswer.setMobileNumber(
                        Integer.toString(MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getPhone())
                 );
@@ -164,10 +176,11 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
                 questionController.setQuestions(questionnaire.getQuestions());
                 questionTitle.setText(questionController.nextQuestion().getCaption());
                 renderQuestion();
+                start_date = dateFormat.format(c.getTime());
+                stopWatch.start();
             }
         });
 
-        start_date = dateFormat.format(c.getTime());
         return view;
     }
 
@@ -176,6 +189,13 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
                 questionFragmentArgs.getSurveyReference(),
                 questionFragmentArgs.getBusinessReference()
         );
+    }
+
+    public int getTimer(String timer) {
+        String[] units = timer.split(":");
+        int minutes = Integer.parseInt(units[0]);
+        int seconds = Integer.parseInt(units[1]);
+        return (minutes * 60) + seconds;
     }
 
 

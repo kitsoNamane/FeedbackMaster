@@ -17,6 +17,11 @@
         </item>
     </style>
 
+    <style name="questionRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/question_rating_bar_full</item>
+        <item name="android:minHeight">23dip</item>
+        <item name="android:maxHeight">25dip</item>
+    </style>
 
     <style name="ToolbarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>
