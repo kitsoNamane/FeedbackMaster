@@ -1,11 +1,13 @@
 package sdk.kitso.feedbackmaster.model;
 
 
+import java.io.Serializable;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Department {
+public class Department implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public int id;
 

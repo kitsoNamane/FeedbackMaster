@@ -5,10 +5,11 @@ import android.util.Log;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionnaireAnswer {
+public class QuestionnaireAnswer implements Serializable {
     @SerializedName("a")
     private String business;
 

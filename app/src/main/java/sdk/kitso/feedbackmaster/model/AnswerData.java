@@ -2,12 +2,13 @@ package sdk.kitso.feedbackmaster.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 
-public class AnswerData {
+public class AnswerData implements Serializable {
     @SerializedName("ref")
     private String ref;
     @SerializedName("list")

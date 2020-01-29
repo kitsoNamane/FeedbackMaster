@@ -1,11 +1,12 @@
 package sdk.kitso.feedbackmaster.model;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Children{
+import java.io.Serializable;
+import java.util.List;
+
+public class Children implements Serializable {
 
 	@SerializedName("data")
     @Expose

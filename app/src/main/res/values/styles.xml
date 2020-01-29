@@ -3,18 +3,21 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="textInputStyle">
-            @style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
-        </item>
+            @style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
         <item name="bottomNavigationStyle">
-            @style/Widget.MaterialComponents.BottomNavigationView
-        </item>
+            @style/Widget.MaterialComponents.BottomNavigationView</item>
         <item name="materialCardViewStyle">
-            @style/Widget.MaterialComponents.CardView
-        </item>
-
+            @style/Widget.MaterialComponents.CardView</item>
         <item name="chipGroupStyle">
-            @style/Widget.MaterialComponents.Chip.Filter
-        </item>
+            @style/Widget.MaterialComponents.Chip.Filter</item>
+        <item name="materialAlertDialogTheme">
+            @style/ThemeOverlay.MaterialComponents.MaterialAlertDialog</item>
+        <item name="materialAlertDialogTitlePanelStyle">
+            @style/MaterialAlertDialog.MaterialComponents.Title.Panel</item>
+        <item name="materialAlertDialogTitleIconStyle">
+            @style/MaterialAlertDialog.MaterialComponents.Title.Icon</item>
+        <item name="materialAlertDialogTitleTextStyle">
+            @style/MaterialAlertDialog.MaterialComponents.Title.Text</item>
     </style>
 
     <style name="questionRatingBar" parent="@android:style/Widget.RatingBar">

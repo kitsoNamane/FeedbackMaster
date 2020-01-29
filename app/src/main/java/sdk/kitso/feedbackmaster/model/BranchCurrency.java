@@ -2,7 +2,9 @@ package sdk.kitso.feedbackmaster.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class BranchCurrency {
+import java.io.Serializable;
+
+public class BranchCurrency implements Serializable {
 
 	@SerializedName("code")
 	private String code;

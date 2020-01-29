@@ -2,11 +2,13 @@ package sdk.kitso.feedbackmaster.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Question{
+public class Question implements Serializable {
 	@PrimaryKey(autoGenerate = true)
 	public int id;
 

@@ -7,23 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.flexbox.JustifyContent;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
-
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.Utils;
-import sdk.kitso.feedbackmaster.model.Profile;
 
 
 /**
@@ -104,7 +98,7 @@ public class SurveysFragment extends Fragment {
             MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
         }
 
-        //profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
+        //profile = MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
 
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());

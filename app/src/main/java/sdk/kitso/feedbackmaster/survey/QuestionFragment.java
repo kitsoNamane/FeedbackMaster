@@ -14,6 +14,7 @@ import android.widget.RatingBar;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -30,7 +31,6 @@ import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.Answer;
 import sdk.kitso.feedbackmaster.model.AnswerData;
 import sdk.kitso.feedbackmaster.model.AnswersItem;
-import sdk.kitso.feedbackmaster.question.QuestionController;
 
 
 /**
@@ -134,7 +134,7 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
                 MainActivity.questionnaireAnswer.setAnswers(answers);
                 MainActivity.questionnaireAnswer.setTimer(getTimer(stopWatch.getText().toString()));
                 MainActivity.questionnaireAnswer.setMobileNumber(
-                       Integer.toString(MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getPhone())
+                       Integer.toString(MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getPhone())
                 );
                 MainActivity.questionnaireAnswer.setStartDate(start_date);
                 MainActivity.questionnaireAnswer.setEndDate(end_date);
@@ -146,7 +146,7 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
                         MainActivity.profile.getNumberOfSurveysCompleted() + 1
                 );
 
-                MainActivity.surveyDB.surveyDao().addProfile(MainActivity.profile);
+                MainActivity.feedbackMasterDB.surveyDao().addProfile(MainActivity.profile);
                 MainActivity.navController.navigate(QuestionFragmentDirections.actionCompleted());
             } else if (questionController.currentQuestion != null) {
                 renderQuestion();
@@ -178,6 +178,12 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
                 renderQuestion();
                 start_date = dateFormat.format(c.getTime());
                 stopWatch.start();
+
+                new MaterialAlertDialogBuilder(this.getContext(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
+                    .setTitle("Title")
+                    .setMessage("Message")
+                    .setPositiveButton("Accept", /* listener = */ null).show();
+
             }
         });
 

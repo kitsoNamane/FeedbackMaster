@@ -2,7 +2,9 @@ package sdk.kitso.feedbackmaster.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class QuestionQuestionnaire {
+import java.io.Serializable;
+
+public class QuestionQuestionnaire implements Serializable {
 
 	@SerializedName("ref")
 	private String ref;

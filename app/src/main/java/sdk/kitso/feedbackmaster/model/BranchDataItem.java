@@ -3,7 +3,9 @@ package sdk.kitso.feedbackmaster.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class BranchDataItem {
+import java.io.Serializable;
+
+public class BranchDataItem implements Serializable {
 
 	@SerializedName("ref")
 	private String ref;

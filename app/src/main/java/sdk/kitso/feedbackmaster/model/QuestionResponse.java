@@ -1,9 +1,11 @@
 package sdk.kitso.feedbackmaster.model;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class QuestionResponse{
+import java.io.Serializable;
+import java.util.List;
+
+public class QuestionResponse implements Serializable {
 
 	@SerializedName("result")
 	private Result result;

@@ -3,7 +3,9 @@ package sdk.kitso.feedbackmaster.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ChildCategory {
+import java.io.Serializable;
+
+public class ChildCategory implements Serializable {
 
 	@SerializedName("childrenData")
     @Expose

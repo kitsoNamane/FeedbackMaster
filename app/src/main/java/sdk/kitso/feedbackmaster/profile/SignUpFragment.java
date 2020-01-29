@@ -2,9 +2,6 @@ package sdk.kitso.feedbackmaster.profile;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +13,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 
+import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.Profile;
@@ -75,7 +73,7 @@ public class SignUpFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        //profile = MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
+        //profile = MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
         if(MainActivity.profile == null) {
             MainActivity.profile = new Profile();
         }
@@ -112,7 +110,7 @@ public class SignUpFragment extends Fragment {
 
     public boolean signupPhone(TextInputEditText textInputEditText) {
         String phone = textInputEditText.getText().toString().trim();
-        Toast.makeText(this.getContext(), "Phone :"+phone+" "+Integer.toString(phone.length()), Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getContext(), "Phone :"+phone+" "+ phone.length(), Toast.LENGTH_LONG).show();
         if(!phone.isEmpty()==true && phone.length()==8) {
             try {
                 MainActivity.profile.setPhone(new Integer(phone));
@@ -167,7 +165,7 @@ public class SignUpFragment extends Fragment {
         if(isAgeValid == true && isGenderValid == true) {
             MainActivity.profile.setProfile(true);
             //Globals.exec.execute(()->{
-            MainActivity.surveyDB.surveyDao().addProfile(MainActivity.profile);
+            MainActivity.feedbackMasterDB.surveyDao().addProfile(MainActivity.profile);
             //});
         }
         // Binary End-Gate guarantees that we'll get the right results nomatter the combinations

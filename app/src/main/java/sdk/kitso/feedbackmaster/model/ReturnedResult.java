@@ -2,7 +2,9 @@ package sdk.kitso.feedbackmaster.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ReturnedResult{
+import java.io.Serializable;
+
+public class ReturnedResult implements Serializable {
 
 	@SerializedName("canEditMobile")
 	private boolean canEditMobile;

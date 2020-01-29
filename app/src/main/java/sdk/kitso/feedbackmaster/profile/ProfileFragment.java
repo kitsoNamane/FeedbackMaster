@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
-import com.mifmif.common.regex.Main;
 
 import java.util.Locale;
 
@@ -16,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.model.Profile;
 
 
 /**
@@ -93,7 +91,7 @@ public class ProfileFragment extends Fragment {
 
         completedSurveys.setText(
                 String.format(Locale.getDefault(),"%d",
-                        MainActivity.surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getNumberOfSurveysCompleted()
+                        MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getNumberOfSurveysCompleted()
                 )
         );
         totalWins.setText("0");

@@ -10,15 +10,10 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textview.MaterialTextView;
 
-import java.util.List;
-
 import androidx.constraintlayout.widget.Group;
 import androidx.recyclerview.widget.RecyclerView;
-import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.model.Survey;
-import sdk.kitso.feedbackmaster.model.SurveyAndAllBranches;
-import sdk.kitso.feedbackmaster.model.SurveyAndAllDepartments;
+import sdk.kitso.feedbackmaster.model.DataItem;
 
 public class SurveyLocalViewHolder extends RecyclerView.ViewHolder {
     MaterialTextView company;
@@ -27,8 +22,6 @@ public class SurveyLocalViewHolder extends RecyclerView.ViewHolder {
     Group branch;
     Group department;
     Chip chipItem;
-    List<SurveyAndAllBranches> branches_list;
-    List<SurveyAndAllDepartments> depts;
     ChipGroup branches;
     ChipGroup departments;
     MaterialButton start;
@@ -51,26 +44,27 @@ public class SurveyLocalViewHolder extends RecyclerView.ViewHolder {
         return new SurveyLocalViewHolder(view);
     }
 
-    public void bind(final Survey survey, SurveyLocalPagedAdapter.OnSurveyItemClickedListener onSurveyItemClickedListener) {
-        this.company.setText(survey.getCompany());
-        this.survey.setText(survey.getSurvey());
+    public void bind(final DataItem survey, SurveyLocalPagedAdapter.OnSurveyItemClickedListener onSurveyItemClickedListener) {
+        this.company.setText(survey.getBusiness().getBusinessData().getName());
+        this.survey.setText(survey.getName());
 
         //this.cardView.setId(survey.getId());
         this.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSurveyItemClickedListener.onItemClicked(cardView, survey);
+                //onSurveyItemClickedListener.onItemClicked(cardView, survey);
             }
         });
 
         this.start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSurveyItemClickedListener.onItemClicked(start, survey);
+                //onSurveyItemClickedListener.onItemClicked(start, survey);
             }
         });
     }
 
+    /**
     public void bindDynamicContent(Survey survey) {
         survey.setChecked(!survey.getChecked());
         this.cardView.setChecked(survey.getChecked());
@@ -81,6 +75,7 @@ public class SurveyLocalViewHolder extends RecyclerView.ViewHolder {
             setVisibility(View.GONE);
         }
     }
+     */
 
     public void setVisibility(int VISIBILITY) {
         this.branch.setVisibility(VISIBILITY);

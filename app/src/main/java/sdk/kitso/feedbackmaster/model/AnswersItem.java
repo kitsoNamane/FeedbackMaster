@@ -2,7 +2,9 @@ package sdk.kitso.feedbackmaster.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class AnswersItem{
+import java.io.Serializable;
+
+public class AnswersItem implements Serializable {
 
 	@SerializedName("image")
 	private Object image;

@@ -7,11 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-
 import sdk.kitso.feedbackmaster.NetworkState;
-import sdk.kitso.feedbackmaster.model.Survey;
+import sdk.kitso.feedbackmaster.model.DataItem;
 
-public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, RecyclerView.ViewHolder> {
+public class SurveyLocalPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.ViewHolder> {
     private static final int TYPE_PROGRESS = 0;
     private static final int TYPE_ITEM = 1;
     private NetworkState networkState;
@@ -37,7 +36,7 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, RecyclerVi
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof SurveyLocalViewHolder) {
-            Survey survey = getItem(position);
+            DataItem survey = getItem(position);
             ((SurveyLocalViewHolder)holder).bind(survey, onSurveyItemClickedListener);
             if (survey.getChecked() == true && ((SurveyLocalViewHolder) holder).cardView.isChecked() == true) {
                 ((SurveyLocalViewHolder) holder).setVisibility(View.VISIBLE);
@@ -55,7 +54,7 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, RecyclerVi
 
     @Override
     public int getItemViewType(int position) {
-        Survey survey = getItem(position);
+        DataItem survey = getItem(position);
         if( hasExtraRow() && survey == null) {
             return TYPE_PROGRESS;
         } else {
@@ -65,11 +64,7 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, RecyclerVi
 
 
     private boolean hasExtraRow() {
-        if (networkState != null && networkState != NetworkState.LOADED) {
-            return true;
-        } else {
-            return false;
-        }
+        return networkState != null && networkState != NetworkState.LOADED;
     }
     public void setNetworkState(NetworkState newNetworkState) {
         NetworkState previousState = this.networkState;
@@ -86,22 +81,23 @@ public class SurveyLocalPagedAdapter extends PagedListAdapter<Survey, RecyclerVi
             notifyItemChanged(getItemCount() - 1);
         }
     }
-    private static DiffUtil.ItemCallback<Survey> DIFF_CALLBACK =
-        new DiffUtil.ItemCallback<Survey>() {
+
+    private static DiffUtil.ItemCallback<DataItem> DIFF_CALLBACK =
+        new DiffUtil.ItemCallback<DataItem>() {
             // Concert details may have changed if reloaded from the database,
             // but ID is fixed.
             @Override
-            public boolean areItemsTheSame(Survey oldSurvey, Survey newSurvey) {
-                return oldSurvey.getId() == newSurvey.getId();
+            public boolean areItemsTheSame(DataItem oldSurvey, DataItem newSurvey) {
+                return oldSurvey.getReference() == newSurvey.getReference();
             }
 
             @Override
-            public boolean areContentsTheSame(Survey oldSurvey, Survey newSurvey) {
+            public boolean areContentsTheSame(DataItem oldSurvey, DataItem newSurvey) {
                 return oldSurvey.equals(newSurvey);
             }
     };
 
     interface OnSurveyItemClickedListener {
-        public void onItemClicked(View view, Survey survey);
+        void onItemClicked(View view, DataItem survey);
     }
 }

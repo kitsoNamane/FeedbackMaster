@@ -15,9 +15,9 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
+import sdk.kitso.feedbackmaster.model.FeedbackMasterDB;
 import sdk.kitso.feedbackmaster.model.Profile;
 import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
-import sdk.kitso.feedbackmaster.model.SurveyDB;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApi;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApiService;
 import sdk.kitso.feedbackmaster.survey.SurveyPagedAdapter;
@@ -25,7 +25,7 @@ import sdk.kitso.feedbackmaster.survey.SurveyViewModel;
 import sdk.kitso.feedbackmaster.survey.SurveysFragment;
 
 public class MainActivity extends AppCompatActivity {
-    public static SurveyDB surveyDB;
+    public static FeedbackMasterDB feedbackMasterDB;
     public static NavController navController;
     public static SurveyViewModel surveyViewModel;
     public static SurveyPagedAdapter pagedAdapter;
@@ -42,9 +42,21 @@ public class MainActivity extends AppCompatActivity {
                 Settings.Secure.ANDROID_ID
         );
 
+        feedbackMasterDB = Room.databaseBuilder(getApplicationContext(), FeedbackMasterDB.class, "userdb")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries().build();
+
+        profile = feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
+
+        if(profile == null) {
+            profile = new Profile();
+        }
+
         if(questionnaireAnswer == null) {
             questionnaireAnswer = new QuestionnaireAnswer();
         }
+
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
         questionnaireAnswer.setDevice(androidId);
 
@@ -61,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
         surveyViewModel.getNetworkState().observe(this, networkState->{
             pagedAdapter.setNetworkState(networkState);
-
             switch (navController.getCurrentDestination().getId()) {
                 case R.id.branchesDepartmentsFragment:
                     // do something here
@@ -76,14 +87,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        surveyDB = Room.databaseBuilder(getApplicationContext(), SurveyDB.class, "userdb")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries().build();
-
-        profile = surveyDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
-        if(profile == null) {
-            profile = new Profile();
-        }
 
 
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
@@ -94,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
             // Do nothing
         });
 
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
         navController.addOnDestinationChangedListener((navController, navDestination, bundle) -> {
             switch (navDestination.getId()) {
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "I'M NOT AT Questions", Toast.LENGTH_LONG).show();
             }
         });
+
         NavigationUI.setupActionBarWithNavController(this, navController);
         NavigationUI.setupWithNavController(navView, navController);
     }

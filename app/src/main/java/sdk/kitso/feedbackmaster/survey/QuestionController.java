@@ -1,4 +1,4 @@
-package sdk.kitso.feedbackmaster.question;
+package sdk.kitso.feedbackmaster.survey;
 
 import android.util.Log;
 

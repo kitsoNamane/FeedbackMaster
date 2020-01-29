@@ -1,12 +1,14 @@
 package sdk.kitso.feedbackmaster.model;
 
+import java.io.Serializable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import sdk.kitso.feedbackmaster.Globals;
 
 @Entity(tableName="profile")
-public class Profile {
+public class Profile implements Serializable {
     @PrimaryKey(autoGenerate = false)
     int id = Globals.CURRENT_USER_ID;
 
