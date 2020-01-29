@@ -30,7 +30,7 @@
 
     <fragment
         android:id="@+id/questionFragment"
-        android:name="sdk.kitso.feedbackmaster.survey.QuestionFragment"
+        android:name="sdk.kitso.feedbackmaster.survey.QuestionnaireFragment"
         android:label="fragment_question">
         tools:layout="@layout/fragment_question"
         <action
@@ -56,6 +56,9 @@
         <action
             android:id="@+id/actionHome"
             app:destination="@id/navigation_survey" />
+        <argument
+            android:name="questionnaireAnswers"
+            app:argType="sdk.kitso.feedbackmaster.model.QuestionnaireAnswer" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"

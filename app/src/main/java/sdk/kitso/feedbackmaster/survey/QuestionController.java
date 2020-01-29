@@ -9,7 +9,7 @@ import sdk.kitso.feedbackmaster.model.QuestionsItem;
 
 // Make it a Singleton: If it's already created re-use the instantiated one
 public class QuestionController {
-    private int maxQuestions;
+    public int maxQuestions;
     private static QuestionController instance;
     public QuestionsItem currentQuestion;
 

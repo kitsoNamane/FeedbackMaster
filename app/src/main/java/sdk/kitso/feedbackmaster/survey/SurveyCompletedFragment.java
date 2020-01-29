@@ -1,20 +1,25 @@
 package sdk.kitso.feedbackmaster.survey;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Locale;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 
 
 /**
@@ -30,6 +35,11 @@ public class SurveyCompletedFragment extends Fragment {
     MaterialButton goHome;
     MaterialTextView completedSurveys;
     MaterialTextView totalWins;
+    MaterialTextView thankYou;
+    MaterialAlertDialogBuilder materialAlertDialogBuilder;
+    FlexboxLayout uploadingAnswers;
+    Handler handler = new Handler();
+    private QuestionnaireViewModel questionnaireViewModel;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -61,6 +71,47 @@ public class SurveyCompletedFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        SurveyCompletedFragmentArgs surveyCompletedFragmentArgs = SurveyCompletedFragmentArgs.fromBundle(getArguments());
+        QuestionnaireAnswer answer = surveyCompletedFragmentArgs.getQuestionnaireAnswers();
+        questionnaireViewModel = ViewModelProviders.of(this).get(QuestionnaireViewModel.class);
+        questionnaireViewModel.init();
+        questionnaireViewModel.sendAnswerToServer(MainActivity.questionnaireAnswer);
+
+        questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
+            switch (networkState.getStatus()) {
+                case FAILED:
+                    //disableBottomNavigation();
+                    showProgressBar(View.GONE);
+                    break;
+                case RUNNING:
+                    // render loading screen
+                    //disableBottomNavigation();
+                    showProgressBar(View.VISIBLE);
+                    break;
+                case SUCCESS:
+                    showProgressBar(View.GONE);
+                default:
+                    // stop rendering loading animation
+                    //enableBottomNavigation();
+            }
+        });
+
+        questionnaireViewModel.getAnswerResponse().observe(getViewLifecycleOwner(), answerResponse -> {
+            if(answerResponse == null) {
+                // prompt reload button
+            } else if(answerResponse.isSuccess() == false) {
+                setVisibility(View.GONE);
+                delayedDialogBox(answerResponse.getMessage().get(0).toString());
+            } else {
+                setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -75,8 +126,15 @@ public class SurveyCompletedFragment extends Fragment {
         // Inflate the layout for this fragment
         View view  = inflater.inflate(R.layout.fragment_survey_completed, container, false);
         goHome = view.findViewById(R.id.go_home_text);
+        uploadingAnswers = view.findViewById(R.id.uploading_answers);
         completedSurveys = view.findViewById(R.id.surveys_completed);
+        thankYou = view.findViewById(R.id.thank_you_text);
         totalWins = view.findViewById(R.id.total_wins);
+        materialAlertDialogBuilder = new MaterialAlertDialogBuilder(
+                this.getContext(),
+                R.style.ThemeOverlay_MaterialComponents_Dialog_Alert
+        );
+        materialAlertDialogBuilder.setTitle("Feedback Master");
         completedSurveys.setText(
                 String.format(Locale.getDefault(), "%d",
                         MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getNumberOfSurveysCompleted()
@@ -88,40 +146,41 @@ public class SurveyCompletedFragment extends Fragment {
         return view;
     }
 
-    /** TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+    public void showProgressBar(int VISIBILITY) {
+        if(VISIBILITY == View.GONE) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    uploadingAnswers.setVisibility(VISIBILITY);
+                }
+            }, 3000);
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            this.uploadingAnswers.setVisibility(VISIBILITY);
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+   public void delayedDialogBox(String message) {
 
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+       handler.postDelayed(new Runnable() {
+           @Override
+           public void run() {
+               materialAlertDialogBuilder.setMessage(message)
+                   .setPositiveButton("Retry", (dialog, which)->{
+                       showProgressBar(View.VISIBLE);
+                       questionnaireViewModel.retry();
+                       dialog.dismiss();
+                   })
+                   .setNegativeButton("Quit", (dialog, which)->{
+                       setVisibility(View.VISIBLE);
+                       dialog.dismiss();
+                   }).show();
+           }
+       }, 1000);
+
+   }
+
+    public void setVisibility(int VISIBILITY) {
+        this.goHome.setVisibility(VISIBILITY);
+        this.thankYou.setVisibility(VISIBILITY);
     }
-     */
 }

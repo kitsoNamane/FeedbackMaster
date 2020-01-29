@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.AnswerResponse;
 import sdk.kitso.feedbackmaster.model.QuestionResponse;
@@ -20,23 +19,25 @@ public class FeedbackMasterQuestionnaireApi {
     private MutableLiveData<NetworkState> networkState;
     private MutableLiveData<Result> questionnaire;
     private MutableLiveData<AnswerResponse> answerResponse;
+    private FeedbackMasterSurveyApiService apiService;
 
-    private FeedbackMasterQuestionnaireApi() {
-        questionnaire = new MutableLiveData<>();
-        networkState = new MutableLiveData<>();
-        answerResponse = new MutableLiveData<>();
+    private FeedbackMasterQuestionnaireApi(FeedbackMasterSurveyApiService apiService) {
+        this.questionnaire = new MutableLiveData<>();
+        this.networkState = new MutableLiveData<>();
+        this.answerResponse = new MutableLiveData<>();
+        this.apiService = apiService;
     }
 
-    public static FeedbackMasterQuestionnaireApi getInstance() {
+    public static FeedbackMasterQuestionnaireApi getInstance(FeedbackMasterSurveyApiService apiService) {
         if(instance == null) {
-            instance = new FeedbackMasterQuestionnaireApi();
+            instance = new FeedbackMasterQuestionnaireApi(apiService);
         }
         return instance;
     }
 
     public void sendQuestionsToServer(QuestionnaireAnswer questionnaireAnswer) {
         networkState.postValue(NetworkState.LOADING);
-        MainActivity.feedbackMasterSurveyApiService.sendAnswer(questionnaireAnswer).enqueue(new Callback<AnswerResponse>() {
+        apiService.sendAnswer(questionnaireAnswer).enqueue(new Callback<AnswerResponse>() {
             @Override
             public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
                 if(response.isSuccessful()) {
@@ -74,7 +75,7 @@ public class FeedbackMasterQuestionnaireApi {
 
     private void _getQuestionsFromServer(String surveyReference, String businessReference) {
         networkState.postValue(NetworkState.LOADING);
-        MainActivity.feedbackMasterSurveyApiService.getQuestions(surveyReference, businessReference).enqueue(new Callback<QuestionResponse>() {
+        apiService.getQuestions(surveyReference, businessReference).enqueue(new Callback<QuestionResponse>() {
             @Override
             public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
                 if(response.isSuccessful()) {
@@ -105,6 +106,9 @@ public class FeedbackMasterQuestionnaireApi {
         return questionnaire;
     }
 
+    public MutableLiveData<AnswerResponse> getAnswerResponse() {
+        return answerResponse;
+    }
     public MutableLiveData<NetworkState> getNetworkState() {
         return networkState;
     }

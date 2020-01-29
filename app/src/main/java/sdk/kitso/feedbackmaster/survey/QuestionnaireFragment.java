@@ -14,7 +14,6 @@ import android.widget.RatingBar;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -38,16 +37,16 @@ import sdk.kitso.feedbackmaster.model.AnswersItem;
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
- * Use the {@link QuestionFragment#newInstance} factory method to
+ * Use the {@link QuestionnaireFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QuestionFragment extends Fragment implements MaterialButtonToggleGroup.OnButtonCheckedListener{
+public class QuestionnaireFragment extends Fragment implements MaterialButtonToggleGroup.OnButtonCheckedListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     QuestionController questionController;
-    QuestionFragmentArgs questionFragmentArgs;
+    QuestionnaireFragmentArgs questionFragmentArgs;
     FrameLayout questionView;
     MaterialTextView questionTitle;
     View questionContent;
@@ -69,8 +68,9 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
     private String mParam1;
     private String mParam2;
     SurveyViewModel surveyViewModel;
+    QuestionnaireViewModel questionnaireViewModel;
 
-    public QuestionFragment() {
+    public QuestionnaireFragment() {
         // Required empty public constructor
     }
 
@@ -80,11 +80,11 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment QuestionFragment.
+     * @return A new instance of fragment QuestionnaireFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static QuestionFragment newInstance(String param1, String param2) {
-        QuestionFragment fragment = new QuestionFragment();
+    public static QuestionnaireFragment newInstance(String param1, String param2) {
+        QuestionnaireFragment fragment = new QuestionnaireFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -95,11 +95,12 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
+        questionnaireViewModel = ViewModelProviders.of(this).get(QuestionnaireViewModel.class);
+        questionnaireViewModel.init();
 
         getQuestions();
 
-        surveyViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
+        questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
             switch (networkState.getStatus()) {
                 case FAILED:
                     //disableBottomNavigation();
@@ -115,19 +116,13 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
             }
         });
 
-        surveyViewModel.getQuestionnaire().observe(this, questionnaire->{
+        questionnaireViewModel.getQuestionnaire().observe(this, questionnaire->{
             if(questionnaire != null) {
                 questionController.setQuestions(questionnaire.getQuestions());
                 questionTitle.setText(questionController.nextQuestion().getCaption());
                 renderQuestion();
                 start_date = dateFormat.format(c.getTime());
                 stopWatch.start();
-
-                new MaterialAlertDialogBuilder(this.getContext(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
-                        .setTitle("Title")
-                        .setMessage("Message")
-                        .setPositiveButton("Accept", /* listener = */ null).show();
-
             }
         });
     }
@@ -140,7 +135,7 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         // Get value passed to this fragment using safeargs
-        questionFragmentArgs = QuestionFragmentArgs.fromBundle(getArguments());
+        questionFragmentArgs = QuestionnaireFragmentArgs.fromBundle(getArguments());
         questionController = QuestionController.getInstance();
     }
 
@@ -160,15 +155,14 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
         answers = new ArrayList<>();
         answerData = new AnswerData();
 
-        stopWatch.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                stopWatch = chronometer;
-            }
-        });
+        stopWatch.setOnChronometerTickListener(chronometer -> stopWatch = chronometer);
 
         nextQuestion.setOnClickListener(v -> {
             questionController.nextQuestion();
+            if(questionController.listIterator == (questionController.maxQuestions - 1)) {
+                nextQuestion.setText("Finish");
+            }
+
             if(questionController.currentQuestion == null && answers != null && answers.size() > 0) {
                 stopWatch.stop();
                 end_date = dateFormat.format(c.getTime());
@@ -181,14 +175,18 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
                 MainActivity.questionnaireAnswer.setEndDate(end_date);
                 MainActivity.questionnaireAnswer.removeNullAnswers();
                 MainActivity.questionnaireAnswer.showMe();
-                MainActivity.surveyViewModel.sendAnswerToServer(MainActivity.questionnaireAnswer);
+
+                // send to surveyCompletedFragment
+                //questionnaireViewModel.sendAnswerToServer(MainActivity.questionnaireAnswer);
 
                 MainActivity.profile.setNumberOfSurveysCompleted(
                         MainActivity.profile.getNumberOfSurveysCompleted() + 1
                 );
 
                 MainActivity.feedbackMasterDB.surveyDao().addProfile(MainActivity.profile);
-                MainActivity.navController.navigate(QuestionFragmentDirections.actionCompleted());
+                MainActivity.navController.navigate(
+                        QuestionnaireFragmentDirections.actionCompleted(MainActivity.questionnaireAnswer)
+                );
             } else if (questionController.currentQuestion != null) {
                 renderQuestion();
             }
@@ -197,7 +195,7 @@ public class QuestionFragment extends Fragment implements MaterialButtonToggleGr
     }
 
     public void getQuestions() {
-        surveyViewModel.getQuestionsFromServer(
+        questionnaireViewModel.getQuestionsFromServer(
                 questionFragmentArgs.getSurveyReference(),
                 questionFragmentArgs.getBusinessReference()
         );
