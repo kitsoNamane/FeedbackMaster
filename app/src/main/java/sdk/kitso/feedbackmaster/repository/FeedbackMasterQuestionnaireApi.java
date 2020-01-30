@@ -35,7 +35,7 @@ public class FeedbackMasterQuestionnaireApi {
         return instance;
     }
 
-    public void sendQuestionsToServer(QuestionnaireAnswer questionnaireAnswer) {
+    public MutableLiveData<AnswerResponse> sendAnswers(QuestionnaireAnswer questionnaireAnswer) {
         networkState.postValue(NetworkState.LOADING);
         apiService.sendAnswer(questionnaireAnswer).enqueue(new Callback<AnswerResponse>() {
             @Override
@@ -47,8 +47,9 @@ public class FeedbackMasterQuestionnaireApi {
                     networkState.postValue(NetworkState.LOADED);
                 } else {
                     Log.d("FMDIGILAB 26", response.message());
+                    answerResponse.postValue(null);
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
-                    reload = () -> sendQuestionsToServer(questionnaireAnswer);
+                    reload = () -> sendAnswers(questionnaireAnswer);
                 }
             }
 
@@ -57,37 +58,43 @@ public class FeedbackMasterQuestionnaireApi {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
                 Log.d("FMDIGILAB 27", errorMessage);
                 questionnaire.postValue(null);
+                answerResponse.postValue(null);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
-                reload = () -> sendQuestionsToServer(questionnaireAnswer);
+                reload = () -> sendAnswers(questionnaireAnswer);
             }
         });
+        return answerResponse;
     }
 
-    public void getQuestionsFromServer(String surveyReference, String businessReference) {
+    public MutableLiveData<Result> getQuestions(String surveyReference, String businessReference) {
         if(questionnaire.getValue() == null) {
-            _getQuestionsFromServer(surveyReference, businessReference);
+            return _getQuestionsFromServer(surveyReference, businessReference);
         } else if(!questionnaire.getValue().getQuestionBusiness().getRef()
                 .equals(businessReference)
         ) {
-            _getQuestionsFromServer(surveyReference, businessReference);
+            return _getQuestionsFromServer(surveyReference, businessReference);
+        } else {
+            questionnaire.postValue(null);
+            return questionnaire;
         }
     }
 
-    private void _getQuestionsFromServer(String surveyReference, String businessReference) {
+    private MutableLiveData<Result> _getQuestionsFromServer(String surveyReference, String businessReference) {
         networkState.postValue(NetworkState.LOADING);
         apiService.getQuestions(surveyReference, businessReference).enqueue(new Callback<QuestionResponse>() {
             @Override
             public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
                 if(response.isSuccessful()) {
                     Log.d("FMDIGILAB 20", response.message());
-                    questionnaire.postValue(response.body().getResult());
+                    assert response.body() != null;
                     Log.d("FMDIGILAB 23", response.body().getResult().toString());
                     networkState.postValue(NetworkState.LOADED);
+                    questionnaire.postValue(response.body().getResult());
                 } else {
                     Log.d("FMDIGILAB 20", response.message());
                     questionnaire.postValue(null);
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
-                    reload = () -> getQuestionsFromServer(surveyReference, businessReference);
+                    reload = () -> getQuestions(surveyReference, businessReference);
                 }
             }
 
@@ -97,9 +104,10 @@ public class FeedbackMasterQuestionnaireApi {
                 Log.d("FMDIGILAB 20", errorMessage);
                 questionnaire.postValue(null);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
-                reload = () -> getQuestionsFromServer(surveyReference, businessReference);
+                reload = () -> getQuestions(surveyReference, businessReference);
             }
         });
+        return questionnaire;
     }
 
     public MutableLiveData<Result> getQuestionnaire() {

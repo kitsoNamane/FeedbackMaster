@@ -95,7 +95,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        questionnaireViewModel = ViewModelProviders.of(this).get(QuestionnaireViewModel.class);
+        questionnaireViewModel = ViewModelProviders.of(getActivity()).get(QuestionnaireViewModel.class);
         questionnaireViewModel.init();
 
         getQuestions();
