@@ -8,6 +8,7 @@ import androidx.paging.PageKeyedDataSource;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.DataItem;
 
@@ -43,10 +44,10 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
         networkState.postValue(NetworkState.LOADING);
         Log.d("FMDIGILAB", "HELLO THE REQUEST IS GOING THROUGH");
 
-        apiService.getNextSurveys(1).enqueue(new Callback<sdk.kitso.feedbackmaster.model.Response>() {
+        apiService.getNextSurveys(Globals.FIRST_PAGE).enqueue(new Callback<sdk.kitso.feedbackmaster.model.Response>() {
             @Override
             public void onResponse(Call<sdk.kitso.feedbackmaster.model.Response> call, Response<sdk.kitso.feedbackmaster.model.Response> response) {
-                if(response.isSuccessful()) {
+                if(response.isSuccessful() && response.body().isSuccess()) {
                     Log.d("FMDIGILAB 2", response.message());
                     loadInitialCallback.onResult(response.body().getData().getDataItemList(), null, 2);
                     initialLoading.postValue(NetworkState.LOADED);

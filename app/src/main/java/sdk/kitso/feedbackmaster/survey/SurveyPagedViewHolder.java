@@ -18,7 +18,7 @@ import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.ChildrenDataItem;
 import sdk.kitso.feedbackmaster.model.DataItem;
 
-public class SurveyViewHolder extends RecyclerView.ViewHolder {
+public class SurveyPagedViewHolder extends RecyclerView.ViewHolder {
     MaterialTextView company;
     MaterialTextView survey;
     MaterialCardView cardView;
@@ -28,7 +28,7 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
     MaterialTextView surveyExpiry;
 
 
-    public SurveyViewHolder(@NonNull View view) {
+    public SurveyPagedViewHolder(@NonNull View view) {
         super(view);
         this.cardView = (MaterialCardView) view;
         this.company = view.findViewById(R.id.company_name);
@@ -52,11 +52,11 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-    public static SurveyViewHolder create(ViewGroup parent) {
+    public static SurveyPagedViewHolder create(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.card_survey, parent, false
         );
-        return new SurveyViewHolder(view);
+        return new SurveyPagedViewHolder(view);
     }
 
     public void gotoQuestionnaire(DataItem item) {
@@ -64,7 +64,7 @@ public class SurveyViewHolder extends RecyclerView.ViewHolder {
         Log.d("FMDIGILAB", "NUMBER OF Branches : "+children.size());
         //if(children.size() > 0) {
             // goto select Branches and/or departments
-        SurveysFragmentDirections.ActionBranches actionBranches = SurveysFragmentDirections.actionBranches(item);
+        SurveysFragmentDirections.ActionBranches actionBranches = SurveysFragmentDirections.actionBranches(item, null, null, null);
         MainActivity.navController.navigate(actionBranches);
         //} else {
             // go straight to questionnaire

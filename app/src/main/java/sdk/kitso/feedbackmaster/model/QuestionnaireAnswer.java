@@ -168,4 +168,9 @@ public class QuestionnaireAnswer implements Serializable {
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
+
+    //@Override
+    //public boolean equals(Object other) {
+    //    return this == other;
+    //}
 }

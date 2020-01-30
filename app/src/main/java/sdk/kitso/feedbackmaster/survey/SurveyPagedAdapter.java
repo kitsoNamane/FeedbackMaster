@@ -3,7 +3,6 @@ package sdk.kitso.feedbackmaster.survey;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import androidx.annotation.NonNull;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
@@ -35,38 +34,24 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return SurveyViewHolder.create(parent);
+        return SurveyPagedViewHolder.create(parent);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         DataItem item = getItem(position);
-        ((SurveyViewHolder)holder).bind(item);
+        ((SurveyPagedViewHolder)holder).bind(item);
         /**
-        if (item.getChecked() == true && ((SurveyViewHolder) holder).cardView.isChecked() == true) {
-            ((SurveyViewHolder) holder).setVisibility(View.VISIBLE);
+        if (item.getChecked() == true && ((SurveyPagedViewHolder) holder).cardView.isChecked() == true) {
+            ((SurveyPagedViewHolder) holder).setVisibility(View.VISIBLE);
         } else if(item.getChecked()) {
             item.setChecked(!item.getChecked());
         }else {
-            ((SurveyViewHolder) holder).cardView.setChecked(false);
-            ((SurveyViewHolder) holder).setVisibility(View.GONE);
+            ((SurveyPagedViewHolder) holder).cardView.setChecked(false);
+            ((SurveyPagedViewHolder) holder).setVisibility(View.GONE);
         }
          */
     }
-
-    /*
-     * Default method of RecyclerView.Adapter
-    @Override
-    public int getItemViewType(int position) {
-        if(getItem(position) instanceof QuestionDataItem && getNetworkState()) {
-            Log.d("FMDIGILAB 7 POSITION : ", Integer.toString(position));
-            return R.layout.survey_card;
-        } else {
-            Log.d("FMDIGILAB 8 POSITION : ", Integer.toString(position));
-            return R.layout.load_more;
-        }
-    }
-     */
 
     //private NetworkState.Status getNetworkState() {
     private boolean getNetworkState() {
@@ -81,11 +66,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     }
 
     private boolean hasExtraRow() {
-        if (networkState != null && networkState != NetworkState.LOADED) {
-            return true;
-        } else {
-            return false;
-        }
+        return networkState != null && networkState != NetworkState.LOADED;
     }
 
     public void setNetworkState(NetworkState newNetworkState) {
@@ -105,7 +86,6 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     }
 
     interface OnSurveyItemClickedListener {
-        public void onItemClicked(View view, DataItem dataItem);
+        void onItemClicked(View view, DataItem dataItem);
     }
-
 }

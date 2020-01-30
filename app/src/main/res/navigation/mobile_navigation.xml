@@ -91,5 +91,17 @@
         <action
             android:id="@+id/actionBeginSurvey"
             app:destination="@id/questionFragment" />
+        <argument
+            android:name="surveyReference"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="businessReference"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="message"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

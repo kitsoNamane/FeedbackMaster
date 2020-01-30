@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.BranchDataItem;
@@ -50,8 +52,9 @@ public class BranchesDepartmentsFragment extends Fragment {
     LayoutInflater layoutInflater;
     MaterialButton start;
 
+    MaterialAlertDialogBuilder materialAlertDialogBuilder;
     BranchesDepartmentsFragmentArgs branchesDepartmentsFragmentArgs;
-
+    QuestionnaireViewModel questionnaireViewModel;
     String surveyReference;
     String businessReference;
 
@@ -86,6 +89,55 @@ public class BranchesDepartmentsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        questionnaireViewModel = ViewModelProviders.of(this).get(QuestionnaireViewModel.class);
+        questionnaireViewModel.init();
+        questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
+            switch (networkState.getStatus()) {
+                case FAILED:
+                    Log.d("FMDIGILAB 33", "Access Denied");
+                    if (networkState.getMsg().equalsIgnoreCase("Access Denied")) {
+                        delayedDialogBox(networkState.getMsg());
+                    }
+                    break;
+                case RUNNING:
+                    // render loading screen
+                    //disableBottomNavigation();
+                    break;
+                case SUCCESS:
+                default:
+                    // stop rendering loading animation
+                    //enableBottomNavigation();
+            }
+        });
+
+
+        questionnaireViewModel.getQuestionnaire().observe(getViewLifecycleOwner(), questionnaire->{
+            if(questionnaire != null) {
+                BranchesDepartmentsFragmentDirections.ActionBeginSurvey actionBeginSurvey = BranchesDepartmentsFragmentDirections.actionBeginSurvey(
+                        branchesDepartmentsFragmentArgs.getCurrentSurvey(), surveyReference, businessReference
+                );
+                MainActivity.navController.navigate(actionBeginSurvey);
+            } else {
+                Log.d("FMDIGILAB 35", "Still Null");
+            }
+        });
+        this.start.setOnClickListener(v -> {
+            MainActivity.questionnaireAnswer.setBusiness(businessReference);
+            MainActivity.questionnaireAnswer.setCampaign(surveyReference);
+            MainActivity.questionnaireAnswer.setCountry(item.getBusiness().getBusinessData().getCountry().getCountryData().getKey());
+            questionnaireViewModel.getQuestionsFromServer(surveyReference, businessReference);
+            /**
+            BranchesDepartmentsFragmentDirections.ActionBeginSurvey actionBeginSurvey = BranchesDepartmentsFragmentDirections.actionBeginSurvey(
+                    branchesDepartmentsFragmentArgs.getCurrentSurvey(), surveyReference, businessReference
+            );
+            MainActivity.navController.navigate(actionBeginSurvey);
+             */
+        });
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,6 +156,13 @@ public class BranchesDepartmentsFragment extends Fragment {
         start = view.findViewById(R.id.start_survey);
         item = branchesDepartmentsFragmentArgs.getCurrentSurvey();
 
+        materialAlertDialogBuilder = new MaterialAlertDialogBuilder(
+                this.getContext(),
+                R.style.ThemeOverlay_MaterialComponents_Dialog_Alert
+        );
+        materialAlertDialogBuilder.setTitle("Feedback Master");
+        materialAlertDialogBuilder.setCancelable(true);
+
         survey.setText(this.item.getName());
         company.setText(this.item.getBusiness().getBusinessData().getName());
 
@@ -118,15 +177,7 @@ public class BranchesDepartmentsFragment extends Fragment {
         surveyReference = item.getReference();
         renderBranches();
 
-        this.start.setOnClickListener(v -> {
-            MainActivity.questionnaireAnswer.setBusiness(businessReference);
-            MainActivity.questionnaireAnswer.setCampaign(surveyReference);
-            MainActivity.questionnaireAnswer.setCountry(item.getBusiness().getBusinessData().getCountry().getCountryData().getKey());
-            BranchesDepartmentsFragmentDirections.ActionBeginSurvey actionBeginSurvey = BranchesDepartmentsFragmentDirections.actionBeginSurvey(
-                    branchesDepartmentsFragmentArgs.getCurrentSurvey(), surveyReference, businessReference
-            );
-            MainActivity.navController.navigate(actionBeginSurvey);
-        });
+
 
         return view;
     }
@@ -205,5 +256,19 @@ public class BranchesDepartmentsFragment extends Fragment {
         } else {
             getSelectedCategories.removeAllViews();
         }
+    }
+
+    public void delayedDialogBox(String message) {
+        materialAlertDialogBuilder.setMessage(message)
+                .setPositiveButton("Back", (dialog, which)->{
+                    dialog.dismiss();
+                    MainActivity.navController.popBackStack();
+                }).show();
+    }
+
+    public void getQuestions() {
+        //questionnaireViewModel.getQuestionsFromServer(
+         //       surveyReference, businessReference
+        //);
     }
 }

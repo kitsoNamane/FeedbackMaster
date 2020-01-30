@@ -49,7 +49,8 @@ public class FeedbackMasterQuestionnaireApi {
                     Log.d("FMDIGILAB 26", response.message());
                     answerResponse.postValue(null);
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
-                    reload = () -> sendAnswers(questionnaireAnswer);
+                    //reload = () -> sendAnswers(questionnaireAnswer);
+                    reload = () -> call.request();
                 }
             }
 
@@ -60,7 +61,7 @@ public class FeedbackMasterQuestionnaireApi {
                 questionnaire.postValue(null);
                 answerResponse.postValue(null);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
-                reload = () -> sendAnswers(questionnaireAnswer);
+                reload = () -> call.request();
             }
         });
         return answerResponse;
@@ -75,6 +76,7 @@ public class FeedbackMasterQuestionnaireApi {
             return _getQuestionsFromServer(surveyReference, businessReference);
         } else {
             questionnaire.postValue(null);
+            Log.d("FMDIGILAB 34", "Null Null Null");
             return questionnaire;
         }
     }
@@ -84,17 +86,20 @@ public class FeedbackMasterQuestionnaireApi {
         apiService.getQuestions(surveyReference, businessReference).enqueue(new Callback<QuestionResponse>() {
             @Override
             public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
-                if(response.isSuccessful()) {
+                if(response.isSuccessful() && response.body().isSuccess()) {
                     Log.d("FMDIGILAB 20", response.message());
                     assert response.body() != null;
+                    Log.d("FMDIGILAB 23", response.body().toString());
                     Log.d("FMDIGILAB 23", response.body().getResult().toString());
                     networkState.postValue(NetworkState.LOADED);
                     questionnaire.postValue(response.body().getResult());
                 } else {
-                    Log.d("FMDIGILAB 20", response.message());
+                    Log.d("FMDIGILAB 20", response.body().getMessage().get(0).toString());
+                    networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
+                            response.body().getMessage().get(0).toString())
+                    );
                     questionnaire.postValue(null);
-                    networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
-                    reload = () -> getQuestions(surveyReference, businessReference);
+                    reload = call::request;
                 }
             }
 
@@ -104,7 +109,7 @@ public class FeedbackMasterQuestionnaireApi {
                 Log.d("FMDIGILAB 20", errorMessage);
                 questionnaire.postValue(null);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
-                reload = () -> getQuestions(surveyReference, businessReference);
+                reload = call::request;
             }
         });
         return questionnaire;

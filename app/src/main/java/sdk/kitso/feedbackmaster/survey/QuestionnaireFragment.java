@@ -67,7 +67,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    SurveyViewModel surveyViewModel;
     QuestionnaireViewModel questionnaireViewModel;
 
     public QuestionnaireFragment() {
@@ -95,7 +94,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        questionnaireViewModel = ViewModelProviders.of(getActivity()).get(QuestionnaireViewModel.class);
+        questionnaireViewModel = ViewModelProviders.of(this).get(QuestionnaireViewModel.class);
         questionnaireViewModel.init();
 
         getQuestions();
@@ -103,7 +102,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
             switch (networkState.getStatus()) {
                 case FAILED:
-                    //disableBottomNavigation();
                     break;
                 case RUNNING:
                     // render loading screen
@@ -116,7 +114,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             }
         });
 
-        questionnaireViewModel.getQuestionnaire().observe(this, questionnaire->{
+        questionnaireViewModel.getQuestionnaire().observe(getViewLifecycleOwner(), questionnaire->{
             if(questionnaire != null) {
                 questionController.setQuestions(questionnaire.getQuestions());
                 questionTitle.setText(questionController.nextQuestion().getCaption());
@@ -175,9 +173,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 MainActivity.questionnaireAnswer.setEndDate(end_date);
                 MainActivity.questionnaireAnswer.removeNullAnswers();
                 MainActivity.questionnaireAnswer.showMe();
-
-                // send to surveyCompletedFragment
-                //questionnaireViewModel.sendAnswerToServer(MainActivity.questionnaireAnswer);
 
                 MainActivity.profile.setNumberOfSurveysCompleted(
                         MainActivity.profile.getNumberOfSurveysCompleted() + 1

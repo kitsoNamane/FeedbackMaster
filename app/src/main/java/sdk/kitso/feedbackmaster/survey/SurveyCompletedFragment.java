@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -29,16 +30,22 @@ import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
  * Use the {@link SurveyCompletedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SurveyCompletedFragment extends Fragment {
+public class SurveyCompletedFragment extends Fragment implements MaterialButtonToggleGroup.OnButtonCheckedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     MaterialButton goHome;
+    MaterialButton sendAnonymous;
+    MaterialButtonToggleGroup group;
+    MaterialButton notAnonymous;
     MaterialTextView completedSurveys;
     MaterialTextView totalWins;
     MaterialTextView thankYou;
     MaterialAlertDialogBuilder materialAlertDialogBuilder;
     FlexboxLayout uploadingAnswers;
+    int retryAttempts = 4;
+    FlexboxLayout sendAsAnonymous;
     Handler handler = new Handler();
+    View trophy;
     private QuestionnaireViewModel questionnaireViewModel;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -77,13 +84,12 @@ public class SurveyCompletedFragment extends Fragment {
         QuestionnaireAnswer answer = surveyCompletedFragmentArgs.getQuestionnaireAnswers();
         questionnaireViewModel = ViewModelProviders.of(this).get(QuestionnaireViewModel.class);
         questionnaireViewModel.init();
-        questionnaireViewModel.sendAnswerToServer(MainActivity.questionnaireAnswer);
 
         questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
             switch (networkState.getStatus()) {
                 case FAILED:
                     //disableBottomNavigation();
-                    showProgressBar(View.GONE);
+                    showProgressBar(View.INVISIBLE);
                     break;
                 case RUNNING:
                     // render loading screen
@@ -91,7 +97,7 @@ public class SurveyCompletedFragment extends Fragment {
                     showProgressBar(View.VISIBLE);
                     break;
                 case SUCCESS:
-                    showProgressBar(View.GONE);
+                    showProgressBar(View.INVISIBLE);
                 default:
                     // stop rendering loading animation
                     //enableBottomNavigation();
@@ -102,10 +108,13 @@ public class SurveyCompletedFragment extends Fragment {
             if(answerResponse == null) {
                 // prompt reload button
             } else if(answerResponse.isSuccess() == false) {
-                setVisibility(View.GONE);
+                setVisibility(View.INVISIBLE);
                 delayedDialogBox(answerResponse.getMessage().get(0).toString());
             } else {
+                showProgressBar(View.INVISIBLE);
+                sendAsAnonymous.setVisibility(View.INVISIBLE);
                 setVisibility(View.VISIBLE);
+                trophy.setVisibility(View.VISIBLE);
             }
         });
 
@@ -128,13 +137,24 @@ public class SurveyCompletedFragment extends Fragment {
         goHome = view.findViewById(R.id.go_home_text);
         uploadingAnswers = view.findViewById(R.id.uploading_answers);
         completedSurveys = view.findViewById(R.id.surveys_completed);
+        trophy = view.findViewById(R.id.trophy);
         thankYou = view.findViewById(R.id.thank_you_text);
         totalWins = view.findViewById(R.id.total_wins);
+        sendAsAnonymous = view.findViewById(R.id.send_as_anonymous);
+        sendAnonymous = view.findViewById(R.id.as_anonymous);
+        notAnonymous = view.findViewById(R.id.not_anonymous);
+        group = view.findViewById(R.id.anonymous_group);
+
+        notAnonymous.setOnClickListener(v -> onButtonChecked(group, v.getId(), ((MaterialButton)v).isChecked()));
+        sendAnonymous.setOnClickListener(v -> onButtonChecked(group, v.getId(), ((MaterialButton)v).isChecked()));
+
+
         materialAlertDialogBuilder = new MaterialAlertDialogBuilder(
                 this.getContext(),
                 R.style.ThemeOverlay_MaterialComponents_Dialog_Alert
         );
         materialAlertDialogBuilder.setTitle("Feedback Master");
+
         completedSurveys.setText(
                 String.format(Locale.getDefault(), "%d",
                         MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getNumberOfSurveysCompleted()
@@ -143,44 +163,68 @@ public class SurveyCompletedFragment extends Fragment {
         totalWins.setText("0");
         goHome.setOnClickListener(v -> Navigation.findNavController(v).navigate(SurveyCompletedFragmentDirections.actionHome()));
 
+        setVisibility(View.INVISIBLE);
+        showProgressBar(View.INVISIBLE);
+        trophy.setVisibility(View.INVISIBLE);
+
         return view;
     }
 
     public void showProgressBar(int VISIBILITY) {
-        if(VISIBILITY == View.GONE) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    uploadingAnswers.setVisibility(VISIBILITY);
-                }
-            }, 3000);
+        if(VISIBILITY == View.INVISIBLE) {
+            handler.postDelayed(() -> uploadingAnswers.setVisibility(VISIBILITY), 3000);
         } else {
             this.uploadingAnswers.setVisibility(VISIBILITY);
         }
     }
 
    public void delayedDialogBox(String message) {
-
-       handler.postDelayed(new Runnable() {
-           @Override
-           public void run() {
-               materialAlertDialogBuilder.setMessage(message)
-                   .setPositiveButton("Retry", (dialog, which)->{
-                       showProgressBar(View.VISIBLE);
-                       questionnaireViewModel.retry();
-                       dialog.dismiss();
-                   })
-                   .setNegativeButton("Quit", (dialog, which)->{
-                       setVisibility(View.VISIBLE);
+       if(retryAttempts == 1) {
+           materialAlertDialogBuilder
+                   .setMessage("Try Again Later")
+                   .setPositiveButton("", ((dialog, which) -> {
+                       goHome.setVisibility(View.VISIBLE);
+                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
+                   }))
+                   .setPositiveButton("Ok ", (dialog, which)->{
+                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
                        dialog.dismiss();
                    }).show();
-           }
-       }, 1000);
+       } else {
+           materialAlertDialogBuilder.setMessage(message)
+                   .setPositiveButton("Retry " + (retryAttempts-1), (dialog, which) -> {
+                       showProgressBar(View.VISIBLE);
+                       retry();
+                       dialog.dismiss();
+                   })
+                   .setNegativeButton("Quit", (dialog, which) -> {
+                       goHome.setVisibility(View.VISIBLE);
+                       sendAsAnonymous.setVisibility(View.VISIBLE);
+                       dialog.dismiss();
+                   }).show();
 
+       }
+   }
+
+   public void retry() {
+       retryAttempts -= 1;
+       handler.postDelayed(() -> questionnaireViewModel.retry(), 1000);
    }
 
     public void setVisibility(int VISIBILITY) {
         this.goHome.setVisibility(VISIBILITY);
         this.thankYou.setVisibility(VISIBILITY);
+    }
+
+    @Override
+    public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
+        if(checkedId == R.id.as_anonymous) {
+            questionnaireViewModel.sendAnswerToServer(MainActivity.questionnaireAnswer);
+        } else {
+            // add profile info
+            questionnaireViewModel.sendAnswerToServer(MainActivity.questionnaireAnswer);
+        }
+        sendAsAnonymous.setVisibility(View.INVISIBLE);
+        showProgressBar(View.VISIBLE);
     }
 }

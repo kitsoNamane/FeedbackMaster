@@ -3,59 +3,86 @@ package sdk.kitso.feedbackmaster.survey;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.AnswerResponse;
+import sdk.kitso.feedbackmaster.model.GetQuestionArgs;
 import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.kitso.feedbackmaster.model.Result;
-import sdk.kitso.feedbackmaster.repository.FeedbackMasterQuestionnaireApiFactory;
+import sdk.kitso.feedbackmaster.repository.FeedbackMasterQuestionnaireApi;
 
 public class QuestionnaireViewModel extends ViewModel {
-    private LiveData<NetworkState> networkState;
-    private LiveData<Result> questionnaire;
-    private Runnable reload;
-    private LiveData<AnswerResponse> answerResponse;
-    private FeedbackMasterQuestionnaireApiFactory feedbackMasterQuestionnaireApiFactory;
+    private FeedbackMasterQuestionnaireApi feedbackMasterQuestionnaireApi = FeedbackMasterQuestionnaireApi.getInstance(MainActivity.feedbackMasterSurveyApiService);
+    private MutableLiveData<GetQuestionArgs> getQuestionsArgs = new MutableLiveData<>();
+    private MutableLiveData<QuestionnaireAnswer> getQuestionnaireAnswerArgs = new MutableLiveData<>();
+    private MutableLiveData<Integer> getNetworkArgs = new MutableLiveData<>(0);
+
+    public LiveData<Result> questionnaire = Transformations.switchMap(getQuestionsArgs,
+        (args) -> feedbackMasterQuestionnaireApi.getQuestions(args.getSurveyReference(), args.getBusinessReference())
+    );
+
+    public LiveData<NetworkState> networkState = Transformations.switchMap(getQuestionsArgs,
+            args -> feedbackMasterQuestionnaireApi.getNetworkState()
+    );
+
+    public LiveData<AnswerResponse> answerResponse = Transformations.switchMap(getQuestionnaireAnswerArgs,
+            getQuestionnaireAnswerArgs -> feedbackMasterQuestionnaireApi.sendAnswers(getQuestionnaireAnswerArgs)
+    );
+
+    public Runnable reload;
 
     public void init() {
-        Log.d("LIVEDATA 3", "livedata created");
-        feedbackMasterQuestionnaireApiFactory = new FeedbackMasterQuestionnaireApiFactory(MainActivity.feedbackMasterSurveyApiService);
     }
 
     public void getQuestionsFromServer(String surveyReference, String businessReference) {
-        questionnaire = Transformations.switchMap(feedbackMasterQuestionnaireApiFactory.getMutableLiveData(),
-                feedbackMasterQuestionnaireApi -> feedbackMasterQuestionnaireApi.getQuestions(surveyReference, businessReference));
-        networkState = Transformations.switchMap(feedbackMasterQuestionnaireApiFactory.getMutableLiveData(),
-                feedbackMasterQuestionnaireApi1 -> feedbackMasterQuestionnaireApi1.getNetworkState());
+        Log.d("FMDIGILAB", "getting questions");
+        getQuestionsArgs.setValue(new GetQuestionArgs(surveyReference, businessReference));
+        getNetworkArgs.setValue(getNetworkArgs.getValue()+1);
         reload = () -> getQuestionsFromServer(surveyReference, businessReference);
+        //questionnaire = feedbackMasterQuestionnaireApiFactory.getMutableLiveData().getValue().getQuestions(surveyReference, businessReference);
+        //networkState = Transformations.switchMap(feedbackMasterQuestionnaireApiFactory.getMutableLiveData(),
+        //        feedbackMasterQuestionnaireApi1 -> feedbackMasterQuestionnaireApi1.getNetworkState());
+        //networkState = feedbackMasterQuestionnaireApiFactory.getMutableLiveData().getValue().getNetworkState();
     }
 
     public void sendAnswerToServer(QuestionnaireAnswer answer) {
-        answerResponse = Transformations.switchMap(feedbackMasterQuestionnaireApiFactory.getMutableLiveData(),
-                feedbackMasterQuestionnaireApi -> feedbackMasterQuestionnaireApi.sendAnswers(answer));
-        networkState = Transformations.switchMap(feedbackMasterQuestionnaireApiFactory.getMutableLiveData(),
-                feedbackMasterQuestionnaireApi -> feedbackMasterQuestionnaireApi.getNetworkState());
+        getQuestionnaireAnswerArgs.setValue(answer);
+        getNetworkArgs.setValue(getNetworkArgs.getValue()+1);
         reload = () -> sendAnswerToServer(answer);
+        //answerResponse = Transformations.switchMap(feedbackMasterQuestionnaireApiFactory.getMutableLiveData(),
+        //        feedbackMasterQuestionnaireApi -> feedbackMasterQuestionnaireApi.sendAnswers(answer));
+        //networkState = Transformations.switchMap(feedbackMasterQuestionnaireApiFactory.getMutableLiveData(),
+        //        feedbackMasterQuestionnaireApi -> feedbackMasterQuestionnaireApi.getNetworkState());
     }
 
     public void retry() {
         Thread thread = new Thread(
                 reload
         );
-        thread.start();
+        thread.run();
     }
 
     public LiveData<NetworkState> getNetworkState() {
+        if(networkState == null) {
+            networkState = new MutableLiveData<>();
+        }
         return networkState;
     }
 
     public LiveData<AnswerResponse> getAnswerResponse() {
+        if(answerResponse == null) {
+            answerResponse = new MutableLiveData<>();
+        }
         return answerResponse;
     }
 
     public LiveData<Result> getQuestionnaire() {
+        if(questionnaire == null) {
+            questionnaire = new MutableLiveData<>();
+        }
         return questionnaire;
     }
 }
