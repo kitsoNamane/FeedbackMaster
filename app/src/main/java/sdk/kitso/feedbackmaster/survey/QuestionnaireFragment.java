@@ -24,7 +24,6 @@ import java.util.List;
 
 import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
@@ -92,40 +91,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        questionnaireViewModel = ViewModelProviders.of(this).get(QuestionnaireViewModel.class);
-        questionnaireViewModel.init();
-
-        getQuestions();
-
-        questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
-            switch (networkState.getStatus()) {
-                case FAILED:
-                    break;
-                case RUNNING:
-                    // render loading screen
-                    //disableBottomNavigation();
-                    break;
-                case SUCCESS:
-                default:
-                    // stop rendering loading animation
-                    //enableBottomNavigation();
-            }
-        });
-
-        questionnaireViewModel.getQuestionnaire().observe(getViewLifecycleOwner(), questionnaire->{
-            if(questionnaire != null) {
-                questionController.setQuestions(questionnaire.getQuestions());
-                questionTitle.setText(questionController.nextQuestion().getCaption());
-                renderQuestion();
-                start_date = dateFormat.format(c.getTime());
-                stopWatch.start();
-            }
-        });
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -155,7 +120,26 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
         stopWatch.setOnChronometerTickListener(chronometer -> stopWatch = chronometer);
 
+        questionController.setQuestions(
+                questionFragmentArgs.getSurveyQuestions().getQuestions()
+        );
+
+        questionTitle.setText(questionController.nextQuestion().getCaption());
+        renderQuestion();
+        start_date = dateFormat.format(c.getTime());
+        stopWatch.start();
+
         nextQuestion.setOnClickListener(v -> {
+            if(questionController.currentQuestion.getCaption() == Globals.OPEN_ENDED) {
+                answer = new Answer();
+                answer.setQuestion(questionController.currentQuestion.getRef());
+                answerData = new AnswerData();
+                answerData.setRef("");
+                answerData.setText(shortAnswer.getText().toString());
+                answerData.setListItem("");
+                answer.setAnswerData(answerData);
+                answers.add(answer);
+            }
             questionController.nextQuestion();
             if(questionController.listIterator == (questionController.maxQuestions - 1)) {
                 nextQuestion.setText("Finish");
@@ -237,21 +221,11 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if(s.length() != 0) {
-                            answer = new Answer();
-                            answer.setQuestion(questionController.currentQuestion.getRef());
-                            answerData = new AnswerData();
-                            answerData.setRef("");
-                            answerData.setText(s.toString());
-                            answerData.setListItem("");
-                            answer.setAnswerData(answerData);
-                            answers.add(answer);
-                        }
-                        displayContinueButton(true);
                     }
 
                     @Override
                     public void afterTextChanged(Editable s) {
+                        displayContinueButton(true);
                     }
                 });
                 questionView.removeAllViews();
@@ -317,6 +291,8 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         } else {
             nextQuestion.setVisibility(View.GONE);
         }
+
+
     }
 
     @SuppressLint("ResourceType")

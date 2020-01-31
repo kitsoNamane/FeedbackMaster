@@ -47,6 +47,9 @@
             android:name="businessReference"
             app:argType="string"
             app:nullable="true" />
+        <argument
+            android:name="surveyQuestions"
+            app:argType="sdk.kitso.feedbackmaster.model.Result" />
     </fragment>
     <fragment
         android:id="@+id/surveyCompletedFragment"

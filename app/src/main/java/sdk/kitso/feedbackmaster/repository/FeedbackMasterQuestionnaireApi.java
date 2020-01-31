@@ -40,16 +40,17 @@ public class FeedbackMasterQuestionnaireApi {
         apiService.sendAnswer(questionnaireAnswer).enqueue(new Callback<AnswerResponse>() {
             @Override
             public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
-                if(response.isSuccessful()) {
+                if(response.isSuccessful() && response.body().isSuccess()) {
                     Log.d("FMDIGILAB 25", response.message());
                     Log.d("FMDIGILAB 25", response.body().toString());
                     answerResponse.postValue(response.body());
                     networkState.postValue(NetworkState.LOADED);
                 } else {
-                    Log.d("FMDIGILAB 26", response.message());
-                    answerResponse.postValue(null);
-                    networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
-                    //reload = () -> sendAnswers(questionnaireAnswer);
+                    Log.d("FMDIGILAB 20", response.body().getMessage().get(0).toString());
+                    networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
+                            response.body().getMessage().get(0).toString())
+                    );
+                    answerResponse.postValue(response.body());
                     reload = () -> call.request();
                 }
             }
@@ -98,8 +99,8 @@ public class FeedbackMasterQuestionnaireApi {
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
                             response.body().getMessage().get(0).toString())
                     );
-                    questionnaire.postValue(null);
-                    reload = call::request;
+                    questionnaire.postValue(response.body().getResult());
+                    reload = () -> call.request();
                 }
             }
 
@@ -109,7 +110,7 @@ public class FeedbackMasterQuestionnaireApi {
                 Log.d("FMDIGILAB 20", errorMessage);
                 questionnaire.postValue(null);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
-                reload = call::request;
+                reload = () -> call.request();
             }
         });
         return questionnaire;

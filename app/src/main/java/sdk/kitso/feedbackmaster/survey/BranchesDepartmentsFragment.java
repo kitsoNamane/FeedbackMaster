@@ -115,13 +115,14 @@ public class BranchesDepartmentsFragment extends Fragment {
 
 
         questionnaireViewModel.getQuestionnaire().observe(getViewLifecycleOwner(), questionnaire->{
-            if(questionnaire != null) {
+            if(questionnaire != null && questionnaire.getQuestionBusiness().getRef().equals(businessReference)) {
                 BranchesDepartmentsFragmentDirections.ActionBeginSurvey actionBeginSurvey = BranchesDepartmentsFragmentDirections.actionBeginSurvey(
-                        branchesDepartmentsFragmentArgs.getCurrentSurvey(), surveyReference, businessReference
+                        branchesDepartmentsFragmentArgs.getCurrentSurvey(), surveyReference, businessReference, questionnaire
                 );
                 MainActivity.navController.navigate(actionBeginSurvey);
             } else {
                 Log.d("FMDIGILAB 35", "Still Null");
+                Log.d("FMDIGILAB 34", surveyReference+" "+businessReference);
             }
         });
         this.start.setOnClickListener(v -> {
@@ -129,12 +130,7 @@ public class BranchesDepartmentsFragment extends Fragment {
             MainActivity.questionnaireAnswer.setCampaign(surveyReference);
             MainActivity.questionnaireAnswer.setCountry(item.getBusiness().getBusinessData().getCountry().getCountryData().getKey());
             questionnaireViewModel.getQuestionsFromServer(surveyReference, businessReference);
-            /**
-            BranchesDepartmentsFragmentDirections.ActionBeginSurvey actionBeginSurvey = BranchesDepartmentsFragmentDirections.actionBeginSurvey(
-                    branchesDepartmentsFragmentArgs.getCurrentSurvey(), surveyReference, businessReference
-            );
-            MainActivity.navController.navigate(actionBeginSurvey);
-             */
+            Log.d("FMDIGILAB 34", surveyReference+" "+businessReference);
         });
     }
 
@@ -264,11 +260,5 @@ public class BranchesDepartmentsFragment extends Fragment {
                     dialog.dismiss();
                     MainActivity.navController.popBackStack();
                 }).show();
-    }
-
-    public void getQuestions() {
-        //questionnaireViewModel.getQuestionsFromServer(
-         //       surveyReference, businessReference
-        //);
     }
 }

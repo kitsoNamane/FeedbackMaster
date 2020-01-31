@@ -42,7 +42,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
     MaterialTextView thankYou;
     MaterialAlertDialogBuilder materialAlertDialogBuilder;
     FlexboxLayout uploadingAnswers;
-    int retryAttempts = 4;
+    int retryAttempts = 3;
     FlexboxLayout sendAsAnonymous;
     Handler handler = new Handler();
     View trophy;
@@ -111,9 +111,9 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                 setVisibility(View.INVISIBLE);
                 delayedDialogBox(answerResponse.getMessage().get(0).toString());
             } else {
-                showProgressBar(View.INVISIBLE);
                 sendAsAnonymous.setVisibility(View.INVISIBLE);
                 setVisibility(View.VISIBLE);
+                showProgressBar(View.INVISIBLE);
                 trophy.setVisibility(View.VISIBLE);
             }
         });
@@ -148,7 +148,6 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
         notAnonymous.setOnClickListener(v -> onButtonChecked(group, v.getId(), ((MaterialButton)v).isChecked()));
         sendAnonymous.setOnClickListener(v -> onButtonChecked(group, v.getId(), ((MaterialButton)v).isChecked()));
 
-
         materialAlertDialogBuilder = new MaterialAlertDialogBuilder(
                 this.getContext(),
                 R.style.ThemeOverlay_MaterialComponents_Dialog_Alert
@@ -171,11 +170,11 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
     }
 
     public void showProgressBar(int VISIBILITY) {
-        if(VISIBILITY == View.INVISIBLE) {
-            handler.postDelayed(() -> uploadingAnswers.setVisibility(VISIBILITY), 3000);
-        } else {
-            this.uploadingAnswers.setVisibility(VISIBILITY);
-        }
+        //if(VISIBILITY == View.INVISIBLE) {
+        //    handler.postDelayed(() -> uploadingAnswers.setVisibility(VISIBILITY), 3000);
+        //} else {
+        uploadingAnswers.setVisibility(VISIBILITY);
+        //}
     }
 
    public void delayedDialogBox(String message) {
@@ -185,29 +184,31 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                    .setPositiveButton("", ((dialog, which) -> {
                        goHome.setVisibility(View.VISIBLE);
                        MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
+                       dialog.cancel();
                    }))
                    .setPositiveButton("Ok ", (dialog, which)->{
                        MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
-                       dialog.dismiss();
+                       dialog.cancel();
                    }).show();
        } else {
            materialAlertDialogBuilder.setMessage(message)
-                   .setPositiveButton("Retry " + (retryAttempts-1), (dialog, which) -> {
+                   .setPositiveButton("Retry " + (retryAttempts), (dialog, which) -> {
                        showProgressBar(View.VISIBLE);
                        retry();
                        dialog.dismiss();
                    })
                    .setNegativeButton("Quit", (dialog, which) -> {
                        goHome.setVisibility(View.VISIBLE);
+                       uploadingAnswers.setVisibility(View.INVISIBLE);
                        sendAsAnonymous.setVisibility(View.VISIBLE);
                        dialog.dismiss();
                    }).show();
-
        }
    }
 
    public void retry() {
        retryAttempts -= 1;
+       if(retryAttempts == 0) return;
        handler.postDelayed(() -> questionnaireViewModel.retry(), 1000);
    }
 
