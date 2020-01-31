@@ -2,17 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:gravity="center">
 
-    <RatingBar
+    <androidx.appcompat.widget.AppCompatRatingBar
         android:id="@+id/ten_rating_bar"
-        style="@style/Widget.AppCompat.RatingBar.Indicator"
+        style="@style/questionRatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:isIndicator="false"
         android:max="10"
         android:numStars="10"
+        android:scaleX="1.50"
+        android:scaleY="1.50"
         android:stepSize="1" />
-
 </RelativeLayout>

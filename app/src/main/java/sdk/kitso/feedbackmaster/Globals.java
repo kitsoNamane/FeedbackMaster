@@ -5,7 +5,7 @@ import java.util.concurrent.Executors;
 
 public class Globals {
     public static final int CURRENT_USER_ID = 0;
-    public static final int FIRST_PAGE = 20;
+    public static final int FIRST_PAGE = 1;
     public static Executor executor = Executors.newSingleThreadExecutor();
     public static Executor exec = Executors.newFixedThreadPool(1);
     public static final String RATING = "rating";

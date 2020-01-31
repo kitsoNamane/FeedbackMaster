@@ -153,6 +153,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                 R.style.ThemeOverlay_MaterialComponents_Dialog_Alert
         );
         materialAlertDialogBuilder.setTitle("Feedback Master");
+        materialAlertDialogBuilder.setCancelable(false);
 
         completedSurveys.setText(
                 String.format(Locale.getDefault(), "%d",
@@ -187,6 +188,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                        dialog.cancel();
                    }))
                    .setPositiveButton("Ok ", (dialog, which)->{
+                       goHome.setVisibility(View.VISIBLE);
                        MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
                        dialog.cancel();
                    }).show();
@@ -197,7 +199,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                        retry();
                        dialog.dismiss();
                    })
-                   .setNegativeButton("Quit", (dialog, which) -> {
+                   .setNegativeButton("Cancel", (dialog, which) -> {
                        goHome.setVisibility(View.VISIBLE);
                        uploadingAnswers.setVisibility(View.INVISIBLE);
                        sendAsAnonymous.setVisibility(View.VISIBLE);

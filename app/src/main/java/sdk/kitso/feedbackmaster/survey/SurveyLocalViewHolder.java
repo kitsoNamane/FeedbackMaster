@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textview.MaterialTextView;
 
 import androidx.constraintlayout.widget.Group;
@@ -21,9 +19,6 @@ public class SurveyLocalViewHolder extends RecyclerView.ViewHolder {
     MaterialCardView cardView;
     Group branch;
     Group department;
-    Chip chipItem;
-    ChipGroup branches;
-    ChipGroup departments;
     MaterialButton start;
 
     public SurveyLocalViewHolder(View view) {
@@ -31,12 +26,11 @@ public class SurveyLocalViewHolder extends RecyclerView.ViewHolder {
         this.cardView = (MaterialCardView) view;
         this.company = view.findViewById(R.id.survey_title);
         this.survey = view.findViewById(R.id.company_name);
-        this.branches = view.findViewById(R.id.branchOld);
-        this.departments = view.findViewById(R.id.department);
         this.branch = view.findViewById(R.id.department_list);
         this.department = view.findViewById(R.id.branch_list);
         this.start = view.findViewById(R.id.start_survey);
     }
+
     public static SurveyLocalViewHolder create(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.card_survey, parent, false

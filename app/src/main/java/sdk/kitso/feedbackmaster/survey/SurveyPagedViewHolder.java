@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
@@ -22,7 +21,6 @@ public class SurveyPagedViewHolder extends RecyclerView.ViewHolder {
     MaterialTextView company;
     MaterialTextView survey;
     MaterialCardView cardView;
-    ChipGroup branches;
     MaterialTextView numberOfQuestions;
     MaterialTextView numberOfRespondents;
     MaterialTextView surveyExpiry;
@@ -33,7 +31,6 @@ public class SurveyPagedViewHolder extends RecyclerView.ViewHolder {
         this.cardView = (MaterialCardView) view;
         this.company = view.findViewById(R.id.company_name);
         this.survey = view.findViewById(R.id.survey_title);
-        this.branches = view.findViewById(R.id.branchOld);
         this.numberOfQuestions = view.findViewById(R.id.number_of_questions);
         this.numberOfRespondents = view.findViewById(R.id.number_of_respondents);
         this.surveyExpiry = view.findViewById(R.id.expiry_date);

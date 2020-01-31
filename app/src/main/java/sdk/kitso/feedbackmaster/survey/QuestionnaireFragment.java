@@ -130,16 +130,20 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         stopWatch.start();
 
         nextQuestion.setOnClickListener(v -> {
-            if(questionController.currentQuestion.getCaption() == Globals.OPEN_ENDED) {
+            if(questionController.currentQuestion.getSurveyQuestiontype().getRef().equals(Globals.OPEN_ENDED)) {
+                Log.d("FMDIGILAB 36", "Writing String");
                 answer = new Answer();
                 answer.setQuestion(questionController.currentQuestion.getRef());
                 answerData = new AnswerData();
-                answerData.setRef("");
+                //answerData.setRef("");
                 answerData.setText(shortAnswer.getText().toString());
-                answerData.setListItem("");
+                //answerData.setListItem("");
                 answer.setAnswerData(answerData);
                 answers.add(answer);
+            } else {
+                Log.d("FMDIGILAB 36", "Current Question Short Answer");
             }
+
             questionController.nextQuestion();
             if(questionController.listIterator == (questionController.maxQuestions - 1)) {
                 nextQuestion.setText("Finish");
@@ -171,13 +175,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             }
         });
         return view;
-    }
-
-    public void getQuestions() {
-        questionnaireViewModel.getQuestionsFromServer(
-                questionFragmentArgs.getSurveyReference(),
-                questionFragmentArgs.getBusinessReference()
-        );
     }
 
     public int getTimer(String timer) {
@@ -228,6 +225,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                         displayContinueButton(true);
                     }
                 });
+
                 questionView.removeAllViews();
                 questionView.addView(questionContent);
                 break;
@@ -244,7 +242,11 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                     @Override
                     public void onRatingChanged(RatingBar _ratingBar, float rating, boolean fromUser) {
-                        int index = (int)rating - 1;
+                        int index = (int)(rating - 1);
+                        if(index < 0) {
+                            nextQuestion.setVisibility(View.GONE);
+                            return;
+                        }
                         answer = new Answer();
                         answer.setQuestion(questionController.currentQuestion.getRef());
                         answerData = new AnswerData();
