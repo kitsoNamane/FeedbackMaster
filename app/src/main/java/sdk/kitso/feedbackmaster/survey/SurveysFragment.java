@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,6 +14,7 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +39,7 @@ public class SurveysFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView.LayoutManager layoutManager;
     private FlexboxLayoutManager flexboxLayoutManager;
+    private Toolbar toolbar;
     private static MaterialCardView reloadCard;
     private Chip reloadChip;
 
@@ -81,9 +86,30 @@ public class SurveysFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        //Toolbar toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
+        //toolbar.inflateMenu(R.menu.topbar_with_search);
+        super.onCreateOptionsMenu(menu, menuInflater);
+        getActivity().getMenuInflater().inflate(R.menu.topbar_with_search, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                MainActivity.navController.navigate(SurveysFragmentDirections.actionSearch());
+            default:
+                // Do nothing for now
+        }
+        return true;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_surveys, container, false);
+        setHasOptionsMenu(true);
 
         reloadCard = view.findViewById(R.id.reloadCard);
         reloadChip = view.findViewById(R.id.load_more);
@@ -96,9 +122,6 @@ public class SurveysFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
-        //flexboxLayoutManager = new FlexboxLayoutManager(view.getContext());
-        //flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
-        //flexboxLayoutManager.setJustifyContent(JustifyContent.CENTER);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(MainActivity.pagedAdapter);
 

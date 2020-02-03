@@ -148,13 +148,6 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
         notAnonymous.setOnClickListener(v -> onButtonChecked(group, v.getId(), ((MaterialButton)v).isChecked()));
         sendAnonymous.setOnClickListener(v -> onButtonChecked(group, v.getId(), ((MaterialButton)v).isChecked()));
 
-        materialAlertDialogBuilder = new MaterialAlertDialogBuilder(
-                this.getContext(),
-                R.style.ThemeOverlay_MaterialComponents_Dialog_Alert
-        );
-        materialAlertDialogBuilder.setTitle("Feedback Master");
-        materialAlertDialogBuilder.setCancelable(false);
-
         completedSurveys.setText(
                 String.format(Locale.getDefault(), "%d",
                         MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getNumberOfSurveysCompleted()
@@ -180,30 +173,35 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
 
    public void delayedDialogBox(String message) {
        if(retryAttempts == 1) {
-           materialAlertDialogBuilder
+           new MaterialAlertDialogBuilder(this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+                   .setTitle("Feedback Master")
+                   .setCancelable(true)
                    .setMessage("Try Again Later")
                    .setPositiveButton("", ((dialog, which) -> {
                        goHome.setVisibility(View.VISIBLE);
-                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
                        dialog.cancel();
+                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
                    }))
                    .setPositiveButton("Ok ", (dialog, which)->{
                        goHome.setVisibility(View.VISIBLE);
-                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
                        dialog.cancel();
+                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
                    }).show();
        } else {
-           materialAlertDialogBuilder.setMessage(message)
+           new MaterialAlertDialogBuilder(this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+                   .setTitle("Feedback Master")
+                   .setCancelable(true)
+                   .setMessage(message)
                    .setPositiveButton("Retry " + (retryAttempts), (dialog, which) -> {
                        showProgressBar(View.VISIBLE);
                        retry();
-                       dialog.dismiss();
+                       dialog.cancel();
                    })
                    .setNegativeButton("Cancel", (dialog, which) -> {
                        goHome.setVisibility(View.VISIBLE);
                        uploadingAnswers.setVisibility(View.INVISIBLE);
                        sendAsAnonymous.setVisibility(View.VISIBLE);
-                       dialog.dismiss();
+                       dialog.cancel();
                    }).show();
        }
    }

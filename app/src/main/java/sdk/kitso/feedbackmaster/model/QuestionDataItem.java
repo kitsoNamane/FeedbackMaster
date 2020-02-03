@@ -23,7 +23,7 @@ public class QuestionDataItem implements Serializable {
 	@SerializedName("question")
 	private Question question;
 
-	@SerializedName("questionnaireAnswer")
+	@SerializedName("answer")
 	private String answer;
 
 	@SerializedName("created")

@@ -8,6 +8,7 @@ import sdk.kitso.feedbackmaster.model.AnswerResponse;
 import sdk.kitso.feedbackmaster.model.QuestionResponse;
 import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.kitso.feedbackmaster.model.Response;
+import sdk.kitso.feedbackmaster.model.SearchResponse;
 
 public interface FeedbackMasterSurveyApiService {
     @POST("survey")
@@ -18,4 +19,7 @@ public interface FeedbackMasterSurveyApiService {
 
     @POST("survey/questionnaire")
     Call<QuestionResponse> getQuestions(@Query("b") String surveyReference, @Query("c") String businessReference);
+
+    @POST("surveys/search")
+    Call<SearchResponse> searchCompany(@Query("keyword") String searchString);
 }

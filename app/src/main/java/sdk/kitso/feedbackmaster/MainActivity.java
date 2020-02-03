@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             pagedAdapter.submitList(pagedList);
         });
 
+
         surveyViewModel.getNetworkState().observe(this, networkState->{
             pagedAdapter.setNetworkState(networkState);
             switch (navController.getCurrentDestination().getId()) {

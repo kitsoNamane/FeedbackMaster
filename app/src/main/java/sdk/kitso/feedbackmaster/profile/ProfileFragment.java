@@ -1,6 +1,7 @@
 package sdk.kitso.feedbackmaster.profile;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,11 @@ import com.google.android.material.textview.MaterialTextView;
 import java.util.Locale;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.survey.SearchViewModel;
 
 
 /**
@@ -86,6 +89,30 @@ public class ProfileFragment extends Fragment {
         viewAge.setText(Integer.toString(MainActivity.profile.getAge()));
         viewGender.setText(MainActivity.profile.getGender());
 
+        SearchViewModel searchViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+        searchViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
+            switch (networkState.getStatus()) {
+                case FAILED:
+                    Log.d("FMDIGILAB 40", "Network Failed");
+                    break;
+                case SUCCESS:
+                    Log.d("FMDIGILAB 40", "Network Success");
+                    break;
+                case RUNNING:
+                default:
+                    Log.d("FMDIGILAB 40", "Network Success");
+                    break;
+            }
+        });
+
+        searchViewModel.getSearchResults().observe(getViewLifecycleOwner(), result->{
+           if(result == null ) {
+               Log.d("FMDIGILAB 40", "Null Search Result");
+           } else {
+               Log.d("FMDIGILAB 40", "Got Search Result");
+           }
+        });
+
         completedSurveys = view.findViewById(R.id.surveys_completed);
         totalWins = view.findViewById(R.id.total_wins);
 
@@ -97,6 +124,7 @@ public class ProfileFragment extends Fragment {
         totalWins.setText("0");
 
         editUser.setOnClickListener(v -> Toast.makeText(getContext(), "Go to edit page", Toast.LENGTH_LONG).show());
+        searchViewModel.search("botswana");
         return view;
     }
 

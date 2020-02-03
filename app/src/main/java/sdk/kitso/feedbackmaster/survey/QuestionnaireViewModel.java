@@ -24,7 +24,7 @@ public class QuestionnaireViewModel extends ViewModel {
         (args) -> feedbackMasterQuestionnaireApi.getQuestions(args.getSurveyReference(), args.getBusinessReference())
     );
 
-    public LiveData<NetworkState> networkState = Transformations.switchMap(getQuestionsArgs,
+    public LiveData<NetworkState> networkState = Transformations.switchMap(getNetworkArgs,
             args -> feedbackMasterQuestionnaireApi.getNetworkState()
     );
 
@@ -42,20 +42,12 @@ public class QuestionnaireViewModel extends ViewModel {
         getQuestionsArgs.setValue(new GetQuestionArgs(surveyReference, businessReference));
         getNetworkArgs.setValue(getNetworkArgs.getValue()+1);
         reload = () -> getQuestionsFromServer(surveyReference, businessReference);
-        //questionnaire = feedbackMasterQuestionnaireApiFactory.getMutableLiveData().getValue().getQuestions(surveyReference, businessReference);
-        //networkState = Transformations.switchMap(feedbackMasterQuestionnaireApiFactory.getMutableLiveData(),
-        //        feedbackMasterQuestionnaireApi1 -> feedbackMasterQuestionnaireApi1.getNetworkState());
-        //networkState = feedbackMasterQuestionnaireApiFactory.getMutableLiveData().getValue().getNetworkState();
     }
 
     public void sendAnswerToServer(QuestionnaireAnswer answer) {
         getQuestionnaireAnswerArgs.setValue(answer);
         getNetworkArgs.setValue(getNetworkArgs.getValue()+1);
         reload = () -> sendAnswerToServer(answer);
-        //answerResponse = Transformations.switchMap(feedbackMasterQuestionnaireApiFactory.getMutableLiveData(),
-        //        feedbackMasterQuestionnaireApi -> feedbackMasterQuestionnaireApi.sendAnswers(answer));
-        //networkState = Transformations.switchMap(feedbackMasterQuestionnaireApiFactory.getMutableLiveData(),
-        //        feedbackMasterQuestionnaireApi -> feedbackMasterQuestionnaireApi.getNetworkState());
     }
 
     public void retry() {
