@@ -1,7 +1,5 @@
 package sdk.kitso.feedbackmaster.survey;
 
-import android.util.Log;
-
 import java.util.List;
 
 import sdk.kitso.feedbackmaster.model.AnswersItem;
@@ -24,7 +22,6 @@ public class QuestionController {
     public void setQuestions(List<QuestionsItem> questions) {
         this.questions = questions;
         this.maxQuestions = this.questions.size();
-        Log.d("FMDIGILAB", "MAX Questions : "+this.maxQuestions);
         this.listIterator = -1;
     }
 
@@ -38,7 +35,6 @@ public class QuestionController {
     public QuestionsItem nextQuestion() {
         this.listIterator += 1;
         if(this.listIterator < this.maxQuestions) {
-            Log.d("FMDIGILAB", "Iterator : "+this.listIterator+" MaxQ : "+this.maxQuestions);
             this.currentQuestion = this.questions.get(this.listIterator);
             availableAnswers = this.currentQuestion.getAnswers();
             return this.currentQuestion;

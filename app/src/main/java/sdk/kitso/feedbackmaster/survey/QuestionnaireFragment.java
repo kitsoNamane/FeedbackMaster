@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
@@ -60,13 +61,13 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     TextInputEditText shortAnswer;
     Calendar c = Calendar.getInstance();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    MaterialTextView questionId;
     String start_date;
     String end_date;
     Chronometer stopWatch;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    QuestionnaireViewModel questionnaireViewModel;
 
     public QuestionnaireFragment() {
         // Required empty public constructor
@@ -111,6 +112,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         questionView = view.findViewById(R.id.question_showcase);
         questionTitle = view.findViewById(R.id.question_title);
         nextQuestion = view.findViewById(R.id.next_question);
+        questionId = view.findViewById(R.id.question_id);
         stopWatch = view.findViewById(R.id.stop_watch);
 
         nextQuestion.setVisibility(View.GONE);
@@ -194,6 +196,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         displayContinueButton(false);
         Log.d("FMDIGILAB 24", questionController.currentQuestion.getSurveyQuestiontype().getRef());
         questionTitle.setText(questionController.currentQuestion.getCaption());
+        questionId.setText(String.format(Locale.getDefault()," %d / %d", questionController.listIterator+1, questionController.maxQuestions));
         switch(questionController.currentQuestion.getSurveyQuestiontype().getRef()){
             case Globals.SINGLE_SELECT:
             case Globals.TRUE_OR_FALSE:
@@ -239,24 +242,21 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                     questionContent = setQuestionContent(R.layout.ten_rating_stars);
                     ratingBar = questionContent.findViewById(R.id.ten_rating_bar);
                 }
-                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                    @Override
-                    public void onRatingChanged(RatingBar _ratingBar, float rating, boolean fromUser) {
-                        int index = (int)(rating - 1);
-                        if(index < 0) {
-                            nextQuestion.setVisibility(View.GONE);
-                            return;
-                        }
-                        answer = new Answer();
-                        answer.setQuestion(questionController.currentQuestion.getRef());
-                        answerData = new AnswerData();
-                        answerData.setRef(questionController.availableAnswers.get(index).getRef());
-                        answerData.setText(questionController.availableAnswers.get(index).getCaption());
-                        answerData.setListItem(questionController.availableAnswers.get(index).getRef());
-                        answer.setAnswerData(answerData);
-                        answers.add(answer);
-                        displayContinueButton(true);
+                ratingBar.setOnRatingBarChangeListener((_ratingBar, rating, fromUser) -> {
+                    int index = (int)(rating - 1);
+                    if(index < 0) {
+                        nextQuestion.setVisibility(View.GONE);
+                        return;
                     }
+                    answer = new Answer();
+                    answer.setQuestion(questionController.currentQuestion.getRef());
+                    answerData = new AnswerData();
+                    answerData.setRef(questionController.availableAnswers.get(index).getRef());
+                    answerData.setText(questionController.availableAnswers.get(index).getCaption());
+                    answerData.setListItem(questionController.availableAnswers.get(index).getRef());
+                    answer.setAnswerData(answerData);
+                    answers.add(answer);
+                    displayContinueButton(true);
                 });
                 questionView.removeAllViews();
                 questionView.addView(questionContent);
