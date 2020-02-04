@@ -1,7 +1,6 @@
 package sdk.kitso.feedbackmaster.profile;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,9 @@ import com.google.android.material.textview.MaterialTextView;
 import java.util.Locale;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.survey.SearchViewModel;
 
 
 /**
@@ -89,30 +86,6 @@ public class ProfileFragment extends Fragment {
         viewAge.setText(Integer.toString(MainActivity.profile.getAge()));
         viewGender.setText(MainActivity.profile.getGender());
 
-        SearchViewModel searchViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
-        searchViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
-            switch (networkState.getStatus()) {
-                case FAILED:
-                    Log.d("FMDIGILAB 40", "Network Failed");
-                    break;
-                case SUCCESS:
-                    Log.d("FMDIGILAB 40", "Network Success");
-                    break;
-                case RUNNING:
-                default:
-                    Log.d("FMDIGILAB 40", "Network Success");
-                    break;
-            }
-        });
-
-        searchViewModel.getSearchResults().observe(getViewLifecycleOwner(), result->{
-           if(result == null ) {
-               Log.d("FMDIGILAB 40", "Null Search Result");
-           } else {
-               Log.d("FMDIGILAB 40", "Got Search Result");
-           }
-        });
-
         completedSurveys = view.findViewById(R.id.surveys_completed);
         totalWins = view.findViewById(R.id.total_wins);
 
@@ -124,47 +97,6 @@ public class ProfileFragment extends Fragment {
         totalWins.setText("0");
 
         editUser.setOnClickListener(v -> Toast.makeText(getContext(), "Go to edit page", Toast.LENGTH_LONG).show());
-        searchViewModel.search("botswana");
         return view;
     }
-
-
-
-    /** TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-    */
 }

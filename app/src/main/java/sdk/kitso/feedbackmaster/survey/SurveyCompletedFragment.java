@@ -54,7 +54,6 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
     private String mParam1;
     private String mParam2;
 
-
     public SurveyCompletedFragment() {
         // Required empty public constructor
     }
@@ -87,6 +86,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
 
         questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
             switch (networkState.getStatus()) {
+                case SUCCESS:
                 case FAILED:
                     //disableBottomNavigation();
                     showProgressBar(View.INVISIBLE);
@@ -96,8 +96,6 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                     //disableBottomNavigation();
                     showProgressBar(View.VISIBLE);
                     break;
-                case SUCCESS:
-                    showProgressBar(View.INVISIBLE);
                 default:
                     // stop rendering loading animation
                     //enableBottomNavigation();

@@ -3,7 +3,6 @@ package sdk.kitso.feedbackmaster;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -71,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
             pagedAdapter.submitList(pagedList);
         });
 
-
         surveyViewModel.getNetworkState().observe(this, networkState->{
             pagedAdapter.setNetworkState(networkState);
             switch (navController.getCurrentDestination().getId()) {
@@ -88,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -97,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         navView.setOnNavigationItemReselectedListener(item -> {
             // Do nothing
         });
-
 
         navController.addOnDestinationChangedListener((navController, navDestination, bundle) -> {
             switch (navDestination.getId()) {
@@ -112,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     navView.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
-                    Toast.makeText(MainActivity.this, "I'M NOT AT Questions", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -124,6 +118,4 @@ public class MainActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navController, (DrawerLayout) null);
     }
-
-
 }

@@ -43,8 +43,6 @@ public class SearchFragment extends Fragment {
     TextInputEditText searchKeyword;
     ProgressBar searchProgress;
     TextInputLayout textInputLayout;
-    TextInputLayout textInputCustomEndIcon;
-    TextInputLayout textInputCustomStartIcon;
     CountDownTimer countDownTimer;
 
     // TODO: Rename and change types of parameters
@@ -114,17 +112,20 @@ public class SearchFragment extends Fragment {
                     countDownTimer = new CountDownTimer(500, 1) {
                         @Override
                         public void onTick(long millisUntilFinished) {
-
+                            if(s.length() < 3) return;
                         }
 
                         @Override
                         public void onFinish() {
+                            if(s.length() < 3) return;
                             searchViewModel.search(s.toString());
                             searchProgress.setVisibility(View.VISIBLE);
                         }
                     }.start();
-
                 } else if(count < 3){
+                    searchAdapter.clearSearchResult();
+                    searchProgress.setVisibility(View.GONE);
+                } else {
                     searchAdapter.clearSearchResult();
                     searchProgress.setVisibility(View.GONE);
                 }
@@ -132,7 +133,6 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
         return view;

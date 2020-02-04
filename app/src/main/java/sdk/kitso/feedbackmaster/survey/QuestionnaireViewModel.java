@@ -1,7 +1,5 @@
 package sdk.kitso.feedbackmaster.survey;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -38,7 +36,6 @@ public class QuestionnaireViewModel extends ViewModel {
     }
 
     public void getQuestionsFromServer(String surveyReference, String businessReference) {
-        Log.d("FMDIGILAB", "getting questions");
         getQuestionsArgs.setValue(new GetQuestionArgs(surveyReference, businessReference));
         getNetworkArgs.setValue(getNetworkArgs.getValue()+1);
         reload = () -> getQuestionsFromServer(surveyReference, businessReference);

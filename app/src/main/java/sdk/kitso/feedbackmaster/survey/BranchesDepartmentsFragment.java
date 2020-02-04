@@ -1,7 +1,6 @@
 package sdk.kitso.feedbackmaster.survey;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +88,7 @@ public class BranchesDepartmentsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -97,7 +97,6 @@ public class BranchesDepartmentsFragment extends Fragment {
         questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
             switch (networkState.getStatus()) {
                 case FAILED:
-                    Log.d("FMDIGILAB 33", "Access Denied");
                     if (networkState.getMsg().equalsIgnoreCase("Access Denied")) {
                         delayedDialogBox(networkState.getMsg());
                     }
@@ -113,7 +112,6 @@ public class BranchesDepartmentsFragment extends Fragment {
             }
         });
 
-
         questionnaireViewModel.getQuestionnaire().observe(getViewLifecycleOwner(), questionnaire->{
             if(questionnaire != null && questionnaire.getQuestionBusiness().getRef().equals(businessReference)) {
                 BranchesDepartmentsFragmentDirections.ActionBeginSurvey actionBeginSurvey = BranchesDepartmentsFragmentDirections.actionBeginSurvey(
@@ -121,8 +119,6 @@ public class BranchesDepartmentsFragment extends Fragment {
                 );
                 MainActivity.navController.navigate(actionBeginSurvey);
             } else {
-                Log.d("FMDIGILAB 35", "Still Null");
-                Log.d("FMDIGILAB 34", surveyReference+" "+businessReference);
             }
         });
         this.start.setOnClickListener(v -> {
@@ -130,10 +126,8 @@ public class BranchesDepartmentsFragment extends Fragment {
             MainActivity.questionnaireAnswer.setCampaign(surveyReference);
             MainActivity.questionnaireAnswer.setCountry(item.getBusiness().getBusinessData().getCountry().getCountryData().getKey());
             questionnaireViewModel.getQuestionsFromServer(surveyReference, businessReference);
-            Log.d("FMDIGILAB 34", surveyReference+" "+businessReference);
         });
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -169,12 +163,8 @@ public class BranchesDepartmentsFragment extends Fragment {
         if(surveyReference == null && businessReference == null) {
             this.start.setVisibility(View.GONE);
         }
-
         surveyReference = item.getReference();
         renderBranches();
-
-
-
         return view;
     }
 
@@ -183,7 +173,6 @@ public class BranchesDepartmentsFragment extends Fragment {
         if(children.size() > 0) {
             for(ChildrenDataItem child : children) {
                 chipItem = (Chip) layoutInflater.inflate(R.layout.category_chip, getSelectedCategories, false);
-                Log.d("FMDIGITAL", child.getName());
                 chipItem.setText(child.getName());
 
                 chipItem.setOnClickListener(v -> {
@@ -227,7 +216,6 @@ public class BranchesDepartmentsFragment extends Fragment {
         if(children.size() > 0) {
             for(BranchDataItem child : children) {
                 chipItem = (Chip) layoutInflater.inflate(R.layout.category_chip, getSelectedCategories, false);
-                Log.d("FMDIGITAL Dep", child.getName());
                 chipItem.setText(child.getName());
                 chipItem.setOnClickListener(v -> {
                     Chip selectedChip = (Chip) v;

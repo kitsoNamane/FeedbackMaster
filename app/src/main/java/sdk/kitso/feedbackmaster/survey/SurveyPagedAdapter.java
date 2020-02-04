@@ -1,6 +1,5 @@
 package sdk.kitso.feedbackmaster.survey;
 
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -73,9 +72,5 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
         } else if (newExtraRow && previousState != newNetworkState) {
             notifyItemChanged(getItemCount() - 1);
         }
-    }
-
-    interface OnSurveyItemClickedListener {
-        void onItemClicked(View view, DataItem dataItem);
     }
 }

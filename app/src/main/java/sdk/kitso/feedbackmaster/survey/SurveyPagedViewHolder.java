@@ -1,6 +1,5 @@
 package sdk.kitso.feedbackmaster.survey;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,6 @@ public class SurveyPagedViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(DataItem item) {
-        Log.d("FMDIGILAB", "Question : "+item.getQuestions().getNumberOfQuestion());
         item.setChecked(false);
         survey.setText(item.getName());
         company.setText(item.getBusiness().getBusinessData().getName());
@@ -60,9 +58,6 @@ public class SurveyPagedViewHolder extends RecyclerView.ViewHolder {
 
     public void gotoQuestionnaire(DataItem item) {
         List<ChildrenDataItem> children = item.getBusiness().getBusinessData().getChildren().getData();
-        Log.d("FMDIGILAB 40", "ParentId ->"+viewId);
-        Log.d("FMDIGILAB 40", "Surveys ->"+R.id.survey_list);
-        Log.d("FMDIGILAB 40", "Search ->"+R.id.search_result_list);
         switch (viewId) {
             case R.id.search_result_list:
                 SearchFragmentDirections.ActionDepartments actionDepartments = SearchFragmentDirections.actionDepartments(item, null, null, null);

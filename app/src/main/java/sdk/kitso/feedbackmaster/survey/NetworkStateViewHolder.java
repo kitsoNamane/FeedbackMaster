@@ -18,10 +18,6 @@ public class NetworkStateViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void bind() {
-        loadMore.setOnClickListener(v -> SurveysFragment.retry());
-    }
-
     public static NetworkStateViewHolder create(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.load_more, parent, false

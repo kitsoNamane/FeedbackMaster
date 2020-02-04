@@ -1,7 +1,5 @@
 package sdk.kitso.feedbackmaster.repository;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,12 +39,9 @@ public class FeedbackMasterQuestionnaireApi {
             @Override
             public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
                 if(response.isSuccessful() && response.body().isSuccess()) {
-                    Log.d("FMDIGILAB 25", response.message());
-                    Log.d("FMDIGILAB 25", response.body().toString());
                     answerResponse.postValue(response.body());
                     networkState.postValue(NetworkState.LOADED);
                 } else {
-                    Log.d("FMDIGILAB 20", response.body().getMessage().get(0).toString());
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
                             response.body().getMessage().get(0).toString())
                     );
@@ -58,7 +53,6 @@ public class FeedbackMasterQuestionnaireApi {
             @Override
             public void onFailure(Call<AnswerResponse> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
-                Log.d("FMDIGILAB 27", errorMessage);
                 questionnaire.postValue(null);
                 answerResponse.postValue(null);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
@@ -77,7 +71,6 @@ public class FeedbackMasterQuestionnaireApi {
             return _getQuestionsFromServer(surveyReference, businessReference);
         } else {
             questionnaire.postValue(null);
-            Log.d("FMDIGILAB 34", "Null Null Null");
             return questionnaire;
         }
     }
@@ -88,14 +81,9 @@ public class FeedbackMasterQuestionnaireApi {
             @Override
             public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) {
                 if(response.isSuccessful() && response.body().isSuccess()) {
-                    Log.d("FMDIGILAB 20", response.message());
-                    assert response.body() != null;
-                    Log.d("FMDIGILAB 23", response.body().toString());
-                    Log.d("FMDIGILAB 23", response.body().getResult().toString());
                     networkState.postValue(NetworkState.LOADED);
                     questionnaire.postValue(response.body().getResult());
                 } else {
-                    Log.d("FMDIGILAB 20", response.body().getMessage().get(0).toString());
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
                             response.body().getMessage().get(0).toString())
                     );
@@ -107,7 +95,6 @@ public class FeedbackMasterQuestionnaireApi {
             @Override
             public void onFailure(Call<QuestionResponse> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
-                Log.d("FMDIGILAB 20", errorMessage);
                 questionnaire.postValue(null);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 reload = () -> call.request();
@@ -123,6 +110,7 @@ public class FeedbackMasterQuestionnaireApi {
     public MutableLiveData<AnswerResponse> getAnswerResponse() {
         return answerResponse;
     }
+
     public MutableLiveData<NetworkState> getNetworkState() {
         return networkState;
     }

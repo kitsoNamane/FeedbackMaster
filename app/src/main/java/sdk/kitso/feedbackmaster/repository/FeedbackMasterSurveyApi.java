@@ -2,21 +2,11 @@ package sdk.kitso.feedbackmaster.repository;
 
 import android.content.Context;
 
-import com.google.gson.GsonBuilder;
-
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import sdk.kitso.feedbackmaster.model.DataItem;
 
 public class FeedbackMasterSurveyApi {
-
-    public static GsonConverterFactory customConverterFactory() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(DataItem.class, new SurveyDeserializer());
-        return GsonConverterFactory.create(gsonBuilder.create());
-    }
-
     public static FeedbackMasterSurveyApiService getService(String device_uuid, Context context) {
         DeviceUUIDInterceptor deviceUUIDInterceptor = new DeviceUUIDInterceptor(device_uuid);
         ConnectivityInterceptor connectivityInterceptor = new ConnectivityInterceptor(context);

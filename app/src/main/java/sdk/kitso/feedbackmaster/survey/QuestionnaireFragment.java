@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,7 +132,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
         nextQuestion.setOnClickListener(v -> {
             if(questionController.currentQuestion.getSurveyQuestiontype().getRef().equals(Globals.OPEN_ENDED)) {
-                Log.d("FMDIGILAB 36", "Writing String");
                 answer = new Answer();
                 answer.setQuestion(questionController.currentQuestion.getRef());
                 answerData = new AnswerData();
@@ -142,8 +140,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 //answerData.setListItem("");
                 answer.setAnswerData(answerData);
                 answers.add(answer);
-            } else {
-                Log.d("FMDIGILAB 36", "Current Question Short Answer");
             }
 
             questionController.nextQuestion();
@@ -194,7 +190,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     public void renderQuestion() {
         //View view = questionNav.findViewById(R.id.dummy);
         displayContinueButton(false);
-        Log.d("FMDIGILAB 24", questionController.currentQuestion.getSurveyQuestiontype().getRef());
         questionTitle.setText(questionController.currentQuestion.getCaption());
         questionId.setText(String.format(Locale.getDefault()," %d / %d", questionController.listIterator+1, questionController.maxQuestions));
         switch(questionController.currentQuestion.getSurveyQuestiontype().getRef()){
