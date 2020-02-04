@@ -1,6 +1,7 @@
 package sdk.kitso.feedbackmaster.survey;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.DataItem;
 
@@ -43,6 +45,7 @@ public class SearchFragment extends Fragment {
     TextInputLayout textInputLayout;
     TextInputLayout textInputCustomEndIcon;
     TextInputLayout textInputCustomStartIcon;
+    CountDownTimer countDownTimer;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -95,6 +98,11 @@ public class SearchFragment extends Fragment {
         recyclerView.setAdapter(searchAdapter);
         searchProgress.setVisibility(View.GONE);
 
+        textInputLayout.setStartIconOnClickListener(v -> {
+            SurveysFragment.hideKeyboard(getActivity());
+            MainActivity.navController.navigateUp();
+        });
+
         searchKeyword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -103,9 +111,20 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(count >= 3) {
-                    searchViewModel.search(s.toString());
-                    searchProgress.setVisibility(View.VISIBLE);
-                } else if(count == 0){
+                    countDownTimer = new CountDownTimer(500, 1) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            searchViewModel.search(s.toString());
+                            searchProgress.setVisibility(View.VISIBLE);
+                        }
+                    }.start();
+
+                } else if(count < 3){
                     searchAdapter.clearSearchResult();
                     searchProgress.setVisibility(View.GONE);
                 }
@@ -146,4 +165,5 @@ public class SearchFragment extends Fragment {
             }
         });
     }
+
 }
