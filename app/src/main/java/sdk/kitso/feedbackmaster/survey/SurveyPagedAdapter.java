@@ -41,16 +41,6 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         DataItem item = getItem(position);
         ((SurveyPagedViewHolder)holder).bind(item);
-        /**
-        if (item.getChecked() == true && ((SurveyPagedViewHolder) holder).cardView.isChecked() == true) {
-            ((SurveyPagedViewHolder) holder).setVisibility(View.VISIBLE);
-        } else if(item.getChecked()) {
-            item.setChecked(!item.getChecked());
-        }else {
-            ((SurveyPagedViewHolder) holder).cardView.setChecked(false);
-            ((SurveyPagedViewHolder) holder).setVisibility(View.GONE);
-        }
-         */
     }
 
     //private NetworkState.Status getNetworkState() {

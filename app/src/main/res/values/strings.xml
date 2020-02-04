@@ -47,4 +47,5 @@
     <string name="by_continuing_you_agree_to_the_terms_amp_conditions"><![CDATA[By continuing, you agree to the terms & conditions]]></string>
     <string name="load_more">Try Again</string>
     <string name="uploading_your_answers">Uploading your answers...</string>
+    <string name="search_survey">search survey</string>
 </resources>

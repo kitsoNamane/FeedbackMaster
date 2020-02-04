@@ -24,6 +24,7 @@ public class SurveyPagedViewHolder extends RecyclerView.ViewHolder {
     MaterialTextView numberOfQuestions;
     MaterialTextView numberOfRespondents;
     MaterialTextView surveyExpiry;
+    static int viewId;
 
 
     public SurveyPagedViewHolder(@NonNull View view) {
@@ -53,20 +54,24 @@ public class SurveyPagedViewHolder extends RecyclerView.ViewHolder {
         View view = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.card_survey, parent, false
         );
+        viewId = parent.getId();
         return new SurveyPagedViewHolder(view);
     }
 
     public void gotoQuestionnaire(DataItem item) {
         List<ChildrenDataItem> children = item.getBusiness().getBusinessData().getChildren().getData();
-        Log.d("FMDIGILAB", "NUMBER OF Branches : "+children.size());
-        //if(children.size() > 0) {
-            // goto select Branches and/or departments
-        SurveysFragmentDirections.ActionBranches actionBranches = SurveysFragmentDirections.actionBranches(item, null, null, null);
-        MainActivity.navController.navigate(actionBranches);
-        //} else {
-            // go straight to questionnaire
-        //    SurveysFragmentDirections.ActionStartSurvey actionStartSurvey = SurveysFragmentDirections.actionStartSurvey(item);
-        //    MainActivity.navController.navigate(actionStartSurvey);
-        //}
+        Log.d("FMDIGILAB 40", "ParentId ->"+viewId);
+        Log.d("FMDIGILAB 40", "Surveys ->"+R.id.survey_list);
+        Log.d("FMDIGILAB 40", "Search ->"+R.id.search_result_list);
+        switch (viewId) {
+            case R.id.search_result_list:
+                SearchFragmentDirections.ActionDepartments actionDepartments = SearchFragmentDirections.actionDepartments(item, null, null, null);
+                MainActivity.navController.navigate(actionDepartments);
+                break;
+            case R.id.survey_list:
+            default:
+                SurveysFragmentDirections.ActionBranches actionBranches = SurveysFragmentDirections.actionBranches(item, null, null, null);
+                MainActivity.navController.navigate(actionBranches);
+        }
     }
 }
