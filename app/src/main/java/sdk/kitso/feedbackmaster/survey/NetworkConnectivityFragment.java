@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 
 import com.google.android.material.button.MaterialButton;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.MainActivity;
@@ -75,6 +76,9 @@ public class NetworkConnectivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_network_connectivity, container, false);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Internet Connection");
         retry = view.findViewById(R.id.try_again);
         progressBar = view.findViewById(R.id.progressBar);
         group = view.findViewById(R.id.network_error_group);

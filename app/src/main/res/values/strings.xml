@@ -48,4 +48,6 @@
     <string name="load_more">Try Again</string>
     <string name="uploading_your_answers">Uploading your answers...</string>
     <string name="search_survey">search for surveys</string>
+    <string name="surveys">surveys</string>
+    <string name="profile_nav">profile</string>
 </resources>

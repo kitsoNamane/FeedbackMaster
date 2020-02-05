@@ -13,6 +13,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import sdk.kitso.feedbackmaster.MainActivity;
@@ -134,6 +135,9 @@ public class BranchesDepartmentsFragment extends Fragment {
                              Bundle savedInstanceState) {
         branchesDepartmentsFragmentArgs = BranchesDepartmentsFragmentArgs.fromBundle(getArguments());
         View view =  inflater.inflate(R.layout.fragment_branches_departments, container, false);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Organisation Categories");
         company = view.findViewById(R.id.company_name);
         survey = view.findViewById(R.id.survey_title);
         categoryHelpText = view.findViewById(R.id.category_help_text);
@@ -146,12 +150,6 @@ public class BranchesDepartmentsFragment extends Fragment {
         start = view.findViewById(R.id.start_survey);
         item = branchesDepartmentsFragmentArgs.getCurrentSurvey();
 
-        materialAlertDialogBuilder = new MaterialAlertDialogBuilder(
-                this.getContext(),
-                R.style.ThemeOverlay_MaterialComponents_Dialog_Alert
-        );
-        materialAlertDialogBuilder.setTitle("Feedback Master");
-        materialAlertDialogBuilder.setCancelable(true);
 
         survey.setText(this.item.getName());
         company.setText(this.item.getBusiness().getBusinessData().getName());
@@ -243,7 +241,10 @@ public class BranchesDepartmentsFragment extends Fragment {
     }
 
     public void delayedDialogBox(String message) {
-        materialAlertDialogBuilder.setMessage(message)
+     new MaterialAlertDialogBuilder( this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+        .setTitle("Feedback Master")
+        .setCancelable(true)
+        .setMessage(message)
                 .setPositiveButton("Back", (dialog, which)->{
                     dialog.dismiss();
                     MainActivity.navController.popBackStack();

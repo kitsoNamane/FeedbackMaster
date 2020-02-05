@@ -59,9 +59,10 @@ public class MainActivity extends AppCompatActivity {
 
         questionnaireAnswer.setDevice(androidId);
 
+        feedbackMasterSurveyApiService = FeedbackMasterSurveyApi.getService(androidId, this);
+
         surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
 
-        feedbackMasterSurveyApiService = FeedbackMasterSurveyApi.getService(androidId, this);
         surveyViewModel.init();
 
         pagedAdapter = new SurveyPagedAdapter();

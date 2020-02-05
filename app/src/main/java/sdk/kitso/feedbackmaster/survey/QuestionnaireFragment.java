@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.LayoutRes;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
@@ -107,6 +108,9 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view =  inflater.inflate(R.layout.fragment_question, container, false);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Questionnaire");
 
         questionView = view.findViewById(R.id.question_showcase);
         questionTitle = view.findViewById(R.id.question_title);

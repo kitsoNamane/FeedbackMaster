@@ -14,6 +14,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Locale;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -132,6 +133,10 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view  = inflater.inflate(R.layout.fragment_survey_completed, container, false);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Upload Answers");
+
         goHome = view.findViewById(R.id.go_home_text);
         uploadingAnswers = view.findViewById(R.id.uploading_answers);
         completedSurveys = view.findViewById(R.id.surveys_completed);
@@ -175,7 +180,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                    .setTitle("Feedback Master")
                    .setCancelable(true)
                    .setMessage("Try Again Later")
-                   .setPositiveButton("", ((dialog, which) -> {
+                   .setNegativeButton("", ((dialog, which) -> {
                        goHome.setVisibility(View.VISIBLE);
                        dialog.cancel();
                        MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());

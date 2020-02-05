@@ -12,12 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
-import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.MainActivity;
@@ -40,8 +40,8 @@ public class SurveysFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private RecyclerView.LayoutManager layoutManager;
-    private FlexboxLayoutManager flexboxLayoutManager;
-    private Toolbar toolbar;
+    private SurveyViewModel surveyViewModel;
+    private SurveyPagedAdapter pagedAdapter;
     private static MaterialCardView reloadCard;
     private Chip reloadChip;
 
@@ -108,11 +108,45 @@ public class SurveysFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        surveyViewModel = ViewModelProviders.of(getActivity()).get(SurveyViewModel.class);
+
+        surveyViewModel.init();
+
+        pagedAdapter = new SurveyPagedAdapter();
+
+        surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
+            pagedAdapter.submitList(pagedList);
+        });
+
+        surveyViewModel.getNetworkState().observe(this, networkState->{
+            pagedAdapter.setNetworkState(networkState);
+            /**
+            switch (navController.getCurrentDestination().getId()) {
+                case R.id.branchesDepartmentsFragment:
+                    // do something here
+                    break;
+                case R.id.signUpFragment:
+                    break;
+                case R.id.questionFragment:
+                    break;
+                case R.id.navigation_survey:
+                default:
+            }
+             */
+             SurveysFragment.toggleReload(networkState.getStatus());
+         });
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_surveys, container, false);
         setHasOptionsMenu(true);
-
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Surveys List");
         reloadCard = view.findViewById(R.id.reloadCard);
         reloadChip = view.findViewById(R.id.load_more);
         reloadChip.setOnClickListener(v -> retry());
@@ -124,7 +158,7 @@ public class SurveysFragment extends Fragment {
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(MainActivity.pagedAdapter);
+        recyclerView.setAdapter(pagedAdapter);
 
         return view;
     }

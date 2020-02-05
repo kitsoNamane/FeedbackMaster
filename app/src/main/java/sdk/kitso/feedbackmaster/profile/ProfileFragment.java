@@ -11,6 +11,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Locale;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
@@ -78,6 +79,9 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Profile");
         viewPhone = view.findViewById(R.id.phone_view);
         editUser = view.findViewById(R.id.edit_profile);
         viewAge = view.findViewById(R.id.age_input);

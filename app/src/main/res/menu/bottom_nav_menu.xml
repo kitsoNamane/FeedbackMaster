@@ -4,10 +4,10 @@
     <item
         android:id="@+id/navigation_survey"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="survey"/>
+        android:title="@string/surveys" />
 
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_account_box_black_24dp"
-        android:title="profile"/>
+        android:title="@string/profile_nav"/>
 </menu>
