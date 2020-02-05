@@ -112,32 +112,22 @@ public class SurveysFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         surveyViewModel = ViewModelProviders.of(getActivity()).get(SurveyViewModel.class);
 
-        surveyViewModel.init();
-
         pagedAdapter = new SurveyPagedAdapter();
 
-        surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
-            pagedAdapter.submitList(pagedList);
+        surveyViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState->{
+            pagedAdapter.setNetworkState(networkState);
+            SurveysFragment.toggleReload(networkState.getStatus());
         });
 
-        surveyViewModel.getNetworkState().observe(this, networkState->{
-            pagedAdapter.setNetworkState(networkState);
-            /**
-            switch (navController.getCurrentDestination().getId()) {
-                case R.id.branchesDepartmentsFragment:
-                    // do something here
-                    break;
-                case R.id.signUpFragment:
-                    break;
-                case R.id.questionFragment:
-                    break;
-                case R.id.navigation_survey:
-                default:
+        surveyViewModel.getSurveyLiveData().observe(getViewLifecycleOwner(), pagedList->{
+            if(pagedList != null) {
+                pagedAdapter.submitList(pagedList);
+                pagedAdapter.notifyDataSetChanged();
             }
-             */
-             SurveysFragment.toggleReload(networkState.getStatus());
-         });
+        });
 
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(pagedAdapter);
     }
 
     @Override
@@ -157,8 +147,6 @@ public class SurveysFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(pagedAdapter);
 
         return view;
     }

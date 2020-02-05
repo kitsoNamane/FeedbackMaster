@@ -16,30 +16,26 @@ import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataFactory;
 
 
 public class SurveyViewModel extends ViewModel {
-    private Executor executor;
-    private LiveData<NetworkState> networkState;
-    private LiveData<PagedList<DataItem>> surveyLiveData;
-    private FeedbackMasterNetworkDataFactory feedbackMasterNetworkDataFactory;
     private int pageSize = 10;
+    private Executor executor = Executors.newFixedThreadPool(5);
 
-    public SurveyViewModel() {
-        executor = Executors.newFixedThreadPool(5);
-        feedbackMasterNetworkDataFactory = new FeedbackMasterNetworkDataFactory(MainActivity.feedbackMasterSurveyApiService);
-        networkState = Transformations.switchMap(
+    private FeedbackMasterNetworkDataFactory feedbackMasterNetworkDataFactory = new FeedbackMasterNetworkDataFactory(
+            MainActivity.feedbackMasterSurveyApiService
+    );
+
+    private LiveData<NetworkState>  networkState = Transformations.switchMap(
                 feedbackMasterNetworkDataFactory.getMutableLiveData(), dataSource-> dataSource.getNetworkState()
-        );
-        PagedList.Config config = new PagedList.Config.Builder()
-                .setPageSize(pageSize)
-                .setInitialLoadSizeHint(200)
-                .setEnablePlaceholders(true)
-                .build();
-        surveyLiveData = new LivePagedListBuilder(feedbackMasterNetworkDataFactory, config)
+    );
+
+    PagedList.Config config = new PagedList.Config.Builder()
+            .setPageSize(pageSize)
+            .setInitialLoadSizeHint(200)
+            .setEnablePlaceholders(true)
+            .build();
+
+    private LiveData<PagedList<DataItem>>   surveyLiveData = new LivePagedListBuilder(feedbackMasterNetworkDataFactory, config)
                 .setFetchExecutor(executor)
                 .build();
-    }
-
-    public void init() {
-    }
 
     public void retry() {
         Thread thread = new Thread(
@@ -55,5 +51,4 @@ public class SurveyViewModel extends ViewModel {
     public LiveData<PagedList<DataItem>> getSurveyLiveData() {
         return surveyLiveData;
     }
-
 }

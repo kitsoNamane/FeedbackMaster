@@ -1,5 +1,7 @@
 package sdk.kitso.feedbackmaster.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
@@ -47,6 +49,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
                 if(response.isSuccessful() && response.body().isSuccess()) {
                     loadInitialCallback.onResult(response.body().getData().getDataItemList(), null, 2);
                     initialLoading.postValue(NetworkState.LOADED);
+                    Log.d("FMDIGILAB 1", response.body().getData().getDataItemList().toString());
                     networkState.postValue(NetworkState.LOADED);
                 } else {
                     initialLoading.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
@@ -57,6 +60,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
             @Override
             public void onFailure(Call<sdk.kitso.feedbackmaster.model.Response> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
+                Log.d("FMDIGILAB 1", "Initital Error");
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 reload = () -> loadInitial(loadInitialParams, loadInitialCallback);
             }
@@ -76,6 +80,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
               public void onResponse(Call<sdk.kitso.feedbackmaster.model.Response> call, Response<sdk.kitso.feedbackmaster.model.Response> response) {
                   if(response.isSuccessful()) {
                       //SystemClock.sleep(3000);
+                      Log.d("FMDIGILAB 2", "After Loading");
                       loadCallback.onResult(response.body().getData().getDataItemList(), loadParams.key + 1);
                       networkState.postValue(NetworkState.LOADED);
                   } else {
@@ -87,6 +92,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
               public void onFailure(Call<sdk.kitso.feedbackmaster.model.Response> call, Throwable throwable) {
                   String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
                   networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+                  Log.d("FMDIGILAB 2", "After Error");
                   reload = () -> loadAfter(loadParams, loadCallback);
               }
           }

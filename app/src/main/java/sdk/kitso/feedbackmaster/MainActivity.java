@@ -9,7 +9,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
@@ -21,7 +20,6 @@ import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApi;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApiService;
 import sdk.kitso.feedbackmaster.survey.SurveyPagedAdapter;
 import sdk.kitso.feedbackmaster.survey.SurveyViewModel;
-import sdk.kitso.feedbackmaster.survey.SurveysFragment;
 
 public class MainActivity extends AppCompatActivity {
     public static FeedbackMasterDB feedbackMasterDB;
@@ -60,32 +58,6 @@ public class MainActivity extends AppCompatActivity {
         questionnaireAnswer.setDevice(androidId);
 
         feedbackMasterSurveyApiService = FeedbackMasterSurveyApi.getService(androidId, this);
-
-        surveyViewModel = ViewModelProviders.of(this).get(SurveyViewModel.class);
-
-        surveyViewModel.init();
-
-        pagedAdapter = new SurveyPagedAdapter();
-
-        surveyViewModel.getSurveyLiveData().observe(this, pagedList->{
-            pagedAdapter.submitList(pagedList);
-        });
-
-        surveyViewModel.getNetworkState().observe(this, networkState->{
-            pagedAdapter.setNetworkState(networkState);
-            switch (navController.getCurrentDestination().getId()) {
-                case R.id.branchesDepartmentsFragment:
-                    // do something here
-                    break;
-                case R.id.signUpFragment:
-                    break;
-                case R.id.questionFragment:
-                    break;
-                case R.id.navigation_survey:
-                default:
-                    SurveysFragment.toggleReload(networkState.getStatus());
-            }
-        });
 
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
