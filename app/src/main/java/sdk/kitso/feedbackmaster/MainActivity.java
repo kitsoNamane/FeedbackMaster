@@ -7,7 +7,6 @@ import android.view.View;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -28,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     public static Profile profile;
     public static FeedbackMasterSurveyApiService feedbackMasterSurveyApiService;
     public static QuestionnaireAnswer questionnaireAnswer;
-    public static AlertDialog materialAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setElevation(new Float(2));
         final BottomNavigationView navView = findViewById(R.id.nav_view);
 
         navView.setOnNavigationItemReselectedListener(item -> {
@@ -71,11 +70,13 @@ public class MainActivity extends AppCompatActivity {
             switch (navDestination.getId()) {
                 // use the ID of the navigation graph not the ID of the Question fragment
                 case R.id.signUpFragment:
-                case R.id.questionFragment:
                 case R.id.searchFragment:
                 case R.id.surveyCompletedFragment:
                     navView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.GONE);
+                    break;
+                case R.id.questionFragment:
+                    navView.setVisibility(View.GONE);
                     break;
                 default:
                     navView.setVisibility(View.VISIBLE);
