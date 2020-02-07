@@ -3,7 +3,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/gradient"
     android:orientation="horizontal"
     tools:context=".profile.SignUpFragment"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -35,7 +34,7 @@
             android:layout_marginRight="16dp"
             android:gravity="center"
             android:text="@string/feedbackmaster"
-            android:textSize="36sp"
+            android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.66"
@@ -80,6 +79,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:orientation="vertical"
+            app:cardBackgroundColor="#00A29696"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView8">
@@ -199,7 +199,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
-            android:text="continue"
+            android:text="sign up"
             app:layout_constraintBottom_toTopOf="@+id/textView9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -225,19 +225,17 @@
             android:id="@+id/help_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="192dp"
+            android:layout_marginTop="204dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:clickable="true"
+            android:contentDescription="help text"
             android:focusable="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.015"
+            app:layout_constraintHorizontal_bias="0.084"
             app:layout_constraintStart_toEndOf="@+id/textView8"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_009_question"
-            android:contentDescription="help text" />
+            app:srcCompat="@drawable/ic_009_question" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

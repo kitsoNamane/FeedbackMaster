@@ -1,11 +1,9 @@
 package sdk.kitso.feedbackmaster.profile;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -17,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.Utils;
 import sdk.kitso.feedbackmaster.model.Profile;
 
 /**
@@ -95,18 +94,15 @@ public class SignUpFragment extends Fragment {
         male = gender.findViewById(R.id.male);
         female = gender.findViewById(R.id.female);
 
-        continueBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // validate input
-                if(signupPhone(phoneInput)) {
-                    if(signup(ageInput, gender)) {
-                        hideSoftKeyboard(v);
-                        MainActivity.navController.navigate(SignUpFragmentDirections.actionSignUpFragmentPop());
-                    }
-                } else {
-                    signup(ageInput, gender);
+        continueBtn.setOnClickListener(v -> {
+            // validate input
+            if(signupPhone(phoneInput)) {
+                if(signup(ageInput, gender)) {
+                    Utils.hideKeyboard(getActivity());
+                    MainActivity.navController.navigate(SignUpFragmentDirections.actionSignUpFragmentPop());
                 }
+            } else {
+                signup(ageInput, gender);
             }
         });
         return view;
@@ -174,14 +170,5 @@ public class SignUpFragment extends Fragment {
         }
         // Binary End-Gate guarantees that we'll get the right results nomatter the combinations
         return isAgeValid && isGenderValid;
-    }
-
-    public void hideSoftKeyboard(View view) {
-        if (view.requestFocus()) {
-            InputMethodManager imm = (InputMethodManager)
-                    view.getContext().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            //imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
-        }
     }
 }

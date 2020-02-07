@@ -10,8 +10,9 @@ import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.DataItem;
 
 public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.ViewHolder> {
-    private static final int TYPE_PROGRESS = 0;
-    private static final int TYPE_ITEM = 1;
+    private static final int HERO = 0;
+    private static final int ERROR = 1;
+    private static final int SURVEY = 2;
     private NetworkState networkState;
 
     public static final DiffUtil.ItemCallback<DataItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<DataItem>() {
@@ -41,6 +42,17 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, RecyclerView.
         DataItem item = getItem(position);
         ((SurveyPagedViewHolder)holder).bind(item);
     }
+
+   @Override
+   public int getItemViewType(int position) {
+        if(position == 0) {
+            return HERO;
+        }else if(networkState.getStatus() == NetworkState.Status.FAILED) {
+            return ERROR;
+        } else {
+            return SURVEY;
+        }
+   }
 
     //private NetworkState.Status getNetworkState() {
     private boolean getNetworkState() {

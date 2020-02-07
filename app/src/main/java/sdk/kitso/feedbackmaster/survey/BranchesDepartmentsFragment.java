@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.button.MaterialButton;
@@ -93,8 +94,7 @@ public class BranchesDepartmentsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        questionnaireViewModel = ViewModelProviders.of(this).get(QuestionnaireViewModel.class);
-        questionnaireViewModel.init();
+        questionnaireViewModel = ViewModelProviders.of(requireActivity()).get(QuestionnaireViewModel.class);
         questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
             switch (networkState.getStatus()) {
                 case FAILED:
@@ -118,8 +118,8 @@ public class BranchesDepartmentsFragment extends Fragment {
                 BranchesDepartmentsFragmentDirections.ActionBeginSurvey actionBeginSurvey = BranchesDepartmentsFragmentDirections.actionBeginSurvey(
                         branchesDepartmentsFragmentArgs.getCurrentSurvey(), surveyReference, businessReference, questionnaire
                 );
+                questionnaireViewModel.clearNetworkState();
                 MainActivity.navController.navigate(actionBeginSurvey);
-            } else {
             }
         });
         this.start.setOnClickListener(v -> {
@@ -150,6 +150,9 @@ public class BranchesDepartmentsFragment extends Fragment {
         start = view.findViewById(R.id.start_survey);
         item = branchesDepartmentsFragmentArgs.getCurrentSurvey();
 
+        if(getChildFragmentManager().getFragments().size() > 0) {
+            Toast.makeText(this.getContext(), "More Children", Toast.LENGTH_SHORT).show();
+        }
 
         survey.setText(this.item.getName());
         company.setText(this.item.getBusiness().getBusinessData().getName());

@@ -12,7 +12,7 @@ import sdk.kitso.feedbackmaster.model.Result;
 
 public class FeedbackMasterQuestionnaireApi {
 
-    public static FeedbackMasterQuestionnaireApi instance;
+    private static FeedbackMasterQuestionnaireApi instance;
     public Runnable reload;
     private MutableLiveData<NetworkState> networkState;
     private MutableLiveData<Result> questionnaire;
@@ -53,7 +53,6 @@ public class FeedbackMasterQuestionnaireApi {
             @Override
             public void onFailure(Call<AnswerResponse> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
-                questionnaire.postValue(null);
                 answerResponse.postValue(null);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 reload = () -> call.request();
@@ -103,15 +102,11 @@ public class FeedbackMasterQuestionnaireApi {
         return questionnaire;
     }
 
-    public MutableLiveData<Result> getQuestionnaire() {
-        return questionnaire;
-    }
-
-    public MutableLiveData<AnswerResponse> getAnswerResponse() {
-        return answerResponse;
-    }
-
     public MutableLiveData<NetworkState> getNetworkState() {
         return networkState;
+    }
+
+    public void clearNetworkState() {
+        networkState.postValue(new NetworkState(NetworkState.Status.NULL, "Current Value Null"));
     }
 }

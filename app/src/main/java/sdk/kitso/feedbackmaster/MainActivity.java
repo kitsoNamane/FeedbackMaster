@@ -7,6 +7,7 @@ import android.view.View;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -18,17 +19,16 @@ import sdk.kitso.feedbackmaster.model.Profile;
 import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApi;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApiService;
-import sdk.kitso.feedbackmaster.survey.SurveyPagedAdapter;
 import sdk.kitso.feedbackmaster.survey.SurveyViewModel;
 
 public class MainActivity extends AppCompatActivity {
     public static FeedbackMasterDB feedbackMasterDB;
     public static NavController navController;
     public static SurveyViewModel surveyViewModel;
-    public static SurveyPagedAdapter pagedAdapter;
     public static Profile profile;
     public static FeedbackMasterSurveyApiService feedbackMasterSurveyApiService;
     public static QuestionnaireAnswer questionnaireAnswer;
+    public static AlertDialog materialAlertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -2,6 +2,7 @@ package sdk.kitso.feedbackmaster;
 
 public class NetworkState {
     public enum Status{
+        NULL,
         RUNNING,
         SUCCESS,
         FAILED

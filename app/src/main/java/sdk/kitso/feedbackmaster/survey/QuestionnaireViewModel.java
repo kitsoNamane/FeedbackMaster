@@ -16,24 +16,22 @@ public class QuestionnaireViewModel extends ViewModel {
     private FeedbackMasterQuestionnaireApi feedbackMasterQuestionnaireApi = FeedbackMasterQuestionnaireApi.getInstance(MainActivity.feedbackMasterSurveyApiService);
     private MutableLiveData<GetQuestionArgs> getQuestionsArgs = new MutableLiveData<>();
     private MutableLiveData<QuestionnaireAnswer> getQuestionnaireAnswerArgs = new MutableLiveData<>();
-    private MutableLiveData<Integer> getNetworkArgs = new MutableLiveData<>(0);
+    private MutableLiveData<Integer> getNetworkArgs = new MutableLiveData<>(1);
+    private Integer resetNetwork = new Integer(0);
 
     public LiveData<Result> questionnaire = Transformations.switchMap(getQuestionsArgs,
         (args) -> feedbackMasterQuestionnaireApi.getQuestions(args.getSurveyReference(), args.getBusinessReference())
     );
 
     public LiveData<NetworkState> networkState = Transformations.switchMap(getNetworkArgs,
-            args -> feedbackMasterQuestionnaireApi.getNetworkState()
+        (args) ->  feedbackMasterQuestionnaireApi.getNetworkState()
     );
 
     public LiveData<AnswerResponse> answerResponse = Transformations.switchMap(getQuestionnaireAnswerArgs,
-            getQuestionnaireAnswerArgs -> feedbackMasterQuestionnaireApi.sendAnswers(getQuestionnaireAnswerArgs)
+            (getQuestionnaireAnswerArgs) -> feedbackMasterQuestionnaireApi.sendAnswers(getQuestionnaireAnswerArgs)
     );
 
     public Runnable reload;
-
-    public void init() {
-    }
 
     public void getQuestionsFromServer(String surveyReference, String businessReference) {
         getQuestionsArgs.setValue(new GetQuestionArgs(surveyReference, businessReference));
@@ -73,5 +71,10 @@ public class QuestionnaireViewModel extends ViewModel {
             questionnaire = new MutableLiveData<>();
         }
         return questionnaire;
+    }
+
+    public void clearNetworkState() {
+        feedbackMasterQuestionnaireApi.clearNetworkState();
+        getNetworkArgs.setValue(resetNetwork);
     }
 }

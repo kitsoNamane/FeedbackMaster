@@ -2,6 +2,7 @@ package sdk.kitso.feedbackmaster.survey;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,6 @@ import androidx.navigation.Navigation;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
-import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 
 
 /**
@@ -41,7 +41,6 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
     MaterialTextView completedSurveys;
     MaterialTextView totalWins;
     MaterialTextView thankYou;
-    MaterialAlertDialogBuilder materialAlertDialogBuilder;
     FlexboxLayout uploadingAnswers;
     int retryAttempts = 3;
     FlexboxLayout sendAsAnonymous;
@@ -80,21 +79,15 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SurveyCompletedFragmentArgs surveyCompletedFragmentArgs = SurveyCompletedFragmentArgs.fromBundle(getArguments());
-        QuestionnaireAnswer answer = surveyCompletedFragmentArgs.getQuestionnaireAnswers();
-        questionnaireViewModel = ViewModelProviders.of(this).get(QuestionnaireViewModel.class);
-        questionnaireViewModel.init();
+        questionnaireViewModel = ViewModelProviders.of(requireActivity()).get(QuestionnaireViewModel.class);
 
         questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
             switch (networkState.getStatus()) {
                 case SUCCESS:
                 case FAILED:
-                    //disableBottomNavigation();
                     showProgressBar(View.INVISIBLE);
                     break;
                 case RUNNING:
-                    // render loading screen
-                    //disableBottomNavigation();
                     showProgressBar(View.VISIBLE);
                     break;
                 default:
@@ -109,6 +102,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
             } else if(answerResponse.isSuccess() == false) {
                 setVisibility(View.INVISIBLE);
                 delayedDialogBox(answerResponse.getMessage().get(0).toString());
+                Log.d("FMDIGILAB 2", answerResponse.getMessage().toString());
             } else {
                 sendAsAnonymous.setVisibility(View.INVISIBLE);
                 setVisibility(View.VISIBLE);
@@ -116,7 +110,6 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                 trophy.setVisibility(View.VISIBLE);
             }
         });
-
     }
 
     @Override
@@ -159,6 +152,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
         totalWins.setText("0");
         goHome.setOnClickListener(v -> Navigation.findNavController(v).navigate(SurveyCompletedFragmentDirections.actionHome()));
 
+        sendAsAnonymous.setVisibility(View.VISIBLE);
         setVisibility(View.INVISIBLE);
         showProgressBar(View.INVISIBLE);
         trophy.setVisibility(View.INVISIBLE);
@@ -167,41 +161,41 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
     }
 
     public void showProgressBar(int VISIBILITY) {
-        //if(VISIBILITY == View.INVISIBLE) {
-        //    handler.postDelayed(() -> uploadingAnswers.setVisibility(VISIBILITY), 3000);
-        //} else {
         uploadingAnswers.setVisibility(VISIBILITY);
-        //}
     }
 
    public void delayedDialogBox(String message) {
        if(retryAttempts == 1) {
-           new MaterialAlertDialogBuilder(this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
-                   .setTitle("Feedback Master")
-                   .setCancelable(true)
-                   .setMessage("Try Again Later")
+           new MaterialAlertDialogBuilder(
+                   this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+                   .setCancelable(false)
+                   .setTitle("Try Again Later...")
                    .setNegativeButton("", ((dialog, which) -> {
                        goHome.setVisibility(View.VISIBLE);
+                       questionnaireViewModel.clearNetworkState();
                        dialog.cancel();
                        MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
                    }))
-                   .setPositiveButton("Ok ", (dialog, which)->{
+                   .setPositiveButton("Continue", (dialog, which)->{
                        goHome.setVisibility(View.VISIBLE);
+                       questionnaireViewModel.clearNetworkState();
                        dialog.cancel();
                        MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
                    }).show();
        } else {
-           new MaterialAlertDialogBuilder(this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
-                   .setTitle("Feedback Master")
-                   .setCancelable(true)
+           new MaterialAlertDialogBuilder(
+                   this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+                   .setTitle("Re-Submit Answers ?")
+                   .setCancelable(false)
                    .setMessage(message)
                    .setPositiveButton("Retry " + (retryAttempts), (dialog, which) -> {
                        showProgressBar(View.VISIBLE);
                        retry();
                        dialog.cancel();
                    })
-                   .setNegativeButton("Cancel", (dialog, which) -> {
+                   .setNegativeButton("No", (dialog, which) -> {
                        goHome.setVisibility(View.VISIBLE);
+                       questionnaireViewModel.clearNetworkState();
                        uploadingAnswers.setVisibility(View.INVISIBLE);
                        sendAsAnonymous.setVisibility(View.VISIBLE);
                        dialog.cancel();
