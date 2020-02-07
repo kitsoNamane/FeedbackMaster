@@ -3,7 +3,6 @@ package sdk.kitso.feedbackmaster.survey;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -82,9 +81,8 @@ public class SurveysFragment extends Fragment {
 
     }
 
-    public static void retry() {
-        MainActivity.surveyViewModel.retry();
-        Log.d("FMDIGILAB 16", "RETYRING");
+    public void retry() {
+        surveyViewModel.retry();
     }
 
     @Override
@@ -154,9 +152,7 @@ public class SurveysFragment extends Fragment {
     public static void toggleReload(NetworkState.Status status) {
         if(status == NetworkState.Status.FAILED) {
             reloadCard.setVisibility(View.VISIBLE);
-            Log.d("FMDIGILAB 14", "LiveUpdate");
         } else {
-            Log.d("FMDIGILAB 15", "LiveUpdate");
             reloadCard.setVisibility(View.GONE);
         }
     }

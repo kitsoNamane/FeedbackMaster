@@ -2,6 +2,7 @@ package sdk.kitso.feedbackmaster.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 import androidx.room.ColumnInfo;
@@ -26,6 +27,9 @@ public class DataItem implements Serializable {
 	@SerializedName("entries")
 	@Expose
 	private Entries entries;
+
+	@SerializedName("intro")
+	private String intro;
 
 	@SerializedName("status")
 	private int status;
@@ -140,5 +144,13 @@ public class DataItem implements Serializable {
 	@Override
 	public boolean equals(Object other) {
 		return this == other;
+	}
+
+	public String getIntro() {
+		return intro;
+	}
+
+	public void setIntro(String intro) {
+		this.intro = intro;
 	}
 }
