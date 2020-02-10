@@ -65,6 +65,9 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     String start_date;
     String end_date;
     Chronometer stopWatch;
+    MaterialTextView business;
+    MaterialTextView surveryTitle;
+    MaterialTextView businessIntro;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -113,10 +116,23 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Questionnaire");
 
         questionView = view.findViewById(R.id.question_showcase);
+        business = view.findViewById(R.id.company_title);
+        businessIntro = view.findViewById(R.id.intro);
+        surveryTitle = view.findViewById(R.id.survey_title);
         questionTitle = view.findViewById(R.id.question_title);
         nextQuestion = view.findViewById(R.id.next_question);
         questionId = view.findViewById(R.id.question_id);
         stopWatch = view.findViewById(R.id.stop_watch);
+
+
+        surveryTitle.setText(questionFragmentArgs.getCurrentQuestions().getName());
+        business.setText(questionFragmentArgs.getCurrentQuestions().getBusiness().getBusinessData().getName());
+
+        if(questionFragmentArgs.getCurrentQuestions().getIntro() != null) {
+            businessIntro.setText(questionFragmentArgs.getCurrentQuestions().getIntro());
+        } else {
+            businessIntro.setVisibility(View.GONE);
+        }
 
         nextQuestion.setVisibility(View.GONE);
         layoutInflater = this.getLayoutInflater();

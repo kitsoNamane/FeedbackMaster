@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -45,17 +47,16 @@ public class BranchesDepartmentsFragment extends Fragment {
     MaterialTextView numberOfRespondents;
     MaterialTextView expiryDate;
     MaterialTextView categoryHelpText;
-    FlexboxLayout selectedCategories;
+    LinearLayout selectedCategories;
     FlexboxLayout getSelectedCategories;
-    Chip chipItem;
     Chip selectedChipItem;
     DataItem item;
     LayoutInflater layoutInflater;
     MaterialButton start;
+    MaterialButton toggleButton;
 
-    MaterialAlertDialogBuilder materialAlertDialogBuilder;
     BranchesDepartmentsFragmentArgs branchesDepartmentsFragmentArgs;
-    QuestionnaireViewModel questionnaireViewModel;
+    static QuestionnaireViewModel questionnaireViewModel;
     String surveyReference;
     String businessReference;
 
@@ -128,6 +129,17 @@ public class BranchesDepartmentsFragment extends Fragment {
             MainActivity.questionnaireAnswer.setCountry(item.getBusiness().getBusinessData().getCountry().getCountryData().getKey());
             questionnaireViewModel.getQuestionsFromServer(surveyReference, businessReference);
         });
+
+        /** This callback will only be called when MyFragment is at least Started.
+        OnBackPressedCallback callback = new OnBackPressedCallback(true ) {
+            @Override
+            public void handleOnBackPressed() {
+                questionnaireViewModel.clearNetworkState();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+         The callback can be enabled or disabled here or in handleOnBackPressed()
+         */
     }
 
     @Override
@@ -138,7 +150,7 @@ public class BranchesDepartmentsFragment extends Fragment {
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Organisation Categories");
-        company = view.findViewById(R.id.company_name);
+        company = view.findViewById(R.id.company_title);
         survey = view.findViewById(R.id.survey_title);
         categoryHelpText = view.findViewById(R.id.category_help_text);
         numberOfQuestions = view.findViewById(R.id.number_of_questions);
@@ -157,9 +169,9 @@ public class BranchesDepartmentsFragment extends Fragment {
         survey.setText(this.item.getName());
         company.setText(this.item.getBusiness().getBusinessData().getName());
 
-        expiryDate.setText(item.getEnds());
-        numberOfRespondents.setText(Integer.toString(item.getEntries().getTotal()));
-        numberOfQuestions.setText(Integer.toString(item.getQuestions().getNumberOfQuestion()));
+        //expiryDate.setText(item.getEnds());
+        //numberOfRespondents.setText(Integer.toString(item.getEntries().getTotal()));
+        //numberOfQuestions.setText(Integer.toString(item.getQuestions().getNumberOfQuestion()));
 
         if(surveyReference == null && businessReference == null) {
             this.start.setVisibility(View.GONE);
@@ -173,11 +185,11 @@ public class BranchesDepartmentsFragment extends Fragment {
         List<ChildrenDataItem> children = item.getBusiness().getBusinessData().getChildren().getData();
         if(children.size() > 0) {
             for(ChildrenDataItem child : children) {
-                chipItem = (Chip) layoutInflater.inflate(R.layout.category_chip, getSelectedCategories, false);
-                chipItem.setText(child.getName());
+                toggleButton = (MaterialButton) layoutInflater.inflate(R.layout.option_item, getSelectedCategories, false);
+                toggleButton.setText(child.getName());
 
-                chipItem.setOnClickListener(v -> {
-                    Chip selectedChip = (Chip) v;
+                toggleButton.setOnClickListener(v -> {
+                    MaterialButton selectedChip = (MaterialButton) v;
                     setSelectedCategories(selectedChip);
                     if(child.getChildren().getData().size() <= 0) {
                         businessReference = child.getRef();
@@ -186,7 +198,7 @@ public class BranchesDepartmentsFragment extends Fragment {
                     }
                     BranchesDepartmentsFragment.this.renderDepartments(child);
                 });
-                getSelectedCategories.addView(chipItem);
+                getSelectedCategories.addView(toggleButton);
             }
         } else {
             businessReference = item.getBusiness().getBusinessData().getRef();
@@ -195,18 +207,17 @@ public class BranchesDepartmentsFragment extends Fragment {
         }
     }
 
-    public void setSelectedCategories(Chip chip) {
+    public void setSelectedCategories(MaterialButton btn) {
         selectedChipItem = (Chip) layoutInflater.inflate(R.layout.selected_category_chip, selectedCategories, false);
-        selectedChipItem.setText(chip.getText());
-        selectedChipItem.setOnCloseIconClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedCategories.removeAllViews();
-                start.setVisibility(View.GONE);
-                getSelectedCategories.removeAllViews();
-                categoryHelpText.setText("Do you want to give feedback to the following:");
-                renderBranches();
-            }
+        selectedChipItem.setCloseIcon(getResources().getDrawable(R.drawable.ic_close_black_18dp));
+        selectedChipItem.setCloseIconVisible(true);
+        selectedChipItem.setText(btn.getText());
+        selectedChipItem.setOnCloseIconClickListener(v -> {
+            selectedCategories.removeAllViews();
+            start.setVisibility(View.GONE);
+            getSelectedCategories.removeAllViews();
+            categoryHelpText.setText("Do you want to give feedback to the following:");
+            renderBranches();
         });
         selectedCategories.addView(selectedChipItem);
     }
@@ -216,16 +227,22 @@ public class BranchesDepartmentsFragment extends Fragment {
         getSelectedCategories.removeAllViews();
         if(children.size() > 0) {
             for(BranchDataItem child : children) {
-                chipItem = (Chip) layoutInflater.inflate(R.layout.category_chip, getSelectedCategories, false);
-                chipItem.setText(child.getName());
-                chipItem.setOnClickListener(v -> {
-                    Chip selectedChip = (Chip) v;
+                toggleButton = (MaterialButton) layoutInflater.inflate(R.layout.option_item, getSelectedCategories, false);
+                toggleButton.setText(child.getName());
+                toggleButton.setOnClickListener(v -> {
+                    MaterialButton selectedChip = (MaterialButton) v;
                     businessReference = child.getRef();
                     categoryHelpText.setText("Press Start Survey");
                     start.setVisibility(View.VISIBLE);
 
                     selectedChipItem = (Chip) layoutInflater.inflate(R.layout.selected_category_chip, selectedCategories, false);
+                    selectedChipItem.setCloseIcon(getResources().getDrawable(R.drawable.ic_close_black_18dp));
+                    selectedChipItem.setCloseIconVisible(true);
                     selectedChipItem.setText(selectedChip.getText());
+                    selectedChipItem.setLayoutParams(
+                            new ChipGroup.LayoutParams(
+                                    ChipGroup.LayoutParams.WRAP_CONTENT, ChipGroup.LayoutParams.WRAP_CONTENT)
+                    );
                     selectedChipItem.setOnCloseIconClickListener(v1 -> {
                         selectedCategories.removeView(v1);
                         categoryHelpText.setText("Do you want to give feedback to the following:");
@@ -236,7 +253,7 @@ public class BranchesDepartmentsFragment extends Fragment {
                     getSelectedCategories.removeAllViews();
                 });
 
-                getSelectedCategories.addView(chipItem);
+                getSelectedCategories.addView(toggleButton);
             }
         } else {
             getSelectedCategories.removeAllViews();
@@ -245,12 +262,12 @@ public class BranchesDepartmentsFragment extends Fragment {
 
     public void delayedDialogBox(String message) {
      new MaterialAlertDialogBuilder( this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
-        .setTitle("Feedback Master")
+        .setTitle(message)
         .setCancelable(true)
-        .setMessage(message)
                 .setPositiveButton("Back", (dialog, which)->{
-                    dialog.dismiss();
+                    questionnaireViewModel.clearNetworkState();
                     MainActivity.navController.popBackStack();
+                    dialog.dismiss();
                 }).show();
     }
 }

@@ -1,5 +1,7 @@
 package sdk.kitso.feedbackmaster.repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,6 +47,7 @@ public class FeedbackMasterQuestionnaireApi {
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
                             response.body().getMessage().get(0).toString())
                     );
+                    Log.d("FMDIGILAB 5", "Error Code : "+response.body().getErrorCode());
                     answerResponse.postValue(response.body());
                     reload = () -> call.request();
                 }
@@ -86,6 +89,7 @@ public class FeedbackMasterQuestionnaireApi {
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
                             response.body().getMessage().get(0).toString())
                     );
+                    Log.d("FMDIGILAB 5", "Error Code : "+response.body().getErrorCode());
                     questionnaire.postValue(response.body().getResult());
                     reload = () -> call.request();
                 }

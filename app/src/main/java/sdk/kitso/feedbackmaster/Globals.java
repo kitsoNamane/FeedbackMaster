@@ -1,5 +1,8 @@
 package sdk.kitso.feedbackmaster;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -14,4 +17,14 @@ public class Globals {
     public static final String MULTI_SELECT = "multiple-select";
     public static final String SINGLE_SELECT = "single-select";
     public static final int SCALE = 5;
+
+    /** Response Error Codes Key:
+     *  2208 -> invalid package
+     *  2209 -> unable to save your feedback
+     *  2212 -> your feedback recently receive, try again in {12}{days}
+     *  1202 -> access denied
+     */
+    public static final List<Integer> RESPONSE_ERROR_CODES = new ArrayList<Integer>(Arrays.asList(
+           2208, 2209, 2212, 1202
+    ));
 }

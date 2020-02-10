@@ -22,6 +22,7 @@ import androidx.navigation.Navigation;
 import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
+import sdk.kitso.feedbackmaster.model.AnswerResponse;
 
 
 /**
@@ -101,7 +102,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                 // prompt reload button
             } else if(answerResponse.isSuccess() == false) {
                 setVisibility(View.INVISIBLE);
-                delayedDialogBox(answerResponse.getMessage().get(0).toString());
+                delayedDialogBox(answerResponse);
                 Log.d("FMDIGILAB 2", answerResponse.getMessage().toString());
             } else {
                 sendAsAnonymous.setVisibility(View.INVISIBLE);
@@ -164,8 +165,24 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
         uploadingAnswers.setVisibility(VISIBILITY);
     }
 
-   public void delayedDialogBox(String message) {
-       if(retryAttempts == 1) {
+   public void delayedDialogBox(AnswerResponse response) {
+       if(Globals.RESPONSE_ERROR_CODES.contains(new Integer(response.getErrorCode()))) {
+           new MaterialAlertDialogBuilder(
+                   this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+                   .setCancelable(false)
+                   .setTitle("Try Again Later...")
+                   .setMessage(response.getMessage().get(0).toString())
+                   .setNegativeButton("", ((dialog, which) -> {
+                       questionnaireViewModel.clearNetworkState();
+                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
+                       dialog.cancel();
+                   }))
+                   .setPositiveButton("Continue", (dialog, which) -> {
+                       questionnaireViewModel.clearNetworkState();
+                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
+                       dialog.cancel();
+                   }).show();
+       } else if(retryAttempts == 1) {
            new MaterialAlertDialogBuilder(
                    this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
                    .setCancelable(false)
@@ -176,7 +193,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                        dialog.cancel();
                        MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
                    }))
-                   .setPositiveButton("Continue", (dialog, which)->{
+                   .setPositiveButton("Continue", (dialog, which) -> {
                        goHome.setVisibility(View.VISIBLE);
                        questionnaireViewModel.clearNetworkState();
                        dialog.cancel();
@@ -187,7 +204,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                    this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
                    .setTitle("Re-Submit Answers ?")
                    .setCancelable(false)
-                   .setMessage(message)
+                   .setMessage(response.getMessage().toString())
                    .setPositiveButton("Retry " + (retryAttempts), (dialog, which) -> {
                        showProgressBar(View.VISIBLE);
                        retry();
