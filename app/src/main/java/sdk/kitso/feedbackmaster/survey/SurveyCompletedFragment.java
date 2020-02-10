@@ -15,6 +15,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Locale;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -167,7 +168,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
 
    public void delayedDialogBox(AnswerResponse response) {
        if(Globals.RESPONSE_ERROR_CODES.contains(new Integer(response.getErrorCode()))) {
-           new MaterialAlertDialogBuilder(
+           AlertDialog alertDialog = new MaterialAlertDialogBuilder(
                    this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
                    .setCancelable(false)
                    .setTitle("Try Again Later...")
@@ -181,9 +182,12 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                        questionnaireViewModel.clearNetworkState();
                        MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
                        dialog.cancel();
-                   }).show();
+                   }).create();
+           alertDialog.setCancelable(false);
+           alertDialog.setCanceledOnTouchOutside(false);
+           alertDialog.show();
        } else if(retryAttempts == 1) {
-           new MaterialAlertDialogBuilder(
+           AlertDialog alertDialog = new MaterialAlertDialogBuilder(
                    this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
                    .setCancelable(false)
                    .setTitle("Try Again Later...")
@@ -198,9 +202,12 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                        questionnaireViewModel.clearNetworkState();
                        dialog.cancel();
                        MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
-                   }).show();
+                   }).create();
+           alertDialog.setCancelable(false);
+           alertDialog.setCanceledOnTouchOutside(false);
+           alertDialog.show();
        } else {
-           new MaterialAlertDialogBuilder(
+           AlertDialog alertDialog = new MaterialAlertDialogBuilder(
                    this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
                    .setTitle("Re-Submit Answers ?")
                    .setCancelable(false)
@@ -216,7 +223,10 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                        uploadingAnswers.setVisibility(View.INVISIBLE);
                        sendAsAnonymous.setVisibility(View.VISIBLE);
                        dialog.cancel();
-                   }).show();
+                   }).create();
+           alertDialog.setCancelable(false);
+           alertDialog.setCanceledOnTouchOutside(false);
+           alertDialog.show();
        }
    }
 

@@ -16,6 +16,7 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -95,7 +96,7 @@ public class BranchesDepartmentsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        questionnaireViewModel = ViewModelProviders.of(requireActivity()).get(QuestionnaireViewModel.class);
+        questionnaireViewModel = ViewModelProviders.of(this).get(QuestionnaireViewModel.class);
         questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
             switch (networkState.getStatus()) {
                 case FAILED:
@@ -261,13 +262,16 @@ public class BranchesDepartmentsFragment extends Fragment {
     }
 
     public void delayedDialogBox(String message) {
-     new MaterialAlertDialogBuilder( this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+        AlertDialog alertDialog = new MaterialAlertDialogBuilder( this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
         .setTitle(message)
         .setCancelable(true)
                 .setPositiveButton("Back", (dialog, which)->{
                     questionnaireViewModel.clearNetworkState();
                     MainActivity.navController.popBackStack();
                     dialog.dismiss();
-                }).show();
+                }).create();
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
     }
 }
