@@ -1,15 +1,17 @@
-package sdk.kitso.feedbackmaster.survey;
+package sdk.kitso.feedbackmaster.viewmodels;
+
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import sdk.kitso.feedbackmaster.MainActivity;
-import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.AnswerResponse;
 import sdk.kitso.feedbackmaster.model.GetQuestionArgs;
 import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.kitso.feedbackmaster.model.Result;
+import sdk.kitso.feedbackmaster.network.NetworkState;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterQuestionnaireApi;
 
 public class QuestionnaireViewModel extends ViewModel {
@@ -76,5 +78,7 @@ public class QuestionnaireViewModel extends ViewModel {
     public void clearNetworkState() {
         feedbackMasterQuestionnaireApi.clearNetworkState();
         getNetworkArgs.setValue(resetNetwork);
+        Log.d("FMDIGILAB 8", "NETWORK :"+getNetworkState().getValue().getMsg());
     }
 }
+

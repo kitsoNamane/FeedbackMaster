@@ -3,11 +3,9 @@ package sdk.kitso.feedbackmaster.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
 import androidx.room.ColumnInfo;
 
-public class DataItem implements Serializable {
+public class DataItem extends FeedbackMasterObject {
 
 	@SerializedName("name")
 	private String name;
@@ -23,6 +21,10 @@ public class DataItem implements Serializable {
 
 	@SerializedName("ends")
 	private String ends;
+
+	@SerializedName("total")
+	@Expose
+	private Total total;
 
 	@SerializedName("entries")
 	@Expose
@@ -40,19 +42,6 @@ public class DataItem implements Serializable {
 	@SerializedName("business")
     @Expose
 	private Business business;
-
-
-	@SerializedName("questions")
-	@Expose
-	private Questions questions;
-
-	public void setQuestions(Questions questions){
-		this.questions = questions;
-	}
-
-	public Questions getQuestions(){
-		return questions;
-	}
 
 	public void setChecked(boolean checked) {
 		this.checked = checked;
@@ -152,5 +141,13 @@ public class DataItem implements Serializable {
 
 	public void setIntro(String intro) {
 		this.intro = intro;
+	}
+
+	public Total getTotal() {
+		return total;
+	}
+
+	public void setTotal(Total total) {
+		this.total = total;
 	}
 }

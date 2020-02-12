@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import sdk.kitso.feedbackmaster.MainActivity;
-import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.SearchResponse;
+import sdk.kitso.feedbackmaster.network.NetworkState;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSearchApi;
 
 public class SearchViewModel extends ViewModel {

@@ -1,6 +1,8 @@
-package sdk.kitso.feedbackmaster;
+package sdk.kitso.feedbackmaster.network;
 
-public class NetworkState {
+import sdk.kitso.feedbackmaster.model.FeedbackMasterObject;
+
+public class NetworkState  extends FeedbackMasterObject {
     public enum Status{
         NULL,
         RUNNING,

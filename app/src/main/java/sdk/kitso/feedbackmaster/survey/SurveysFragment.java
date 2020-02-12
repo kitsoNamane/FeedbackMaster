@@ -20,9 +20,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.MainActivity;
-import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.Utils;
+import sdk.kitso.feedbackmaster.viewmodels.SurveyViewModel;
 
 
 /**
@@ -81,10 +81,6 @@ public class SurveysFragment extends Fragment {
 
     }
 
-    public void retry() {
-        surveyViewModel.retry();
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         //Toolbar toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
@@ -114,7 +110,7 @@ public class SurveysFragment extends Fragment {
 
         surveyViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState->{
             pagedAdapter.setNetworkState(networkState);
-            SurveysFragment.toggleReload(networkState.getStatus());
+            pagedAdapter.setRetry(surveyViewModel.getRetry());
         });
 
         surveyViewModel.getSurveyLiveData().observe(getViewLifecycleOwner(), pagedList->{
@@ -135,9 +131,6 @@ public class SurveysFragment extends Fragment {
         setHasOptionsMenu(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Surveys List");
-        reloadCard = view.findViewById(R.id.reloadCard);
-        reloadChip = view.findViewById(R.id.load_more);
-        reloadChip.setOnClickListener(v -> retry());
 
         if(MainActivity.profile.getPhone() == 0) {
             MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
@@ -147,14 +140,6 @@ public class SurveysFragment extends Fragment {
         layoutManager = new LinearLayoutManager(view.getContext());
 
         return view;
-    }
-
-    public static void toggleReload(NetworkState.Status status) {
-        if(status == NetworkState.Status.FAILED) {
-            reloadCard.setVisibility(View.VISIBLE);
-        } else {
-            reloadCard.setVisibility(View.GONE);
-        }
     }
 
     public static void hideKeyboard(Activity activity) {

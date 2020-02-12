@@ -7,6 +7,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.kitso.feedbackmaster.model.DataItem;
+import sdk.kitso.feedbackmaster.viewholders.SurveyPagedViewHolder;
 
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private List<DataItem> searchResult;

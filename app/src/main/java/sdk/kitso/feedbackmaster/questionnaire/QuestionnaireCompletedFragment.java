@@ -1,4 +1,4 @@
-package sdk.kitso.feedbackmaster.survey;
+package sdk.kitso.feedbackmaster.questionnaire;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,16 +24,16 @@ import sdk.kitso.feedbackmaster.Globals;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.AnswerResponse;
-
+import sdk.kitso.feedbackmaster.viewmodels.QuestionnaireViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
- * Use the {@link SurveyCompletedFragment#newInstance} factory method to
+ * Use the {@link QuestionnaireCompletedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SurveyCompletedFragment extends Fragment implements MaterialButtonToggleGroup.OnButtonCheckedListener {
+public class QuestionnaireCompletedFragment extends Fragment implements MaterialButtonToggleGroup.OnButtonCheckedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     MaterialButton goHome;
@@ -56,7 +56,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
     private String mParam1;
     private String mParam2;
 
-    public SurveyCompletedFragment() {
+    public QuestionnaireCompletedFragment() {
         // Required empty public constructor
     }
 
@@ -66,11 +66,11 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SurveyCompletedFragment.
+     * @return A new instance of fragment QuestionnaireCompletedFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SurveyCompletedFragment newInstance(String param1, String param2) {
-        SurveyCompletedFragment fragment = new SurveyCompletedFragment();
+    public static QuestionnaireCompletedFragment newInstance(String param1, String param2) {
+        QuestionnaireCompletedFragment fragment = new QuestionnaireCompletedFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -127,7 +127,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view  = inflater.inflate(R.layout.fragment_survey_completed, container, false);
+        View view  = inflater.inflate(R.layout.fragment_questionnaire_completed, container, false);
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Upload Answers");
@@ -152,7 +152,7 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                 )
         );
         totalWins.setText("0");
-        goHome.setOnClickListener(v -> Navigation.findNavController(v).navigate(SurveyCompletedFragmentDirections.actionHome()));
+        goHome.setOnClickListener(v -> Navigation.findNavController(v).navigate(QuestionnaireCompletedFragmentDirections.actionHome()));
 
         sendAsAnonymous.setVisibility(View.VISIBLE);
         setVisibility(View.INVISIBLE);
@@ -175,12 +175,12 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                    .setMessage(response.getMessage().get(0).toString())
                    .setNegativeButton("", ((dialog, which) -> {
                        questionnaireViewModel.clearNetworkState();
-                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
+                       MainActivity.navController.navigate(QuestionnaireCompletedFragmentDirections.actionHome());
                        dialog.cancel();
                    }))
                    .setPositiveButton("Continue", (dialog, which) -> {
                        questionnaireViewModel.clearNetworkState();
-                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
+                       MainActivity.navController.navigate(QuestionnaireCompletedFragmentDirections.actionHome());
                        dialog.cancel();
                    }).create();
            alertDialog.setCancelable(false);
@@ -195,13 +195,13 @@ public class SurveyCompletedFragment extends Fragment implements MaterialButtonT
                        goHome.setVisibility(View.VISIBLE);
                        questionnaireViewModel.clearNetworkState();
                        dialog.cancel();
-                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
+                       MainActivity.navController.navigate(QuestionnaireCompletedFragmentDirections.actionHome());
                    }))
                    .setPositiveButton("Continue", (dialog, which) -> {
                        goHome.setVisibility(View.VISIBLE);
                        questionnaireViewModel.clearNetworkState();
                        dialog.cancel();
-                       MainActivity.navController.navigate(SurveyCompletedFragmentDirections.actionHome());
+                       MainActivity.navController.navigate(QuestionnaireCompletedFragmentDirections.actionHome());
                    }).create();
            alertDialog.setCancelable(false);
            alertDialog.setCanceledOnTouchOutside(false);

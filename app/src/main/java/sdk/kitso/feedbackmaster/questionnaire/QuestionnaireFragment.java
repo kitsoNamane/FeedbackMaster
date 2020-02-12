@@ -1,4 +1,4 @@
-package sdk.kitso.feedbackmaster.survey;
+package sdk.kitso.feedbackmaster.questionnaire;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

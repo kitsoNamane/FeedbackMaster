@@ -25,6 +25,7 @@ import sdk.kitso.feedbackmaster.R;
 import sdk.kitso.feedbackmaster.model.BranchDataItem;
 import sdk.kitso.feedbackmaster.model.ChildrenDataItem;
 import sdk.kitso.feedbackmaster.model.DataItem;
+import sdk.kitso.feedbackmaster.viewmodels.QuestionnaireViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,6 +57,7 @@ public class BranchesDepartmentsFragment extends Fragment {
     MaterialButton start;
     MaterialButton toggleButton;
 
+    MaterialTextView businessIntro;
     BranchesDepartmentsFragmentArgs branchesDepartmentsFragmentArgs;
     static QuestionnaireViewModel questionnaireViewModel;
     String surveyReference;
@@ -96,7 +98,7 @@ public class BranchesDepartmentsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        questionnaireViewModel = ViewModelProviders.of(this).get(QuestionnaireViewModel.class);
+        questionnaireViewModel = ViewModelProviders.of(requireActivity()).get(QuestionnaireViewModel.class);
         questionnaireViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
             switch (networkState.getStatus()) {
                 case FAILED:
@@ -160,6 +162,7 @@ public class BranchesDepartmentsFragment extends Fragment {
         layoutInflater = this.getLayoutInflater();
         selectedCategories = view.findViewById(R.id.selected_chip_group);
         getSelectedCategories = view.findViewById(R.id.chip_group);
+        businessIntro = view.findViewById(R.id.intro);
         start = view.findViewById(R.id.start_survey);
         item = branchesDepartmentsFragmentArgs.getCurrentSurvey();
 
@@ -169,6 +172,11 @@ public class BranchesDepartmentsFragment extends Fragment {
 
         survey.setText(this.item.getName());
         company.setText(this.item.getBusiness().getBusinessData().getName());
+        if(item.getIntro() != null) {
+            businessIntro.setText(item.getIntro());
+        } else {
+            businessIntro.setVisibility(View.GONE);
+        }
 
         //expiryDate.setText(item.getEnds());
         //numberOfRespondents.setText(Integer.toString(item.getEntries().getTotal()));

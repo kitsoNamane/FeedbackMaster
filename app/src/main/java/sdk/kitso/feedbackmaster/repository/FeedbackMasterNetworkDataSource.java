@@ -9,8 +9,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import sdk.kitso.feedbackmaster.Globals;
-import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.DataItem;
+import sdk.kitso.feedbackmaster.network.NetworkState;
 
 public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer, DataItem> {
     private static final String TAG = FeedbackMasterNetworkDataSource.class.getSimpleName();

@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.SearchResponse;
+import sdk.kitso.feedbackmaster.network.NetworkState;
 
 public class FeedbackMasterSearchApi {
     private static FeedbackMasterSearchApi instance;

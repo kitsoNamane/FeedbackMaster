@@ -1,4 +1,4 @@
-package sdk.kitso.feedbackmaster.survey;
+package sdk.kitso.feedbackmaster.network;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.button.MaterialButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,7 @@ public class NetworkConnectivityFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     ProgressBar progressBar;
+    LottieAnimationView lottieProgressBar;
     Handler handler = new Handler();
     Group group;
     MaterialButton retry;
@@ -80,38 +82,32 @@ public class NetworkConnectivityFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Internet Connection");
         retry = view.findViewById(R.id.try_again);
-        progressBar = view.findViewById(R.id.progressBar);
+        lottieProgressBar = view.findViewById(R.id.progressBar);
         group = view.findViewById(R.id.network_error_group);
         group.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+        lottieProgressBar.setVisibility(View.VISIBLE);
 
         // check network below
         onNetworkState(this.getContext());
 
-        retry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                group.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
-                onNetworkState(v.getContext());
-            }
+        retry.setOnClickListener(v -> {
+            group.setVisibility(View.GONE);
+            lottieProgressBar.setVisibility(View.VISIBLE);
+            onNetworkState(v.getContext());
         });
         return view;
     }
 
     private void onNetworkState(Context context) {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(Utils.isOnline(context)) {
-                    // to to surveys
-                    MainActivity.navController.navigate(NetworkConnectivityFragmentDirections.actionNetworkConnectivityFragmentPop());
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    group.setVisibility(View.VISIBLE);
-                }
+        handler.postDelayed(() -> {
+            if(Utils.isOnline(context)) {
+                // to to surveys
+                MainActivity.navController.navigate(NetworkConnectivityFragmentDirections.actionNetworkConnectivityFragmentPop());
+            } else {
+                lottieProgressBar.setVisibility(View.GONE);
+                group.setVisibility(View.VISIBLE);
             }
-        }, 1000);
+        }, 1500);
 
     }
 }

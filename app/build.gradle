@@ -5,7 +5,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "sdk.kitso.feedbackmaster"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -52,7 +52,6 @@ dependencies {
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     def paging_version = "2.1.1"
-
     implementation "androidx.paging:paging-runtime:$paging_version"
     implementation "com.google.code.gson:gson:2.8.5"
     implementation "com.squareup.retrofit2:converter-gson:2.7.1"
@@ -63,4 +62,6 @@ dependencies {
     debugImplementation 'com.idescout.sql:sqlscout-server:4.1'
     releaseImplementation 'com.idescout.sql:sqlscout-server-noop:4.1'
     implementation 'com.google.android:flexbox:1.1.0'
+    def lottieVersion = "3.3.1"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 }

@@ -6,11 +6,11 @@ import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.AnswerResponse;
 import sdk.kitso.feedbackmaster.model.QuestionResponse;
 import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.kitso.feedbackmaster.model.Result;
+import sdk.kitso.feedbackmaster.network.NetworkState;
 
 public class FeedbackMasterQuestionnaireApi {
 

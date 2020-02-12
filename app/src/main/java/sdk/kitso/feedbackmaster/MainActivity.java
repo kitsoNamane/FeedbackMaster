@@ -18,7 +18,7 @@ import sdk.kitso.feedbackmaster.model.Profile;
 import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApi;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApiService;
-import sdk.kitso.feedbackmaster.survey.SurveyViewModel;
+import sdk.kitso.feedbackmaster.viewmodels.SurveyViewModel;
 
 public class MainActivity extends AppCompatActivity {
     public static FeedbackMasterDB feedbackMasterDB;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 // use the ID of the navigation graph not the ID of the Question fragment
                 case R.id.signUpFragment:
                 case R.id.searchFragment:
-                case R.id.surveyCompletedFragment:
+                case R.id.questionnaireCompletedFragment:
                     navView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.GONE);
                     break;

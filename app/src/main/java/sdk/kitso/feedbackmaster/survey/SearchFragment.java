@@ -104,13 +104,11 @@ public class SearchFragment extends Fragment {
         searchKeyword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                textInputLayout.setHelperTextEnabled(false);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(count >= 3) {
-                    textInputLayout.setHelperTextEnabled(false);
                     countDownTimer = new CountDownTimer(500, 1) {
                         @Override
                         public void onTick(long millisUntilFinished) {
@@ -126,11 +124,9 @@ public class SearchFragment extends Fragment {
                     }.start();
                 } else if(count < 3){
                     searchAdapter.clearSearchResult();
-                    textInputLayout.setHelperTextEnabled(true);
                     searchProgress.setVisibility(View.GONE);
                 } else {
                     searchAdapter.clearSearchResult();
-                    textInputLayout.setHelperTextEnabled(true);
                     searchProgress.setVisibility(View.GONE);
                 }
             }

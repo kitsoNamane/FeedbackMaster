@@ -1,4 +1,4 @@
-package sdk.kitso.feedbackmaster.survey;
+package sdk.kitso.feedbackmaster.viewmodels;
 
 import java.util.Objects;
 import java.util.concurrent.Executor;
@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 import sdk.kitso.feedbackmaster.MainActivity;
-import sdk.kitso.feedbackmaster.NetworkState;
 import sdk.kitso.feedbackmaster.model.DataItem;
+import sdk.kitso.feedbackmaster.network.NetworkState;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataFactory;
 
 
@@ -42,6 +42,10 @@ public class SurveyViewModel extends ViewModel {
                Objects.requireNonNull(feedbackMasterNetworkDataFactory.getMutableLiveData().getValue()).reload
         );
         thread.start();
+    }
+
+    public Runnable getRetry() {
+        return feedbackMasterNetworkDataFactory.getMutableLiveData().getValue().reload;
     }
 
     public LiveData<NetworkState> getNetworkState() {
