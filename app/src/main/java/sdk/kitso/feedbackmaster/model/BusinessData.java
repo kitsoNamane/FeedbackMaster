@@ -82,4 +82,18 @@ public class BusinessData implements Serializable {
 	public Package getPackage() {
 		return aPackage;
 	}
+
+	@Override
+	public String toString(){
+		return
+				"QuestionDataItem{" +
+						"name = '" + name + '\'' +
+						",ref = '" +  ref + '\'' +
+						",alias = '" + alias + '\'' +
+						",package = '" + aPackage + '\'' +
+						",country = '" + country + '\'' +
+						",category = '" + category + '\'' +
+						",childre = '" + children + '\'' +
+						"}";
+	}
 }

@@ -16,8 +16,8 @@ import androidx.room.Room;
 import sdk.kitso.feedbackmaster.model.FeedbackMasterDB;
 import sdk.kitso.feedbackmaster.model.Profile;
 import sdk.kitso.feedbackmaster.model.QuestionnaireAnswer;
-import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApi;
 import sdk.kitso.feedbackmaster.repository.FeedbackMasterSurveyApiService;
+import sdk.kitso.feedbackmaster.repository.factories.FeedbackMasterSurveyServiceFactory;
 import sdk.kitso.feedbackmaster.viewmodels.SurveyViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         questionnaireAnswer.setDevice(androidId);
 
-        feedbackMasterSurveyApiService = FeedbackMasterSurveyApi.getService(androidId, this);
+        feedbackMasterSurveyApiService = FeedbackMasterSurveyServiceFactory.getService(androidId, this);
 
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

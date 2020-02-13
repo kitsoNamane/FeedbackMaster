@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
-    tools:context=".survey.SurveysFragment">
+    tools:context=".ui.survey_fragments.SurveysFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/survey_list"

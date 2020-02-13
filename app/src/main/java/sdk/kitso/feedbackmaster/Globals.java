@@ -23,6 +23,7 @@ public class Globals {
      *  2209 -> unable to save your feedback
      *  2212 -> your feedback recently receive, try again in {12}{days}
      *  1202 -> access denied
+     *  1201 -> access denied
      */
     public static final List<Integer> RESPONSE_ERROR_CODES = new ArrayList<Integer>(Arrays.asList(
            2208, 2209, 2212, 1202

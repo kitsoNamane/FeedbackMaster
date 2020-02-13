@@ -1,6 +1,7 @@
 package sdk.kitso.feedbackmaster.model;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class JsonMemberPackage implements Serializable {

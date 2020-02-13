@@ -11,8 +11,8 @@ import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 import sdk.kitso.feedbackmaster.MainActivity;
 import sdk.kitso.feedbackmaster.model.DataItem;
-import sdk.kitso.feedbackmaster.network.NetworkState;
-import sdk.kitso.feedbackmaster.repository.FeedbackMasterNetworkDataFactory;
+import sdk.kitso.feedbackmaster.model.NetworkState;
+import sdk.kitso.feedbackmaster.repository.factories.FeedbackMasterNetworkDataFactory;
 
 
 public class SurveyViewModel extends ViewModel {
