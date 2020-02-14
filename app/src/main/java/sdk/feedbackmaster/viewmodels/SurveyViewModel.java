@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 import sdk.feedbackmaster.MainActivity;
-import sdk.feedbackmaster.model.DataItem;
 import sdk.feedbackmaster.model.NetworkState;
+import sdk.feedbackmaster.model.Survey;
 import sdk.feedbackmaster.repository.factories.FeedbackMasterNetworkDataFactory;
 
 
@@ -33,7 +33,7 @@ public class SurveyViewModel extends ViewModel {
             .setEnablePlaceholders(true)
             .build();
 
-    private LiveData<PagedList<DataItem>>   surveyLiveData = new LivePagedListBuilder(feedbackMasterNetworkDataFactory, config)
+    private LiveData<PagedList<Survey>>   surveyLiveData = new LivePagedListBuilder(feedbackMasterNetworkDataFactory, config)
                 .setFetchExecutor(executor)
                 .build();
 
@@ -52,7 +52,7 @@ public class SurveyViewModel extends ViewModel {
         return networkState;
     }
 
-    public LiveData<PagedList<DataItem>> getSurveyLiveData() {
+    public LiveData<PagedList<Survey>> getSurveyLiveData() {
         return surveyLiveData;
     }
 }

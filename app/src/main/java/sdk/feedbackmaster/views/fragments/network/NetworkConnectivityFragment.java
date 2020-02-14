@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.network_fragments;
+package sdk.feedbackmaster.views.fragments.network;
 
 import android.content.Context;
 import android.os.Bundle;

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import androidx.room.ColumnInfo;
 
-public class DataItem extends FeedbackMasterObject {
+public class Survey extends FeedbackMasterObject {
 
 	@SerializedName("name")
 	private String name;

@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.viewholders;
+package sdk.feedbackmaster.views.viewholders;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +9,6 @@ import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.model.FeedbackMasterObject;
 
 public class WelcomeViewHolder extends BaseViewHolder {
-
     ImageView close;
 
     public WelcomeViewHolder(View view) {

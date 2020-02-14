@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.adapters;
+package sdk.feedbackmaster.views.adapters;
 
 import android.util.Log;
 import android.view.ViewGroup;
@@ -8,16 +8,16 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.feedbackmaster.R;
-import sdk.feedbackmaster.model.DataItem;
 import sdk.feedbackmaster.model.NetworkState;
-import sdk.feedbackmaster.ui.viewholders.BaseViewHolder;
-import sdk.feedbackmaster.ui.viewholders.NetworkStateViewHolder;
-import sdk.feedbackmaster.ui.viewholders.SurveyPagedViewHolder;
-import sdk.feedbackmaster.ui.viewholders.WelcomeViewHolder;
+import sdk.feedbackmaster.model.Survey;
+import sdk.feedbackmaster.views.viewholders.BaseViewHolder;
+import sdk.feedbackmaster.views.viewholders.NetworkStateViewHolder;
+import sdk.feedbackmaster.views.viewholders.SurveyPagedViewHolder;
+import sdk.feedbackmaster.views.viewholders.WelcomeViewHolder;
 
 public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>{
-    private List<DataItem> searchResult;
-    private List<DataItem> removeSearchResult;
+    private List<Survey> searchResult;
+    private List<Survey> removeSearchResult;
     private NetworkState networkState;
     private static final int HERO = 0;
     private static final int ERROR = 1;
@@ -28,7 +28,7 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>{
         this.retry = retry;
     }
 
-    public void setSearchResult(List<DataItem> searchResult) {
+    public void setSearchResult(List<Survey> searchResult) {
         this.searchResult = searchResult;
         this.removeSearchResult = searchResult;
         this.notifyDataSetChanged();
@@ -65,7 +65,7 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>{
                 break;
             case SURVEY:
             default:
-                DataItem item = searchResult.get(position);
+                Survey item = searchResult.get(position);
                 holder.bind(item);
         }
     }

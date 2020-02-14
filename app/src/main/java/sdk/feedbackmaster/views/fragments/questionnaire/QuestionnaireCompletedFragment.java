@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.questionnaire_fragments;
+package sdk.feedbackmaster.views.fragments.questionnaire;
 
 import android.os.Bundle;
 import android.os.Handler;

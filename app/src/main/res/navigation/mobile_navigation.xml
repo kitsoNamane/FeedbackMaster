@@ -7,45 +7,55 @@
 
     <fragment
         android:id="@+id/navigation_survey"
-        android:name="sdk.feedbackmaster.ui.survey_fragments.SurveysFragment"
+        android:name="sdk.feedbackmaster.views.fragments.survey.SurveysFragment"
         android:label="fragment_surveys"
         tools:layout="@layout/fragment_surveys" >
         <action
             android:id="@+id/actionSignup"
             app:destination="@id/signUpFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_enter"
             app:launchSingleTop="true" />
         <action
             android:id="@+id/actionNetworkError"
             app:destination="@id/networkConnectivityFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_enter"
             app:launchSingleTop="true" />
         <action
             android:id="@+id/actionBranches"
             app:destination="@id/branchesDepartmentsFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_enter"
             app:launchSingleTop="true" />
         <action
             android:id="@+id/actionSearch"
             app:destination="@id/searchFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_enter"
             app:launchSingleTop="true" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="sdk.feedbackmaster.ui.profile_fragments.ProfileFragment"
+        android:name="sdk.feedbackmaster.views.fragments.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/questionFragment"
-        android:name="sdk.feedbackmaster.ui.questionnaire_fragments.QuestionnaireFragment"
+        android:name="sdk.feedbackmaster.views.fragments.questionnaire.QuestionnaireFragment"
         android:label="fragment_question">
         tools:layout="@layout/fragment_question"
         <action
             android:id="@+id/actionCompleted"
             app:destination="@id/questionnaireCompletedFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_enter"
             app:launchSingleTop="true" />
         <argument
             android:name="currentQuestions"
-            app:argType="sdk.feedbackmaster.model.DataItem" />
+            app:argType="sdk.feedbackmaster.model.Survey" />
         <argument
             android:name="surveyReference"
             app:argType="string"
@@ -60,12 +70,14 @@
     </fragment>
     <fragment
         android:id="@+id/questionnaireCompletedFragment"
-        android:name="sdk.feedbackmaster.ui.questionnaire_fragments.QuestionnaireCompletedFragment"
+        android:name="sdk.feedbackmaster.views.fragments.questionnaire.QuestionnaireCompletedFragment"
         android:label="fragment_survey_completed"
         tools:layout="@layout/fragment_questionnaire_completed" >
         <action
             android:id="@+id/actionHome"
             app:destination="@id/navigation_survey"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_enter"
             app:launchSingleTop="true"
             app:popUpTo="@+id/navigation_survey"
             app:popUpToInclusive="true" />
@@ -75,18 +87,20 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="sdk.feedbackmaster.ui.profile_fragments.SignUpFragment"
+        android:name="sdk.feedbackmaster.views.fragments.profile.SignUpFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
         <action
             android:id="@+id/action_signUpFragment_pop"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_enter"
             app:launchSingleTop="true"
             app:popUpTo="@+id/navigation_survey"
             app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/networkConnectivityFragment"
-        android:name="sdk.feedbackmaster.ui.network_fragments.NetworkConnectivityFragment"
+        android:name="sdk.feedbackmaster.views.fragments.network.NetworkConnectivityFragment"
         android:label="fragment_network_connectivity"
         tools:layout="@layout/fragment_network_connectivity" >
         <action
@@ -96,15 +110,17 @@
     </fragment>
     <fragment
         android:id="@+id/branchesDepartmentsFragment"
-        android:name="sdk.feedbackmaster.ui.survey_fragments.BranchesDepartmentsFragment"
+        android:name="sdk.feedbackmaster.views.fragments.survey.BranchesDepartmentsFragment"
         android:label="fragment_branches_departments"
         tools:layout="@layout/fragment_branches_departments" >
         <argument
             android:name="currentSurvey"
-            app:argType="sdk.feedbackmaster.model.DataItem" />
+            app:argType="sdk.feedbackmaster.model.Survey" />
         <action
             android:id="@+id/actionBeginSurvey"
             app:destination="@id/questionFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_enter"
             app:launchSingleTop="true" />
         <argument
             android:name="surveyReference"
@@ -121,12 +137,14 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="sdk.feedbackmaster.ui.survey_fragments.SearchFragment"
+        android:name="sdk.feedbackmaster.views.fragments.survey.SearchSurveysFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/actionDepartments"
             app:destination="@id/branchesDepartmentsFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_enter"
             app:launchSingleTop="true" />
     </fragment>
 </navigation>

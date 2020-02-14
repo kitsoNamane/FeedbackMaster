@@ -6,26 +6,26 @@
     android:background="@color/colorBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.survey_fragments.SearchFragment">
+    tools:context=".views.fragments.survey.SearchSurveysFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
         android:layout_width="match_parent"
-        android:background="@color/colorBackground"
-        app:boxStrokeColor="@color/colorAccent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:background="@color/colorBackground"
+        android:focusable="true"
         android:hint="@string/search_survey"
         app:endIconCheckable="true"
-        app:hintTextColor="@color/colorPrimary"
         app:endIconDrawable="@drawable/ic_close_black_18dp"
         app:endIconMode="clear_text"
         app:helperTextEnabled="false"
         app:helperTextTextColor="#D50000"
+        app:hintTextColor="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,9 +34,10 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_keyword"
-            android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:focusable="auto"
+            android:textColor="@color/colorPrimary" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <ProgressBar

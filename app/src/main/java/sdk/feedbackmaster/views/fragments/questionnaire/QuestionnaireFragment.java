@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.questionnaire_fragments;
+package sdk.feedbackmaster.views.fragments.questionnaire;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

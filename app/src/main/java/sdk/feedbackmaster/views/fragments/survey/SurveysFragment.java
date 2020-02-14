@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.survey_fragments;
+package sdk.feedbackmaster.views.fragments.survey;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.Utils;
-import sdk.feedbackmaster.ui.adapters.SurveyPagedAdapter;
 import sdk.feedbackmaster.viewmodels.SurveyViewModel;
+import sdk.feedbackmaster.views.adapters.SurveyPagedAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

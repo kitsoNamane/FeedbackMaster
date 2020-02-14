@@ -7,11 +7,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import sdk.feedbackmaster.Globals;
-import sdk.feedbackmaster.model.DataItem;
 import sdk.feedbackmaster.model.NetworkState;
+import sdk.feedbackmaster.model.Survey;
 import sdk.feedbackmaster.repository.FeedbackMasterSurveyApiService;
 
-public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer, DataItem> {
+public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer, Survey> {
     private static final String TAG = FeedbackMasterNetworkDataSource.class.getSimpleName();
     private FeedbackMasterSurveyApiService apiService;
 
@@ -38,7 +38,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
 
 
     @Override
-    public void loadInitial(@NonNull LoadInitialParams<Integer> loadInitialParams, @NonNull LoadInitialCallback<Integer, DataItem> loadInitialCallback) {
+    public void loadInitial(@NonNull LoadInitialParams<Integer> loadInitialParams, @NonNull LoadInitialCallback<Integer, Survey> loadInitialCallback) {
         initialLoading.postValue(NetworkState.LOADING);
         networkState.postValue(NetworkState.LOADING);
 
@@ -46,7 +46,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
             @Override
             public void onResponse(Call<sdk.feedbackmaster.model.Response> call, Response<sdk.feedbackmaster.model.Response> response) {
                 if(response.isSuccessful() && response.body().isSuccess()) {
-                    loadInitialCallback.onResult(response.body().getData().getDataItemList(), null, 2);
+                    loadInitialCallback.onResult(response.body().getData().getSurveyList(), null, 2);
                     initialLoading.postValue(NetworkState.LOADED);
                     networkState.postValue(NetworkState.LOADED);
                 } else {
@@ -65,11 +65,11 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
     }
 
     @Override
-    public void loadBefore(@NonNull LoadParams<Integer> loadParams, @NonNull LoadCallback<Integer, DataItem> loadCallback) {
+    public void loadBefore(@NonNull LoadParams<Integer> loadParams, @NonNull LoadCallback<Integer, Survey> loadCallback) {
     }
 
     @Override
-    public void loadAfter(@NonNull LoadParams<Integer> loadParams, @NonNull LoadCallback<Integer, DataItem> loadCallback) {
+    public void loadAfter(@NonNull LoadParams<Integer> loadParams, @NonNull LoadCallback<Integer, Survey> loadCallback) {
         networkState.postValue(NetworkState.LOADING);
 
         apiService.getNextSurveys(loadParams.key).enqueue(new Callback<sdk.feedbackmaster.model.Response>() {
@@ -77,7 +77,7 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
               public void onResponse(Call<sdk.feedbackmaster.model.Response> call, Response<sdk.feedbackmaster.model.Response> response) {
                   if(response.isSuccessful()) {
                       //SystemClock.sleep(3000);
-                      loadCallback.onResult(response.body().getData().getDataItemList(), loadParams.key + 1);
+                      loadCallback.onResult(response.body().getData().getSurveyList(), loadParams.key + 1);
                       networkState.postValue(NetworkState.LOADED);
                   } else {
                       networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));

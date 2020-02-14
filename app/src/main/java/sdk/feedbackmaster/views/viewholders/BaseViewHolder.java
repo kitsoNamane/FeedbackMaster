@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.viewholders;
+package sdk.feedbackmaster.views.viewholders;
 
 import android.view.View;
 

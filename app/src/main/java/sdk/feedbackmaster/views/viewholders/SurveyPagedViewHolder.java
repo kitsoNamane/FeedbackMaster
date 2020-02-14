@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.viewholders;
+package sdk.feedbackmaster.views.viewholders;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,10 +13,10 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
-import sdk.feedbackmaster.model.DataItem;
 import sdk.feedbackmaster.model.FeedbackMasterObject;
-import sdk.feedbackmaster.ui.survey_fragments.SearchFragmentDirections;
-import sdk.feedbackmaster.ui.survey_fragments.SurveysFragmentDirections;
+import sdk.feedbackmaster.model.Survey;
+import sdk.feedbackmaster.views.fragments.survey.SearchSurveysFragmentDirections;
+import sdk.feedbackmaster.views.fragments.survey.SurveysFragmentDirections;
 
 public class SurveyPagedViewHolder extends BaseViewHolder {
     MaterialTextView company;
@@ -26,7 +26,6 @@ public class SurveyPagedViewHolder extends BaseViewHolder {
     MaterialTextView numberOfRespondents;
     MaterialTextView surveyExpiry;
     static int viewId;
-
 
     public SurveyPagedViewHolder(@NonNull View view) {
         super(view);
@@ -41,15 +40,14 @@ public class SurveyPagedViewHolder extends BaseViewHolder {
 
     @Override
     public void bind(FeedbackMasterObject obj) {
+        ((Survey)obj).setChecked(false);
+        survey.setText(((Survey)obj).getName());
+        company.setText(((Survey)obj).getBusiness().getBusinessData().getName());
+        surveyExpiry.setText(((Survey)obj).getEnds());
+        numberOfRespondents.setText(String.format(Locale.getDefault(),"%d", ((Survey)obj).getEntries().getTotal()));
+        numberOfQuestions.setText(String.format(Locale.getDefault(),"%d", ((Survey)obj).getTotal().getQuestions()));
 
-        ((DataItem)obj).setChecked(false);
-        survey.setText(((DataItem)obj).getName());
-        company.setText(((DataItem)obj).getBusiness().getBusinessData().getName());
-        surveyExpiry.setText(((DataItem)obj).getEnds());
-        numberOfRespondents.setText(String.format(Locale.getDefault(),"%d", ((DataItem)obj).getEntries().getTotal()));
-        numberOfQuestions.setText(String.format(Locale.getDefault(),"%d", ((DataItem)obj).getTotal().getQuestions()));
-
-        this.cardView.setOnClickListener(v -> gotoQuestionnaire(((DataItem)obj)));
+        this.cardView.setOnClickListener(v -> gotoQuestionnaire(((Survey)obj)));
     }
 
 
@@ -61,16 +59,18 @@ public class SurveyPagedViewHolder extends BaseViewHolder {
         return new SurveyPagedViewHolder(view);
     }
 
-    public void gotoQuestionnaire(DataItem item) {
+    public void gotoQuestionnaire(Survey item) {
         switch (viewId) {
             case R.id.search_result_list:
                 Log.d("FMDIGILAB 10", item.toString());
-                SearchFragmentDirections.ActionDepartments actionDepartments = SearchFragmentDirections.actionDepartments(item, null, null, null);
+                SearchSurveysFragmentDirections.ActionDepartments actionDepartments = SearchSurveysFragmentDirections.actionDepartments(
+                        item, null, null, null);
                 MainActivity.navController.navigate(actionDepartments);
                 break;
             case R.id.survey_list:
             default:
-                SurveysFragmentDirections.ActionBranches actionBranches = SurveysFragmentDirections.actionBranches(item, null, null, null);
+                SurveysFragmentDirections.ActionBranches actionBranches = SurveysFragmentDirections.actionBranches(
+                        item, null, null, null);
                 MainActivity.navController.navigate(actionBranches);
         }
     }

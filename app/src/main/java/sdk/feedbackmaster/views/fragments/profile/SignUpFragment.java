@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.profile_fragments;
+package sdk.feedbackmaster.views.fragments.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

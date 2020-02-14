@@ -10,18 +10,18 @@ public class Data implements Serializable {
 
 	@SerializedName("data")
 	@Expose
-	private List<DataItem> dataItemList;
+	private List<Survey> surveyList;
 
 	@SerializedName("meta")
     @Expose
 	private Meta meta;
 
-	public void setDataItemList(List<DataItem> dataItemList){
-		this.dataItemList = dataItemList;
+	public void setSurveyList(List<Survey> surveyList){
+		this.surveyList = surveyList;
 	}
 
-	public List<DataItem> getDataItemList(){
-		return dataItemList;
+	public List<Survey> getSurveyList(){
+		return surveyList;
 	}
 
 	public void setMeta(Meta meta){
@@ -70,7 +70,7 @@ public class Data implements Serializable {
  	public String toString(){
 		return 
 			"ChildrenData{" +
-			"data = '" + dataItemList + '\'' +
+			"data = '" + surveyList + '\'' +
 			",meta = '" + meta + '\'' +
 			"}";
 		}

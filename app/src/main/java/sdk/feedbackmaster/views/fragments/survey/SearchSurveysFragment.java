@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.survey_fragments;
+package sdk.feedbackmaster.views.fragments.survey;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,21 +23,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.Utils;
-import sdk.feedbackmaster.model.DataItem;
-import sdk.feedbackmaster.ui.adapters.SearchAdapter;
-import sdk.feedbackmaster.ui.adapters.SurveyPagedAdapter;
+import sdk.feedbackmaster.model.Survey;
 import sdk.feedbackmaster.viewmodels.SearchViewModel;
+import sdk.feedbackmaster.views.adapters.SearchAdapter;
+import sdk.feedbackmaster.views.adapters.SurveyPagedAdapter;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
- * Use the {@link SearchFragment#newInstance} factory method to
+ * Use the {@link SearchSurveysFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 
-public class SearchFragment extends Fragment {
+public class SearchSurveysFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,7 +56,7 @@ public class SearchFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SearchFragment() {
+    public SearchSurveysFragment() {
         // Required empty public constructor
     }
 
@@ -65,11 +66,11 @@ public class SearchFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchFragment.
+     * @return A new instance of fragment SearchSurveysFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SearchFragment newInstance(String param1, String param2) {
-        SearchFragment fragment = new SearchFragment();
+    public static SearchSurveysFragment newInstance(String param1, String param2) {
+        SearchSurveysFragment fragment = new SearchSurveysFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -91,6 +92,10 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Search Surveys");
+
         textInputLayout = view.findViewById(R.id.textInputLayout);
         searchKeyword = view.findViewById(R.id.search_keyword);
         searchProgress = view.findViewById(R.id.search_progress_bar);
@@ -98,7 +103,7 @@ public class SearchFragment extends Fragment {
         layoutManager = new LinearLayoutManager(view.getContext());
         searchAdapter = new SearchAdapter();
         pagedAdapter = new SurveyPagedAdapter();
-        searchAdapter.setSearchResult(new ArrayList<DataItem>());
+        searchAdapter.setSearchResult(new ArrayList<Survey>());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(searchAdapter);
         searchProgress.setVisibility(View.GONE);
@@ -173,8 +178,8 @@ public class SearchFragment extends Fragment {
 
 
         searchViewModel.getSearchResults().observe(getViewLifecycleOwner(), result -> {
-            if(result != null && result.getData().getDataItemList() != null) {
-                searchAdapter.setSearchResult(result.getData().getDataItemList());
+            if(result != null && result.getData().getSurveyList() != null) {
+                searchAdapter.setSearchResult(result.getData().getSurveyList());
                 searchProgress.setVisibility(View.GONE);
             } else {
                 searchAdapter.clearSearchResult();

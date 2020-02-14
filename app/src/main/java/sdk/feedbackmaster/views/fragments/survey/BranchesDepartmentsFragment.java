@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.survey_fragments;
+package sdk.feedbackmaster.views.fragments.survey;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +25,7 @@ import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.model.BranchDataItem;
 import sdk.feedbackmaster.model.ChildrenDataItem;
-import sdk.feedbackmaster.model.DataItem;
+import sdk.feedbackmaster.model.Survey;
 import sdk.feedbackmaster.viewmodels.QuestionnaireViewModel;
 
 /**
@@ -54,7 +54,7 @@ public class BranchesDepartmentsFragment extends Fragment {
     private FlexboxLayout setSelectedCategories;
     private Chip selectedChipItem;
     private MaterialButton selectedCategoryItem;
-    private DataItem item;
+    private Survey item;
     private LayoutInflater layoutInflater;
     private MaterialButton start;
     private MaterialButton toggleButton;

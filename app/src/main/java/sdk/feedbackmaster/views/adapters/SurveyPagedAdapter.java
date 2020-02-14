@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.adapters;
+package sdk.feedbackmaster.views.adapters;
 
 import android.view.ViewGroup;
 
@@ -6,14 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import sdk.feedbackmaster.R;
-import sdk.feedbackmaster.model.DataItem;
 import sdk.feedbackmaster.model.NetworkState;
-import sdk.feedbackmaster.ui.viewholders.BaseViewHolder;
-import sdk.feedbackmaster.ui.viewholders.NetworkStateViewHolder;
-import sdk.feedbackmaster.ui.viewholders.SurveyPagedViewHolder;
-import sdk.feedbackmaster.ui.viewholders.WelcomeViewHolder;
+import sdk.feedbackmaster.model.Survey;
+import sdk.feedbackmaster.views.viewholders.BaseViewHolder;
+import sdk.feedbackmaster.views.viewholders.NetworkStateViewHolder;
+import sdk.feedbackmaster.views.viewholders.SurveyPagedViewHolder;
+import sdk.feedbackmaster.views.viewholders.WelcomeViewHolder;
 
-public class SurveyPagedAdapter extends PagedListAdapter<DataItem, BaseViewHolder> {
+public class SurveyPagedAdapter extends PagedListAdapter<Survey, BaseViewHolder> {
     private static final int HERO = 0;
     private static final int ERROR = 1;
     private static final int SURVEY = 2;
@@ -24,14 +24,14 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, BaseViewHolde
         this.retry = retry;
     }
 
-    public static final DiffUtil.ItemCallback<DataItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<DataItem>() {
+    public static final DiffUtil.ItemCallback<Survey> DIFF_CALLBACK = new DiffUtil.ItemCallback<Survey>() {
         @Override
-        public boolean areItemsTheSame(@NonNull DataItem oldSurvey, @NonNull DataItem newSurvey) {
+        public boolean areItemsTheSame(@NonNull Survey oldSurvey, @NonNull Survey newSurvey) {
             return oldSurvey.getReference() == newSurvey.getReference();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull DataItem oldSurvey, @NonNull DataItem newSurvey) {
+        public boolean areContentsTheSame(@NonNull Survey oldSurvey, @NonNull Survey newSurvey) {
             return oldSurvey.equals(newSurvey);
         }
     };
@@ -65,7 +65,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<DataItem, BaseViewHolde
                 break;
             case SURVEY:
             default:
-                DataItem item = getItem(position);
+                Survey item = getItem(position);
                 holder.bind(item);
         }
     }

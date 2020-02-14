@@ -7,7 +7,7 @@
     android:background="@color/colorSurface"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.questionnaire_fragments.QuestionnaireFragment">
+    tools:context=".views.fragments.questionnaire.QuestionnaireFragment">
 
     <include
         android:id="@+id/include"

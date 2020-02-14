@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.ui.viewholders;
+package sdk.feedbackmaster.views.viewholders;
 
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -72,7 +72,7 @@ public class NetworkStateViewHolder extends BaseViewHolder {
 
                 @Override
                 public void onFinish() {
-                    if(! Utils.isOnline(retryBtn.getContext())) toggleVisibility(View.VISIBLE);
+                    if(!Utils.isOnline(retryBtn.getContext())) toggleVisibility(View.VISIBLE);
                 }
             }.start();
         });
