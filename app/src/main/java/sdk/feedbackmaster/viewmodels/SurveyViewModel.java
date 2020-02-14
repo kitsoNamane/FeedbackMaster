@@ -1,0 +1,58 @@
+package sdk.feedbackmaster.viewmodels;
+
+import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
+import androidx.lifecycle.ViewModel;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
+import sdk.feedbackmaster.MainActivity;
+import sdk.feedbackmaster.model.DataItem;
+import sdk.feedbackmaster.model.NetworkState;
+import sdk.feedbackmaster.repository.factories.FeedbackMasterNetworkDataFactory;
+
+
+public class SurveyViewModel extends ViewModel {
+    private int pageSize = 10;
+    private Executor executor = Executors.newFixedThreadPool(5);
+
+    private FeedbackMasterNetworkDataFactory feedbackMasterNetworkDataFactory = new FeedbackMasterNetworkDataFactory(
+            MainActivity.feedbackMasterSurveyApiService
+    );
+
+    private LiveData<NetworkState>  networkState = Transformations.switchMap(
+                feedbackMasterNetworkDataFactory.getMutableLiveData(), dataSource-> dataSource.getNetworkState()
+    );
+
+    PagedList.Config config = new PagedList.Config.Builder()
+            .setPageSize(pageSize)
+            .setInitialLoadSizeHint(200)
+            .setEnablePlaceholders(true)
+            .build();
+
+    private LiveData<PagedList<DataItem>>   surveyLiveData = new LivePagedListBuilder(feedbackMasterNetworkDataFactory, config)
+                .setFetchExecutor(executor)
+                .build();
+
+    public void retry() {
+        Thread thread = new Thread(
+               Objects.requireNonNull(feedbackMasterNetworkDataFactory.getMutableLiveData().getValue()).reload
+        );
+        thread.start();
+    }
+
+    public Runnable getRetry() {
+        return feedbackMasterNetworkDataFactory.getMutableLiveData().getValue().reload;
+    }
+
+    public LiveData<NetworkState> getNetworkState() {
+        return networkState;
+    }
+
+    public LiveData<PagedList<DataItem>> getSurveyLiveData() {
+        return surveyLiveData;
+    }
+}
