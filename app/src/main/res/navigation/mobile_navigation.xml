@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_survey"
-        android:name="sdk.kitso.feedbackmaster.ui.survey_fragments.SurveysFragment"
+        android:name="sdk.feedbackmaster.ui.survey_fragments.SurveysFragment"
         android:label="fragment_surveys"
         tools:layout="@layout/fragment_surveys" >
         <action
@@ -30,13 +30,13 @@
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="sdk.kitso.feedbackmaster.ui.profile_fragments.ProfileFragment"
+        android:name="sdk.feedbackmaster.ui.profile_fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/questionFragment"
-        android:name="sdk.kitso.feedbackmaster.ui.questionnaire_fragments.QuestionnaireFragment"
+        android:name="sdk.feedbackmaster.ui.questionnaire_fragments.QuestionnaireFragment"
         android:label="fragment_question">
         tools:layout="@layout/fragment_question"
         <action
@@ -45,7 +45,7 @@
             app:launchSingleTop="true" />
         <argument
             android:name="currentQuestions"
-            app:argType="sdk.kitso.feedbackmaster.model.DataItem" />
+            app:argType="sdk.feedbackmaster.model.DataItem" />
         <argument
             android:name="surveyReference"
             app:argType="string"
@@ -56,11 +56,11 @@
             app:nullable="true" />
         <argument
             android:name="surveyQuestions"
-            app:argType="sdk.kitso.feedbackmaster.model.Result" />
+            app:argType="sdk.feedbackmaster.model.Result" />
     </fragment>
     <fragment
         android:id="@+id/questionnaireCompletedFragment"
-        android:name="sdk.kitso.feedbackmaster.ui.questionnaire_fragments.QuestionnaireCompletedFragment"
+        android:name="sdk.feedbackmaster.ui.questionnaire_fragments.QuestionnaireCompletedFragment"
         android:label="fragment_survey_completed"
         tools:layout="@layout/fragment_questionnaire_completed" >
         <action
@@ -71,11 +71,11 @@
             app:popUpToInclusive="true" />
         <argument
             android:name="questionnaireAnswers"
-            app:argType="sdk.kitso.feedbackmaster.model.QuestionnaireAnswer" />
+            app:argType="sdk.feedbackmaster.model.QuestionnaireAnswer" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="sdk.kitso.feedbackmaster.ui.profile_fragments.SignUpFragment"
+        android:name="sdk.feedbackmaster.ui.profile_fragments.SignUpFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
         <action
@@ -86,7 +86,7 @@
     </fragment>
     <fragment
         android:id="@+id/networkConnectivityFragment"
-        android:name="sdk.kitso.feedbackmaster.ui.network_fragments.NetworkConnectivityFragment"
+        android:name="sdk.feedbackmaster.ui.network_fragments.NetworkConnectivityFragment"
         android:label="fragment_network_connectivity"
         tools:layout="@layout/fragment_network_connectivity" >
         <action
@@ -96,12 +96,12 @@
     </fragment>
     <fragment
         android:id="@+id/branchesDepartmentsFragment"
-        android:name="sdk.kitso.feedbackmaster.ui.survey_fragments.BranchesDepartmentsFragment"
+        android:name="sdk.feedbackmaster.ui.survey_fragments.BranchesDepartmentsFragment"
         android:label="fragment_branches_departments"
         tools:layout="@layout/fragment_branches_departments" >
         <argument
             android:name="currentSurvey"
-            app:argType="sdk.kitso.feedbackmaster.model.DataItem" />
+            app:argType="sdk.feedbackmaster.model.DataItem" />
         <action
             android:id="@+id/actionBeginSurvey"
             app:destination="@id/questionFragment"
@@ -121,7 +121,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="sdk.kitso.feedbackmaster.ui.survey_fragments.SearchFragment"
+        android:name="sdk.feedbackmaster.ui.survey_fragments.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
