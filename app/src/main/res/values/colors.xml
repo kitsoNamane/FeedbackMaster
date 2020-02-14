@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#AAAAAA</color>
-    <color name="colorPrimaryDark">#AAAAAA</color>
+    <color name="colorPrimary">#FF070606</color>
+    <color name="colorPrimaryDark">#FF070606</color>
     <color name="colorAccent">#B00020</color>
-    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorBackground">#F5F5F5F5</color>
+
+    <color name="colorCompanyName">#61616161</color>
+    <color name="colorSurveyName">#FF070606</color>
+    <color name="colorTextColor">#616161</color>
+
+    <color name="colorPrimaryButton">#61616161</color>
+    <color name="colorActionButton">#FF33691E</color>
+
     <color name="colorSurface">#FFFFFF</color>
     <color name="colorError">#B00020</color>
+
     <color name="colorTransparent">#00ffffff</color>
+
     <color name="colorGradientStart">#D9FF43</color>
     <color name="colorGradientCenter">#F67831</color>
     <color name="colorGradientEnd">#FF1493</color>

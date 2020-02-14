@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
+import sdk.feedbackmaster.Utils;
 import sdk.feedbackmaster.model.DataItem;
 import sdk.feedbackmaster.ui.adapters.SearchAdapter;
+import sdk.feedbackmaster.ui.adapters.SurveyPagedAdapter;
 import sdk.feedbackmaster.viewmodels.SearchViewModel;
 
 
@@ -40,6 +43,7 @@ public class SearchFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     RecyclerView recyclerView;
     SearchAdapter searchAdapter;
+    SurveyPagedAdapter pagedAdapter;
     RecyclerView.LayoutManager layoutManager;
     SearchViewModel searchViewModel;
     TextInputEditText searchKeyword;
@@ -93,6 +97,7 @@ public class SearchFragment extends Fragment {
         recyclerView = view.findViewById(R.id.search_result_list);
         layoutManager = new LinearLayoutManager(view.getContext());
         searchAdapter = new SearchAdapter();
+        pagedAdapter = new SurveyPagedAdapter();
         searchAdapter.setSearchResult(new ArrayList<DataItem>());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(searchAdapter);
@@ -111,6 +116,10 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(count >= 3) {
+                    if(!Utils.isOnline(getContext())) {
+                        searchViewModel.clearNetworkState();
+                        return;
+                    }
                     countDownTimer = new CountDownTimer(500, 1) {
                         @Override
                         public void onTick(long millisUntilFinished) {
@@ -145,8 +154,12 @@ public class SearchFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
         searchViewModel.getNetworkState().observe(getViewLifecycleOwner(), networkState -> {
+            searchAdapter.setNetworkState(networkState);
             switch (networkState.getStatus()) {
                 case FAILED:
+                    Log.d("FMDIGILAB", networkState.getMsg());
+                    searchAdapter.setRetry(searchViewModel.getRetry());
+                    searchProgress.setVisibility(View.GONE);
                     break;
                 case RUNNING:
                     // run loading progressbar
@@ -157,6 +170,7 @@ public class SearchFragment extends Fragment {
                     //enableBottomNavigation();
             }
         });
+
 
         searchViewModel.getSearchResults().observe(getViewLifecycleOwner(), result -> {
             if(result != null && result.getData().getDataItemList() != null) {

@@ -18,12 +18,10 @@ import sdk.feedbackmaster.model.Profile;
 import sdk.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.feedbackmaster.repository.FeedbackMasterSurveyApiService;
 import sdk.feedbackmaster.repository.factories.FeedbackMasterSurveyServiceFactory;
-import sdk.feedbackmaster.viewmodels.SurveyViewModel;
 
 public class MainActivity extends AppCompatActivity {
     public static FeedbackMasterDB feedbackMasterDB;
     public static NavController navController;
-    public static SurveyViewModel surveyViewModel;
     public static Profile profile;
     public static FeedbackMasterSurveyApiService feedbackMasterSurveyApiService;
     public static QuestionnaireAnswer questionnaireAnswer;
@@ -71,15 +69,13 @@ public class MainActivity extends AppCompatActivity {
                 // use the ID of the navigation graph not the ID of the Question fragment
                 case R.id.signUpFragment:
                 case R.id.searchFragment:
-                case R.id.questionnaireCompletedFragment:
                     navView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.GONE);
                     break;
+                case R.id.questionnaireCompletedFragment:
                 case R.id.questionFragment:
-                    navView.setVisibility(View.GONE);
-                    break;
                 default:
-                    navView.setVisibility(View.VISIBLE);
+                    navView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.VISIBLE);
             }
         });

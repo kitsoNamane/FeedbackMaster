@@ -1,5 +1,7 @@
 package sdk.feedbackmaster.repository.api;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,6 +51,7 @@ public class FeedbackMasterSearchApi {
             public void onFailure(Call<SearchResponse> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
                 searchResponse.postValue(null);
+                Log.d("FMDIGILAB 12", "Exception"+throwable.getMessage());
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 reload = () -> call.request();
             }
@@ -61,5 +64,9 @@ public class FeedbackMasterSearchApi {
             networkState = new MutableLiveData<>();
         }
         return networkState;
+    }
+
+    public void invalidate() {
+        networkState.postValue(new NetworkState(NetworkState.Status.NULL, "Current Value Null"));
     }
 }

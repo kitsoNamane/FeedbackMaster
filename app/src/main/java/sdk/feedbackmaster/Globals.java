@@ -16,7 +16,6 @@ public class Globals {
     public static final String TRUE_OR_FALSE = "true-or-false";
     public static final String MULTI_SELECT = "multiple-select";
     public static final String SINGLE_SELECT = "single-select";
-    public static final int SCALE = 5;
 
     /** Response Error Codes Key:
      *  2208 -> invalid package

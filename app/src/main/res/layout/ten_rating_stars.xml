@@ -11,6 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:scaleY="1.4"
+        android:scaleX="1.4"
         android:isIndicator="false"
         android:max="10"
         android:numStars="10"

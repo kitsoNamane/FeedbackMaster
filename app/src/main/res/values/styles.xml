@@ -1,23 +1,32 @@
 <resources>
+
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="textInputStyle">
-            @style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+            @style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
         <item name="bottomNavigationStyle">
-            @style/Widget.MaterialComponents.BottomNavigationView</item>
+            @style/Widget.MaterialComponents.BottomNavigationView
+        </item>
         <item name="materialCardViewStyle">
-            @style/Widget.MaterialComponents.CardView</item>
+            @style/Widget.MaterialComponents.CardView
+        </item>
         <item name="chipGroupStyle">
-            @style/Widget.MaterialComponents.Chip.Filter</item>
+            @style/Widget.MaterialComponents.Chip.Filter
+        </item>
         <item name="materialAlertDialogTheme">
-            @style/ThemeOverlay.MaterialComponents.MaterialAlertDialog</item>
+            @style/ThemeOverlay.MaterialComponents.MaterialAlertDialog
+        </item>
         <item name="materialAlertDialogTitlePanelStyle">
-            @style/MaterialAlertDialog.MaterialComponents.Title.Panel</item>
+            @style/MaterialAlertDialog.MaterialComponents.Title.Panel
+        </item>
         <item name="materialAlertDialogTitleIconStyle">
-            @style/MaterialAlertDialog.MaterialComponents.Title.Icon</item>
+            @style/MaterialAlertDialog.MaterialComponents.Title.Icon
+        </item>
         <item name="materialAlertDialogTitleTextStyle">
-            @style/MaterialAlertDialog.MaterialComponents.Title.Text</item>
+            @style/MaterialAlertDialog.MaterialComponents.Title.Text
+        </item>
     </style>
 
     <style name="questionRatingBar" parent="@android:style/Widget.RatingBar">
@@ -30,4 +39,13 @@
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">#EEEEEE</item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

@@ -12,6 +12,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
@@ -50,12 +51,14 @@ public class BranchesDepartmentsFragment extends Fragment {
     private MaterialTextView expiryDate;
     private MaterialTextView categoryHelpText;
     private LinearLayout selectedCategories;
-    private FlexboxLayout getSelectedCategories;
+    private FlexboxLayout setSelectedCategories;
     private Chip selectedChipItem;
+    private MaterialButton selectedCategoryItem;
     private DataItem item;
     private LayoutInflater layoutInflater;
     private MaterialButton start;
     private MaterialButton toggleButton;
+    private FloatingActionButton continueBtn;
 
     private MaterialTextView businessIntro;
     private BranchesDepartmentsFragmentArgs branchesDepartmentsFragmentArgs;
@@ -150,7 +153,7 @@ public class BranchesDepartmentsFragment extends Fragment {
         expiryDate = view.findViewById(R.id.expiry_date);
         layoutInflater = this.getLayoutInflater();
         selectedCategories = view.findViewById(R.id.selected_chip_group);
-        getSelectedCategories = view.findViewById(R.id.chip_group);
+        setSelectedCategories = view.findViewById(R.id.chip_group);
         businessIntro = view.findViewById(R.id.intro);
         start = view.findViewById(R.id.start_survey);
         item = branchesDepartmentsFragmentArgs.getCurrentSurvey();
@@ -183,7 +186,7 @@ public class BranchesDepartmentsFragment extends Fragment {
         List<ChildrenDataItem> children = item.getBusiness().getBusinessData().getChildren().getData();
         if(children.size() > 0) {
             for(ChildrenDataItem child : children) {
-                toggleButton = (MaterialButton) layoutInflater.inflate(R.layout.option_item, getSelectedCategories, false);
+                toggleButton = (MaterialButton) layoutInflater.inflate(R.layout.option_item, setSelectedCategories, false);
                 toggleButton.setText(child.getName());
 
                 toggleButton.setOnClickListener(v -> {
@@ -196,7 +199,7 @@ public class BranchesDepartmentsFragment extends Fragment {
                     }
                     BranchesDepartmentsFragment.this.renderDepartments(child);
                 });
-                getSelectedCategories.addView(toggleButton);
+                setSelectedCategories.addView(toggleButton);
             }
         } else {
             businessReference = item.getBusiness().getBusinessData().getAlias();
@@ -213,7 +216,7 @@ public class BranchesDepartmentsFragment extends Fragment {
         selectedChipItem.setOnCloseIconClickListener(v -> {
             selectedCategories.removeAllViews();
             start.setVisibility(View.GONE);
-            getSelectedCategories.removeAllViews();
+            setSelectedCategories.removeAllViews();
             categoryHelpText.setText("Do you want to give feedback to the following:");
             renderBranches();
         });
@@ -222,10 +225,10 @@ public class BranchesDepartmentsFragment extends Fragment {
 
     public void renderDepartments(ChildrenDataItem childObj) {
         List<BranchDataItem> children = childObj.getChildren().getData();
-        getSelectedCategories.removeAllViews();
+        setSelectedCategories.removeAllViews();
         if(children.size() > 0) {
             for(BranchDataItem child : children) {
-                toggleButton = (MaterialButton) layoutInflater.inflate(R.layout.option_item, getSelectedCategories, false);
+                toggleButton = (MaterialButton) layoutInflater.inflate(R.layout.option_item, setSelectedCategories, false);
                 toggleButton.setText(child.getName());
                 toggleButton.setOnClickListener(v -> {
                     MaterialButton selectedChip = (MaterialButton) v;
@@ -248,13 +251,13 @@ public class BranchesDepartmentsFragment extends Fragment {
                         renderDepartments(childObj);
                     });
                     selectedCategories.addView(selectedChipItem);
-                    getSelectedCategories.removeAllViews();
+                    setSelectedCategories.removeAllViews();
                 });
 
-                getSelectedCategories.addView(toggleButton);
+                setSelectedCategories.addView(toggleButton);
             }
         } else {
-            getSelectedCategories.removeAllViews();
+            setSelectedCategories.removeAllViews();
         }
     }
 

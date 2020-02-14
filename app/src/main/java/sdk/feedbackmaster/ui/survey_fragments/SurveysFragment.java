@@ -25,7 +25,6 @@ import sdk.feedbackmaster.Utils;
 import sdk.feedbackmaster.ui.adapters.SurveyPagedAdapter;
 import sdk.feedbackmaster.viewmodels.SurveyViewModel;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -133,9 +132,13 @@ public class SurveysFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Surveys List");
 
+        /**
         if(MainActivity.profile.getPhone() == 0) {
-            MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(
+                    SurveysFragmentDirections.actionSignup()
+            );
         }
+         */
 
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
@@ -156,7 +159,7 @@ public class SurveysFragment extends Fragment {
 
     private void onNetworkState(Context context) {
         if(!Utils.isOnline(context)) {
-            MainActivity.navController.navigate(SurveysFragmentDirections.actionNetworkError());
+            MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
         }
     }
 }

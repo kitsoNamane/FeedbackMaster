@@ -10,7 +10,7 @@ import sdk.feedbackmaster.model.SearchResponse;
 import sdk.feedbackmaster.repository.api.FeedbackMasterSearchApi;
 
 public class SearchViewModel extends ViewModel {
-    public Runnable reload;
+    private Runnable reload;
     private FeedbackMasterSearchApi feedbackMasterSearchApi = FeedbackMasterSearchApi.getInstance(MainActivity.feedbackMasterSurveyApiService);
     private MutableLiveData<String> searchString = new MutableLiveData<>();
     private MutableLiveData<Integer> getNetworkArgs = new MutableLiveData<>(0);
@@ -21,13 +21,6 @@ public class SearchViewModel extends ViewModel {
     public LiveData<NetworkState> networkState = Transformations.switchMap(getNetworkArgs,
             args -> feedbackMasterSearchApi.getNetworkState()
     );
-
-    public void retry() {
-        Thread thread = new Thread(
-                reload
-        );
-        thread.run();
-    }
 
     public void search(String keyword) {
         searchString.setValue(keyword);
@@ -48,4 +41,13 @@ public class SearchViewModel extends ViewModel {
         }
         return searchResults;
     }
+
+    public void clearNetworkState() {
+        feedbackMasterSearchApi.invalidate();
+    }
+
+    public Runnable getRetry() {
+    return reload;
+    }
+
 }
