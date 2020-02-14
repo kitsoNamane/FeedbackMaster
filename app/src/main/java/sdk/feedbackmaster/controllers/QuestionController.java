@@ -7,13 +7,13 @@ import sdk.feedbackmaster.model.QuestionsItem;
 
 // Make it a Singleton: If it's already created re-use the instantiated one
 public class QuestionController {
-    public int maxQuestions;
+    private int maxQuestions;
     private static QuestionController instance;
-    public QuestionsItem currentQuestion;
+    private QuestionsItem currentQuestion;
 
-    public List<AnswersItem> availableAnswers;
+    private List<AnswersItem> availableAnswers;
     private List<QuestionsItem> questions;
-    public int listIterator;
+    private int index;
 
     private QuestionController() {
         currentQuestion = new QuestionsItem();
@@ -22,7 +22,7 @@ public class QuestionController {
     public void setQuestions(List<QuestionsItem> questions) {
         this.questions = questions;
         this.maxQuestions = this.questions.size();
-        this.listIterator = -1;
+        this.index = -1;
     }
 
     public static QuestionController getInstance() {
@@ -32,27 +32,39 @@ public class QuestionController {
         return instance;
     }
 
+    public QuestionsItem getCurrentQuestion() {
+        return currentQuestion;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public int getMaxQuestions() {
+        return maxQuestions;
+    }
+
+    public List<AnswersItem> getAvailableAnswers() {
+        return availableAnswers;
+    }
+
+    public AnswersItem getAnswerItem(int index) {
+        return availableAnswers.get(index);
+    }
+
+    public List<QuestionsItem> getQuestions() {
+        return questions;
+    }
+
     public QuestionsItem nextQuestion() {
-        this.listIterator += 1;
-        if(this.listIterator < this.maxQuestions) {
-            this.currentQuestion = this.questions.get(this.listIterator);
+        this.index += 1;
+        if(this.index < this.maxQuestions) {
+            this.currentQuestion = this.questions.get(this.index);
             availableAnswers = this.currentQuestion.getAnswers();
             return this.currentQuestion;
         }
-        this.listIterator -= 1;
+        this.index -= 1;
         this.currentQuestion = null;
         return this.currentQuestion;
     }
-
-    public QuestionsItem previousQuestion() {
-        this.listIterator -= 1;
-        if(this.listIterator >= 0) {
-            this.currentQuestion = this.questions.get(this.listIterator);
-            availableAnswers = this.currentQuestion.getAnswers();
-            return this.currentQuestion;
-        }
-        this.listIterator += 1;
-        return this.currentQuestion;
-    }
-
 }

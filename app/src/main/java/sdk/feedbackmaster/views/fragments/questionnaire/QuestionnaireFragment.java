@@ -31,7 +31,6 @@ import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.controllers.QuestionController;
 import sdk.feedbackmaster.model.Answer;
 import sdk.feedbackmaster.model.AnswerData;
-import sdk.feedbackmaster.model.AnswersItem;
 
 
 /**
@@ -152,9 +151,9 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         stopWatch.start();
 
         nextQuestion.setOnClickListener(v -> {
-            if(questionController.currentQuestion.getSurveyQuestiontype().getRef().equals(Globals.OPEN_ENDED)) {
+            if(questionController.getCurrentQuestion().getSurveyQuestiontype().getRef().equals(Globals.OPEN_ENDED)) {
                 answer = new Answer();
-                answer.setQuestion(questionController.currentQuestion.getRef());
+                answer.setQuestion(questionController.getCurrentQuestion().getRef());
                 answerData = new AnswerData();
                 //answerData.setRef("");
                 answerData.setText(shortAnswer.getText().toString());
@@ -164,11 +163,11 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             }
 
             questionController.nextQuestion();
-            if(questionController.listIterator == (questionController.maxQuestions - 1)) {
+            if(questionController.getIndex() == (questionController.getMaxQuestions() - 1)) {
                 nextQuestion.setText("Finish");
             }
 
-            if(questionController.currentQuestion == null && answers != null && answers.size() > 0) {
+            if(questionController.getCurrentQuestion() == null && answers != null && answers.size() > 0) {
                 stopWatch.stop();
                 end_date = dateFormat.format(c.getTime());
                 MainActivity.questionnaireAnswer.setAnswers(answers);
@@ -189,7 +188,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 MainActivity.navController.navigate(
                         QuestionnaireFragmentDirections.actionCompleted(MainActivity.questionnaireAnswer)
                 );
-            } else if (questionController.currentQuestion != null) {
+            } else if (questionController.getCurrentQuestion() != null) {
                 renderQuestion();
             }
         });
@@ -211,9 +210,13 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     public void renderQuestion() {
         //View view = questionNav.findViewById(R.id.dummy);
         displayContinueButton(false);
-        questionTitle.setText(questionController.currentQuestion.getCaption());
-        questionId.setText(String.format(Locale.getDefault()," %d / %d", questionController.listIterator+1, questionController.maxQuestions));
-        switch(questionController.currentQuestion.getSurveyQuestiontype().getRef()){
+        questionTitle.setText(questionController.getCurrentQuestion().getCaption());
+        questionId.setText(
+                String.format(
+                        Locale.getDefault()," %d / %d", questionController.getIndex()+1,
+                        questionController.getMaxQuestions()
+        ));
+        switch(questionController.getCurrentQuestion().getSurveyQuestiontype().getRef()){
             case Globals.SINGLE_SELECT:
             case Globals.TRUE_OR_FALSE:
                 // True or False is categorized as single-select
@@ -250,7 +253,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 break;
             case Globals.RATING:
             default:
-                String questionType = questionController.currentQuestion.getAnswertype().getRef();
+                String questionType = questionController.getCurrentQuestion().getAnswertype().getRef();
                 if(questionType.equals("one-to-five")) {
                     questionContent = setQuestionContent(R.layout.five_rating_stars);
                     ratingBar = questionContent.findViewById(R.id.five_rating_bar);
@@ -265,11 +268,11 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                         return;
                     }
                     answer = new Answer();
-                    answer.setQuestion(questionController.currentQuestion.getRef());
+                    answer.setQuestion(questionController.getCurrentQuestion().getRef());
                     answerData = new AnswerData();
-                    answerData.setRef(questionController.availableAnswers.get(index).getRef());
-                    answerData.setText(questionController.availableAnswers.get(index).getCaption());
-                    answerData.setListItem(questionController.availableAnswers.get(index).getRef());
+                    answerData.setRef(questionController.getAnswerItem(index).getRef());
+                    answerData.setText(questionController.getAnswerItem(index).getCaption());
+                    answerData.setListItem(questionController.getAnswerItem(index).getRef());
                     answer.setAnswerData(answerData);
                     answers.add(answer);
                     displayContinueButton(true);
@@ -282,12 +285,11 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     public void addOptions(View view, String QestionType) {
         multipleChoice = (MaterialButtonToggleGroup) view;
         multipleChoice.setClickable(true);
-        List<AnswersItem> options = questionController.currentQuestion.getAnswers();
 
         multipleChoice.removeAllViews();
-        for(int i=0; i < options.size(); i++) {
+        for(int i=0; i < questionController.getCurrentQuestion().getAnswers().size(); i++) {
             option = (MaterialButton) layoutInflater.inflate(R.layout.option_item, multipleChoice, false);
-            option.setText(options.get(i).getCaption());
+            option.setText(questionController.getCurrentQuestion().getAnswers().get(i).getCaption());
             option.setId(i);
             option.setOnClickListener(v -> onButtonChecked(multipleChoice, v.getId(), ((MaterialButton)v).isChecked()));
             multipleChoice.addView(option);
@@ -320,10 +322,10 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         if(isChecked) {
             answer = new Answer();
 
-            answer.setQuestion(questionController.currentQuestion.getRef());
-            answerData.setRef(questionController.availableAnswers.get(checkedId).getRef());
-            answerData.setText(questionController.availableAnswers.get(checkedId).getCaption());
-            answerData.setListItem(questionController.availableAnswers.get(checkedId).getRef());
+            answer.setQuestion(questionController.getCurrentQuestion().getRef());
+            answerData.setRef(questionController.getAvailableAnswers().get(checkedId).getRef());
+            answerData.setText(questionController.getAvailableAnswers().get(checkedId).getCaption());
+            answerData.setListItem(questionController.getAvailableAnswers().get(checkedId).getRef());
             answer.setAnswerData(answerData);
             // hack for now
             while(answers.size() < checkedId) {
