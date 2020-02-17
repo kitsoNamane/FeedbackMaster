@@ -24,6 +24,9 @@
         <item name="materialAlertDialogTitleIconStyle">
             @style/MaterialAlertDialog.MaterialComponents.Title.Icon
         </item>
+        <item name="colorAccent">
+            @color/colorAccent
+        </item>
         <item name="materialAlertDialogTitleTextStyle">
             @style/MaterialAlertDialog.MaterialComponents.Title.Text
         </item>

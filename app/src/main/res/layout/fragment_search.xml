@@ -17,34 +17,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content">
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:focusable="true"
-        android:hint="@string/search_survey"
-        app:endIconCheckable="true"
-        app:endIconDrawable="@drawable/ic_close_black_18dp"
-        app:endIconMode="clear_text"
-        app:helperTextEnabled="false"
-        app:helperTextTextColor="#D50000"
-        app:hintTextColor="@color/colorPrimary"
-        app:startIconCheckable="true"
-        app:startIconDrawable="@drawable/ic_arrow_back_black_24dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_keyword"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorPrimaryButton"
-            android:focusable="auto"
-            android:textColor="@color/colorPrimary" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            android:focusable="true"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/colorAccent"
+            app:endIconCheckable="true"
+            app:endIconDrawable="@drawable/ic_close_black_18dp"
+            app:endIconMode="clear_text"
+            app:helperTextEnabled="false"
+            app:helperTextTextColor="#D50000"
+            app:hintTextColor="@color/colorTextColor"
+            app:startIconCheckable="true"
+            app:startIconDrawable="@drawable/ic_arrow_back_black_24dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_keyword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorTransparent"
+                android:focusable="auto"
+                android:textColor="@color/colorTextColor" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <ProgressBar
