@@ -73,7 +73,7 @@ public class SurveysFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onNetworkState(this.getContext());
+        //onNetworkState(this.getContext());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -159,7 +159,7 @@ public class SurveysFragment extends Fragment {
 
     private void onNetworkState(Context context) {
         if(!Utils.isOnline(context)) {
-            MainActivity.navController.navigate(SurveysFragmentDirections.actionSignup());
+            MainActivity.navController.navigate(SurveysFragmentDirections.actionNetworkError());
         }
     }
 }

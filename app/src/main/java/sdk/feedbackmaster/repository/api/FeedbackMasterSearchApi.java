@@ -38,10 +38,12 @@ public class FeedbackMasterSearchApi {
                 if(response.isSuccessful() && response.body().isSuccess()) {
                     searchResponse.postValue(response.body());
                     networkState.postValue(NetworkState.LOADED);
+                    Log.d("FMDIGILAB 12", response.body().toString());
                 } else {
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
                             response.body().getMessage().get(0).toString())
                     );
+                    Log.d("FMDIGILAB 12", response.body().toString());
                     searchResponse.postValue(response.body());
                     reload = () -> call.request();
                 }

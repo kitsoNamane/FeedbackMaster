@@ -29,6 +29,7 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>{
     }
 
     public void setSearchResult(List<Survey> searchResult) {
+        //searchResult.add(0, new Survey());
         this.searchResult = searchResult;
         this.removeSearchResult = searchResult;
         this.notifyDataSetChanged();
@@ -74,8 +75,6 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>{
     public int getItemViewType(int position) {
         if (hasExtraRow() && position == getItemCount() - 1) {
             return R.layout.try_again;
-        } else if(position == 0) {
-            return R.layout.welcome;
         } else {
             return R.layout.card_survey;
         }
@@ -87,7 +86,6 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>{
 
     public void setNetworkState(NetworkState newNetworkState) {
         NetworkState previousState = this.networkState;
-        Log.d("FMDIGILAB 13", "Network Setting");
         boolean hadExtraRow = hasExtraRow();
         this.networkState = newNetworkState;
         boolean hasExtraRow = hasExtraRow();

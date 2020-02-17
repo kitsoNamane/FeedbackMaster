@@ -52,4 +52,5 @@
     <string name="profile_nav">profile</string>
     <string name="title_activity_test_main2">TestMain2Activity</string>
     <string name="action_settings">Settings</string>
+    <string name="select_categories">Select organisation categories bellow or</string>
 </resources>

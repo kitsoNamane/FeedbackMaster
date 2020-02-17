@@ -10,7 +10,6 @@ import android.widget.Toast;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
@@ -36,6 +35,8 @@ import sdk.feedbackmaster.viewmodels.QuestionnaireViewModel;
  * create an instance of this fragment.
  */
 public class BranchesDepartmentsFragment extends Fragment {
+    //.addConverterFactory(customConverterFactory())
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -165,7 +166,8 @@ public class BranchesDepartmentsFragment extends Fragment {
         survey.setText(this.item.getName());
         company.setText(this.item.getBusiness().getBusinessData().getName());
         if(item.getIntro() != null) {
-            businessIntro.setText(item.getIntro());
+            businessIntro.setText(this.item.getIntro());
+            businessIntro.setVisibility(View.VISIBLE);
         } else {
             businessIntro.setVisibility(View.GONE);
         }
@@ -174,10 +176,8 @@ public class BranchesDepartmentsFragment extends Fragment {
         //numberOfRespondents.setText(Integer.toString(item.getEntries().getTotal()));
         //numberOfQuestions.setText(Integer.toString(item.getQuestions().getNumberOfQuestion()));
 
-        if(surveyReference == null && businessReference == null) {
-            this.start.setVisibility(View.GONE);
-        }
         surveyReference = item.getAlias();
+        businessReference = item.getBusiness().getBusinessData().getAlias();
         renderBranches();
         return view;
     }
@@ -194,7 +194,7 @@ public class BranchesDepartmentsFragment extends Fragment {
                     setSelectedCategories(selectedChip);
                     if(child.getChildren().getData().size() <= 0) {
                         businessReference = child.getAlias();
-                        categoryHelpText.setText("Press Start Survey");
+                        categoryHelpText.setText("Press continue to start survey");
                         start.setVisibility(View.VISIBLE);
                     }
                     BranchesDepartmentsFragment.this.renderDepartments(child);
@@ -204,23 +204,25 @@ public class BranchesDepartmentsFragment extends Fragment {
         } else {
             businessReference = item.getBusiness().getBusinessData().getAlias();
             start.setVisibility(View.VISIBLE);
-            categoryHelpText.setText("Press Start Survey");
+            categoryHelpText.setText("Press continue to start survey");
         }
     }
 
     public void setSelectedCategories(MaterialButton btn) {
-        selectedChipItem = (Chip) layoutInflater.inflate(R.layout.selected_category_chip, selectedCategories, false);
-        selectedChipItem.setCloseIcon(getResources().getDrawable(R.drawable.ic_close_black_18dp));
-        selectedChipItem.setCloseIconVisible(true);
-        selectedChipItem.setText(btn.getText());
-        selectedChipItem.setOnCloseIconClickListener(v -> {
+        selectedCategoryItem = (MaterialButton) layoutInflater.inflate(R.layout.selected_subcategory, selectedCategories, false);
+        selectedCategoryItem.setText(btn.getText());
+        selectedCategoryItem.setOnClickListener(v -> {
             selectedCategories.removeAllViews();
             start.setVisibility(View.GONE);
             setSelectedCategories.removeAllViews();
-            categoryHelpText.setText("Do you want to give feedback to the following:");
-            renderBranches();
+            categoryHelpText.setText(BranchesDepartmentsFragment.this.getResources().getString(R.string.select_categories));
+            BranchesDepartmentsFragment.this.renderBranches();
         });
-        selectedCategories.addView(selectedChipItem);
+        View divider = new View(getContext());
+        divider.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 3));
+        divider.setBackgroundColor(getResources().getColor(R.color.colorSurface));
+        selectedCategories.addView(selectedCategoryItem);
+        selectedCategories.addView(divider);
     }
 
     public void renderDepartments(ChildrenDataItem childObj) {
@@ -233,24 +235,18 @@ public class BranchesDepartmentsFragment extends Fragment {
                 toggleButton.setOnClickListener(v -> {
                     MaterialButton selectedChip = (MaterialButton) v;
                     businessReference = child.getAlias();
-                    categoryHelpText.setText("Press Start Survey");
+                    categoryHelpText.setText("Press continue to start survey");
                     start.setVisibility(View.VISIBLE);
 
-                    selectedChipItem = (Chip) layoutInflater.inflate(R.layout.selected_category_chip, selectedCategories, false);
-                    selectedChipItem.setCloseIcon(getResources().getDrawable(R.drawable.ic_close_black_18dp));
-                    selectedChipItem.setCloseIconVisible(true);
-                    selectedChipItem.setText(selectedChip.getText());
-                    selectedChipItem.setLayoutParams(
-                            new ChipGroup.LayoutParams(
-                                    ChipGroup.LayoutParams.WRAP_CONTENT, ChipGroup.LayoutParams.WRAP_CONTENT)
-                    );
-                    selectedChipItem.setOnCloseIconClickListener(v1 -> {
+                    selectedCategoryItem = (MaterialButton) layoutInflater.inflate(R.layout.selected_subcategory, selectedCategories, false);
+                    selectedCategoryItem.setText(selectedChip.getText());
+                    selectedCategoryItem.setOnClickListener(v1 -> {
                         selectedCategories.removeView(v1);
                         categoryHelpText.setText("Do you want to give feedback to the following:");
                         start.setVisibility(View.GONE);
                         renderDepartments(childObj);
                     });
-                    selectedCategories.addView(selectedChipItem);
+                    selectedCategories.addView(selectedCategoryItem);
                     setSelectedCategories.removeAllViews();
                 });
 

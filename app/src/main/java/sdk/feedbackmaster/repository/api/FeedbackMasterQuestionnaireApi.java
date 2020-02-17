@@ -38,6 +38,11 @@ public class FeedbackMasterQuestionnaireApi {
 
     public MutableLiveData<AnswerResponse> sendAnswers(QuestionnaireAnswer questionnaireAnswer) {
         networkState.postValue(NetworkState.LOADING);
+        if(questionnaireAnswer.getAnswers() == null) {
+            answerResponse.postValue(null);
+            return answerResponse;
+        }
+
         apiService.sendAnswer(questionnaireAnswer).enqueue(new Callback<AnswerResponse>() {
             @Override
             public void onResponse(Call<AnswerResponse> call, Response<AnswerResponse> response) {
@@ -111,9 +116,12 @@ public class FeedbackMasterQuestionnaireApi {
         return networkState;
     }
 
-    public void clearNetworkState() {
-        networkState.postValue(new NetworkState(NetworkState.Status.NULL, "Current Value Null"));
+    public void invalidateData() {
         answerResponse.postValue(null);
         questionnaire.postValue(null);
+    }
+
+    public void clearNetworkState() {
+        networkState.postValue(new NetworkState(NetworkState.Status.NULL, "Current Value Null"));
     }
 }

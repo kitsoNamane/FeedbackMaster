@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
-import sdk.feedbackmaster.Utils;
 import sdk.feedbackmaster.model.Survey;
 import sdk.feedbackmaster.viewmodels.SearchViewModel;
 import sdk.feedbackmaster.views.adapters.SearchAdapter;
@@ -121,10 +120,10 @@ public class SearchSurveysFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(count >= 3) {
-                    if(!Utils.isOnline(getContext())) {
+                    //if(!Utils.isOnline(getContext())) {
                         searchViewModel.clearNetworkState();
-                        return;
-                    }
+                     //   return;
+                    //}
                     countDownTimer = new CountDownTimer(500, 1) {
                         @Override
                         public void onTick(long millisUntilFinished) {
