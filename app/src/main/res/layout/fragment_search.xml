@@ -32,13 +32,15 @@
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/colorAccent"
             app:endIconCheckable="true"
-            app:endIconDrawable="@drawable/ic_close_black_18dp"
+            app:endIconTint="@color/colorAccent"
+            app:endIconDrawable="@drawable/ic_close_red_50_24dp"
             app:endIconMode="clear_text"
             app:helperTextEnabled="false"
             app:helperTextTextColor="#D50000"
             app:hintTextColor="@color/colorTextColor"
             app:startIconCheckable="true"
-            app:startIconDrawable="@drawable/ic_arrow_back_black_24dp">
+            app:startIconTint="@color/colorAccent"
+            app:startIconDrawable="@drawable/ic_arrow_back_red_50_24dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/search_keyword"
