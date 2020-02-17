@@ -40,8 +40,6 @@
                 layout="@layout/questionnaire_intro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
                 android:visibility="visible" />
 
             <com.google.android.flexbox.FlexboxLayout
@@ -106,8 +104,11 @@
 
             </FrameLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:id="@+id/next_question"
+                android:background="@color/colorPrimaryButton"
+                android:backgroundTint="@color/colorPrimaryButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"

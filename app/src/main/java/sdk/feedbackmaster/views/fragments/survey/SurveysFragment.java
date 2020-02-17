@@ -17,6 +17,7 @@ import com.google.android.material.chip.Chip;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.feedbackmaster.MainActivity;
@@ -87,11 +88,12 @@ public class SurveysFragment extends Fragment {
         //toolbar.inflateMenu(R.menu.topbar_with_search);
         super.onCreateOptionsMenu(menu, menuInflater);
         getActivity().getMenuInflater().inflate(R.menu.topbar_with_search, menu);
+        MenuItem search = menu.getItem(menu.size() - 1);
+        search.setTitle("search");
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_search:
                 MainActivity.navController.navigate(SurveysFragmentDirections.actionSearch());
@@ -132,13 +134,11 @@ public class SurveysFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Surveys List");
 
-        /**
         if(MainActivity.profile.getPhone() == 0) {
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(
                     SurveysFragmentDirections.actionSignup()
             );
         }
-         */
 
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
