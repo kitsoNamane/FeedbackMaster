@@ -6,11 +6,15 @@
 
     <RatingBar
         android:id="@+id/five_rating_bar"
+        style="@style/questionRatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginTop="16dp"
         android:max="5"
         android:numStars="5"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
         android:stepSize="1" />
 
 
