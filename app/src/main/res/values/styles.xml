@@ -32,6 +32,11 @@
         </item>
     </style>
 
+    <style name="CustomAlert" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="windowMinWidthMajor">0dp</item>
+        <item name="windowMinWidthMinor">0dp</item>
+    </style>
+
     <style name="questionRatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:minHeight">28dip</item>
         <item name="android:maxHeight">28dip</item>

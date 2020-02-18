@@ -14,12 +14,12 @@ public class FeedbackMasterSurveyServiceFactory {
         DeviceUUIDInterceptor deviceUUIDInterceptor = new DeviceUUIDInterceptor(device_uuid);
         ConnectivityInterceptor connectivityInterceptor = new ConnectivityInterceptor(context);
         OkHttpClient httpClient = new OkHttpClient.Builder()
-                //.addInterceptor(connectivityInterceptor)
+                .addInterceptor(connectivityInterceptor)
                 .addInterceptor(deviceUUIDInterceptor)
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .client(httpClient)
-                .baseUrl("http://192.168.43.208:8000/api/v1/")
+                .baseUrl("http://192.168.1.78:8000/api/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(FeedbackMasterSurveyApiService.class);

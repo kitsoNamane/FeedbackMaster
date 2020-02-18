@@ -57,4 +57,5 @@
     <string name="question_icon">Number of questions in survey questionnaire</string>
     <string name="expiry_icon">Expiry date of survey</string>
     <string name="survey_icon">Total respondents of survey</string>
+    <string name="tap_to_dismiss">Tap to dismiss</string>
 </resources>

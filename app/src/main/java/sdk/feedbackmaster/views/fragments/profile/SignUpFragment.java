@@ -15,8 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
-import sdk.feedbackmaster.Utils;
 import sdk.feedbackmaster.model.Profile;
+import sdk.feedbackmaster.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.

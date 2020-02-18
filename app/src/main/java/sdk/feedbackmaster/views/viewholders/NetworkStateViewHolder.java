@@ -12,9 +12,9 @@ import com.google.android.material.textview.MaterialTextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
 import sdk.feedbackmaster.R;
-import sdk.feedbackmaster.Utils;
 import sdk.feedbackmaster.model.FeedbackMasterObject;
 import sdk.feedbackmaster.model.NetworkState;
+import sdk.feedbackmaster.utils.Utils;
 
 public class NetworkStateViewHolder extends BaseViewHolder {
     private NetworkState networkState;

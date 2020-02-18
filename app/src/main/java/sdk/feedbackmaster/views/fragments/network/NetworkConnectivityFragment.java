@@ -16,7 +16,7 @@ import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
-import sdk.feedbackmaster.Utils;
+import sdk.feedbackmaster.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setElevation(new Float(2));
         final BottomNavigationView navView = findViewById(R.id.nav_view);
 
         navView.setOnNavigationItemReselectedListener(item -> {

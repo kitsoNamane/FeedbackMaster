@@ -22,7 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
-import sdk.feedbackmaster.Utils;
+import sdk.feedbackmaster.utils.CustomAlertDialog;
+import sdk.feedbackmaster.utils.Utils;
 import sdk.feedbackmaster.viewmodels.SurveyViewModel;
 import sdk.feedbackmaster.views.adapters.SurveyPagedAdapter;
 
@@ -74,7 +75,7 @@ public class SurveysFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //onNetworkState(this.getContext());
+        onNetworkState(this.getContext());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -122,8 +123,13 @@ public class SurveysFragment extends Fragment {
             }
         });
 
+
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(pagedAdapter);
+
+        CustomAlertDialog.showAlert(
+                this.getContext(), 1, "custom message, try to position it"
+        );
     }
 
     @Override

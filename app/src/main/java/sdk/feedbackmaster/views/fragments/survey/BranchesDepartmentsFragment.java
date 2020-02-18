@@ -172,10 +172,6 @@ public class BranchesDepartmentsFragment extends Fragment {
             businessIntro.setVisibility(View.GONE);
         }
 
-        //expiryDate.setText(item.getEnds());
-        //numberOfRespondents.setText(Integer.toString(item.getEntries().getTotal()));
-        //numberOfQuestions.setText(Integer.toString(item.getQuestions().getNumberOfQuestion()));
-
         surveyReference = item.getAlias();
         businessReference = item.getBusiness().getBusinessData().getAlias();
         renderBranches();

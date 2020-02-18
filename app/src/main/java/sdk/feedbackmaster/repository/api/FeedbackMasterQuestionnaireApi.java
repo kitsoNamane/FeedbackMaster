@@ -72,6 +72,11 @@ public class FeedbackMasterQuestionnaireApi {
     }
 
     public MutableLiveData<Result> getQuestions(String surveyReference, String businessReference) {
+        if(surveyReference == null || businessReference == null) {
+            questionnaire.postValue(null);
+            return questionnaire;
+        }
+
         if(questionnaire.getValue() == null) {
             return _getQuestionsFromServer(surveyReference, businessReference);
         } else if(!questionnaire.getValue().getQuestionBusiness().getRef()
@@ -116,8 +121,11 @@ public class FeedbackMasterQuestionnaireApi {
         return networkState;
     }
 
-    public void invalidateData() {
+    public void invalidateAnswerResponse() {
         answerResponse.postValue(null);
+    }
+
+    public void invalidateQuestionnaire() {
         questionnaire.postValue(null);
     }
 

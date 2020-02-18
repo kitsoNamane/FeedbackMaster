@@ -53,7 +53,7 @@ public class AnswersViewModel extends ViewModel {
 
     public void clearNetworkState() {
         feedbackMasterQuestionnaireApi.clearNetworkState();
-        feedbackMasterQuestionnaireApi.invalidateData();
+        feedbackMasterQuestionnaireApi.invalidateAnswerResponse();
         getNetworkArgs.setValue(resetNetwork);
         getQuestionnaireAnswerArgs.setValue(new QuestionnaireAnswer());
     }
