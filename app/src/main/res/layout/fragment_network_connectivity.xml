@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/linearLayout"
+    android:id="@+id/network_connectivity"
     android:layout_width="match_parent"
-    android:background="@color/colorSurface"
     android:layout_height="match_parent"
+    android:background="@color/colorSurface"
     android:orientation="vertical">
 
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/progressBar"
-        app:lottie_rawRes="@raw/circles_menu_1"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:outlineSpotShadowColor="#00351B1B"
@@ -21,7 +18,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.499"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/circles_menu_1" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/network_error_group"
@@ -34,8 +34,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.469">
-    </androidx.constraintlayout.widget.Group>
+        app:layout_constraintVertical_bias="0.469"></androidx.constraintlayout.widget.Group>
 
     <TextView
         android:id="@+id/errorMgs"
@@ -64,9 +63,6 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/network_img_error"
-        app:lottie_rawRes="@raw/wifi_search"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -78,7 +74,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/wifi_search" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

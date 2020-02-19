@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/questions"
+    android:id="@+id/questionnaire"
     android:layout_width="match_parent"
     android:background="@color/colorSurface"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".views.fragments.questionnaire.QuestionnaireFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <include
         android:id="@+id/include"
         layout="@layout/business_questionnaire"
@@ -21,7 +24,6 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -105,10 +107,8 @@
             </FrameLayout>
 
             <com.google.android.material.button.MaterialButton
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:id="@+id/next_question"
-                android:background="@color/colorPrimaryButton"
-                android:backgroundTint="@color/colorPrimaryButton"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -117,9 +117,16 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="16dp"
+                android:background="@color/colorPrimaryButton"
+                android:backgroundTint="@color/colorPrimaryButton"
                 android:text="@string/next"
                 android:visibility="visible" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:id="@+id/tutorials"
+        android:background="@color/colorTransparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>

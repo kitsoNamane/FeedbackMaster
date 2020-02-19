@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
-import sdk.feedbackmaster.utils.CustomAlertDialog;
+import sdk.feedbackmaster.controllers.TutorialsController;
 import sdk.feedbackmaster.utils.Utils;
 import sdk.feedbackmaster.viewmodels.SurveyViewModel;
 import sdk.feedbackmaster.views.adapters.SurveyPagedAdapter;
@@ -127,9 +127,11 @@ public class SurveysFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(pagedAdapter);
 
+        /**
         CustomAlertDialog.showAlert(
                 this.getContext(), 1, "custom message, try to position it"
         );
+         */
     }
 
     @Override
@@ -148,9 +150,11 @@ public class SurveysFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
-
+        TutorialsController tutorialsController = TutorialsController.getInstance();
+        tutorialsController.initTutorial(view);
         return view;
     }
+
 
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);

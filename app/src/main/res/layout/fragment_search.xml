@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/searchView"
+    android:id="@+id/search"
     android:background="@color/colorSurface"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.fragments.survey.SearchSurveysFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/textInputLayoutParent"
         android:layout_width="match_parent"
@@ -71,5 +74,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_progress_bar" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <FrameLayout
+        android:id="@+id/tutorials"
+        android:background="@color/colorTransparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>
