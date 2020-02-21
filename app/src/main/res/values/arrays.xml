@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   <string-array name="hint_text">
+       <!-- surveys view help -->
+       <item>swipe up to get more surveys</item>
+       <item>tired of swiping! use search to get surveys quickly</item>
+
+       <!-- branches and departments -->
+       <item>you can select a company sub-organisation to review</item>
+       <item>you can jump straight to the questionnaire</item>
+
+       <!-- questionnaire -->
+       <item>swipe up for more options</item>
+   </string-array>
+
+    <array name="hint_icons">
+        <!-- surveys view help -->
+        <item>@drawable/ic_arrow_upward_white_48dp</item>
+        <item>@drawable/ic_search_white_48dp</item>
+
+        <!-- branches and departments -->
+        <item>@drawable/ic_dns_white_48dp</item>
+        <item>@drawable/ic_keyboard_arrow_right_white_48dp</item>
+
+        <!-- questionnaire -->
+        <item>@drawable/ic_arrow_upward_white_48dp</item>
+    </array>
+</resources>

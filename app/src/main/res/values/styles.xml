@@ -53,6 +53,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="ChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
+       <item name="chipBackgroundColor">@color/button_selection</item>
+       <item name="android:textColor">@color/text_selection</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

@@ -1,12 +1,20 @@
 package sdk.feedbackmaster.model;
 
+import android.graphics.drawable.Drawable;
+
 import java.io.Serializable;
 
 public class Hint implements Serializable {
 
     private int hintId;
     private String hintText;
-    private int hintImage;
+    private Drawable hintImage;
+
+    public Hint(int hintId, String hintText, Drawable hintImage) {
+        this.hintId = hintId;
+        this.hintText = hintText;
+        this.hintImage = hintImage;
+    }
 
     public String getHintText() {
         return hintText;
@@ -16,11 +24,11 @@ public class Hint implements Serializable {
         this.hintText = hintText;
     }
 
-    public int getHintImage() {
+    public Drawable getHintImage() {
         return hintImage;
     }
 
-    public void setHintImage(int hintImage) {
+    public void setHintImage(Drawable hintImage) {
         this.hintImage = hintImage;
     }
 

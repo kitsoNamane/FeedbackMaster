@@ -22,9 +22,12 @@ public class Tutorial implements Serializable {
     }
 
     public void setTutorialContent(List<Hint> tutorialContent) {
-        List<Hint> copy = this.tutorialContent;
-        copy.addAll(tutorialContent);
-        this.tutorialContent = this.tutorialContent == null ? tutorialContent : copy;
+        this.tutorialContent = tutorialContent;
+    }
+
+    public void removeAllTutorials() {
+        this.tutorialContent = null;
+        this.tutorialContent = new ArrayList<>();
     }
 
     public void setTutorialHint(Hint tutorialHint) {

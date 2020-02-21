@@ -4,6 +4,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:checkable="true"
-    android:text="select me"
-    app:chipIcon="@drawable/ic_check_black_24dp"
-    app:chipIconVisible="false"></com.google.android.material.chip.Chip>
+    android:checked="true"
+    android:text="1"
+    app:chipBackgroundColor="@color/button_selection"
+    app:chipIconVisible="false">
+</com.google.android.material.chip.Chip>
