@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
+import sdk.feedbackmaster.controllers.TutorialsController;
 import sdk.feedbackmaster.model.BranchDataItem;
 import sdk.feedbackmaster.model.ChildrenDataItem;
 import sdk.feedbackmaster.model.Survey;
@@ -175,6 +176,9 @@ public class BranchesDepartmentsFragment extends Fragment {
         surveyReference = item.getAlias();
         businessReference = item.getBusiness().getBusinessData().getAlias();
         renderBranches();
+
+        TutorialsController tutorialsController = TutorialsController.getInstance();
+        tutorialsController.initTutorial(view);
         return view;
     }
 

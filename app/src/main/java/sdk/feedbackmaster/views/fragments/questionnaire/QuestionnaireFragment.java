@@ -29,6 +29,7 @@ import sdk.feedbackmaster.Globals;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.controllers.QuestionController;
+import sdk.feedbackmaster.controllers.TutorialsController;
 import sdk.feedbackmaster.model.Answer;
 import sdk.feedbackmaster.model.AnswerData;
 
@@ -192,6 +193,9 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 renderQuestion();
             }
         });
+
+        TutorialsController tutorialsController = TutorialsController.getInstance();
+        tutorialsController.initTutorial(view);
         return view;
     }
 

@@ -36,6 +36,7 @@ public class TutorialsController {
     TypedArray hintMessages;
     TypedArray hintIcons;
 
+    private TutorialsController() {}
 
     Tutorial tutorial;
 
@@ -48,6 +49,7 @@ public class TutorialsController {
 
     public void initTutorial(View view) {
 
+        /**
         tutorial = tutorial != null ? tutorial : new Tutorial();
         parent = parent != null ? parent : view.findViewById(R.id.tutorials);
         tutorialView = tutorialView != null ? tutorialView : LayoutInflater.from(view.getContext()).inflate(R.layout.tutorial, parent);
@@ -55,6 +57,14 @@ public class TutorialsController {
         hintText = hintText != null ? hintText : tutorialView.findViewById(R.id.hint_text);
         hintImage = hintImage != null ? hintImage : tutorialView.findViewById(R.id.hint_image);
         tutorialPages = tutorialPages != null ? tutorialPages : tutorialView.findViewById(R.id.tutorial_pages);
+         */
+        tutorial = new Tutorial();
+        parent = view.findViewById(R.id.tutorials);
+        tutorialView = LayoutInflater.from(view.getContext()).inflate(R.layout.tutorial, parent);
+        skip = tutorialView.findViewById(R.id.skip_tutorial);
+        hintText =  tutorialView.findViewById(R.id.hint_text);
+        hintImage = tutorialView.findViewById(R.id.hint_image);
+        tutorialPages = tutorialView.findViewById(R.id.tutorial_pages);
 
         hintMessages = view.getContext().getResources().obtainTypedArray(R.array.hint_text);
         hintTexts = Arrays.asList(view.getContext().getResources().getStringArray(R.array.hint_text));
