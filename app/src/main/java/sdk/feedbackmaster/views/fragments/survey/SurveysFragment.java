@@ -120,18 +120,18 @@ public class SurveysFragment extends Fragment {
             if(pagedList != null) {
                 pagedAdapter.submitList(pagedList);
                 pagedAdapter.notifyDataSetChanged();
+
+                if(!MainActivity.appData.hasRan()) {
+                    MainActivity.appData.setHasRan(true);
+                    MainActivity.feedbackMasterDB.surveyDao().addDevice(MainActivity.appData);
+                    TutorialsController tutorialsController = TutorialsController.getInstance();
+                    tutorialsController.initTutorial(this.getView());
+                }
             }
         });
 
-
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(pagedAdapter);
-
-        /**
-        CustomAlertDialog.showAlert(
-                this.getContext(), 1, "custom message, try to position it"
-        );
-         */
     }
 
     @Override
@@ -150,8 +150,6 @@ public class SurveysFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.survey_list);
         layoutManager = new LinearLayoutManager(view.getContext());
-        TutorialsController tutorialsController = TutorialsController.getInstance();
-        tutorialsController.initTutorial(view);
         return view;
     }
 

@@ -44,6 +44,11 @@ public class Utils {
         return popupWindow;
     }
 
+    public static boolean checkAppHasRan(Context context) {
+        SharedPreferancesStorage storage = SharedPreferancesStorage.getInstance(context);
+        return storage.checkAppHasRan();
+    }
+
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.

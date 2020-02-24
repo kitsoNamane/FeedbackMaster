@@ -2,7 +2,9 @@ package sdk.feedbackmaster.controllers;
 
 import android.annotation.SuppressLint;
 import android.content.res.TypedArray;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -48,19 +50,31 @@ public class TutorialsController {
     }
 
     public void initTutorial(View view) {
-
-        /**
-        tutorial = tutorial != null ? tutorial : new Tutorial();
-        parent = parent != null ? parent : view.findViewById(R.id.tutorials);
-        tutorialView = tutorialView != null ? tutorialView : LayoutInflater.from(view.getContext()).inflate(R.layout.tutorial, parent);
-        skip = skip != null ? skip : tutorialView.findViewById(R.id.skip_tutorial);
-        hintText = hintText != null ? hintText : tutorialView.findViewById(R.id.hint_text);
-        hintImage = hintImage != null ? hintImage : tutorialView.findViewById(R.id.hint_image);
-        tutorialPages = tutorialPages != null ? tutorialPages : tutorialView.findViewById(R.id.tutorial_pages);
-         */
         tutorial = new Tutorial();
         parent = view.findViewById(R.id.tutorials);
         tutorialView = LayoutInflater.from(view.getContext()).inflate(R.layout.tutorial, parent);
+
+        view.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                return false;
+            }
+        });
+
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+
+        tutorialView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
+
         skip = tutorialView.findViewById(R.id.skip_tutorial);
         hintText =  tutorialView.findViewById(R.id.hint_text);
         hintImage = tutorialView.findViewById(R.id.hint_image);
@@ -101,6 +115,7 @@ public class TutorialsController {
 
         // set tutorial hints
         tutorialPages.removeAllViews();
+        tutorialPages.setSelectionRequired(true);
         for(Hint hint : tutorial.getTutorialContent()) {
             ChipDrawable chipDrawable = ChipDrawable.createFromAttributes(tutorialView.getContext(), null, 0, R.style.ChipStyle);
             Chip chip = new Chip(tutorialView.getContext());
@@ -108,12 +123,7 @@ public class TutorialsController {
             chip.setId(hint.getHintId());
             chip.setClickable(true);
             chip.setText(String.format(Locale.getDefault(), "%d", hint.getHintId()));
-            chip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TutorialsController.this.changeHint(v.getId());
-                }
-            });
+            chip.setOnClickListener(v -> TutorialsController.this.changeHint(v.getId()));
 
             if(hint.getHintId() == 1) {
                 chip.setChecked(true);

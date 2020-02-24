@@ -12,5 +12,11 @@ public interface FeedbackMasterDao {
 
     @Query("select * from profile where id = :profile_id")
     Profile getProfile(int profile_id);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void addDevice(AppData data);
+
+    @Query("select * from app_data where  id = :app_id")
+    AppData getAppData(int app_id);
 }
 
