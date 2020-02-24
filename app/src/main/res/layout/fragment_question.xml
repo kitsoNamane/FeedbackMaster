@@ -18,8 +18,8 @@
         android:layout_marginRight="24dp"
         android:layout_marginBottom="24dp"
         android:elevation="4dp"
-        android:tint="@color/colorPrimaryButton"
-        app:backgroundTint="@color/colorPrimaryButton" />
+        android:tint="@color/colorAccent"
+        app:backgroundTint="@color/colorAccent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

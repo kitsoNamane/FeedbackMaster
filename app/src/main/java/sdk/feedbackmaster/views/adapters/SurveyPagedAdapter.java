@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import sdk.feedbackmaster.R;
+import sdk.feedbackmaster.model.FeedbackMasterObject;
 import sdk.feedbackmaster.model.NetworkState;
 import sdk.feedbackmaster.model.Survey;
 import sdk.feedbackmaster.views.viewholders.BaseViewHolder;
@@ -19,6 +20,9 @@ public class SurveyPagedAdapter extends PagedListAdapter<Survey, BaseViewHolder>
     private static final int SURVEY = 2;
     Runnable retry;
     private NetworkState networkState;
+    private boolean hasAppRan;
+    private boolean welcomeRemoved = false;
+
 
     public void setRetry(Runnable retry) {
         this.retry = retry;
@@ -39,6 +43,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<Survey, BaseViewHolder>
     public SurveyPagedAdapter() {
         super(DIFF_CALLBACK);
     }
+
 
     @NonNull
     @Override
@@ -62,6 +67,13 @@ public class SurveyPagedAdapter extends PagedListAdapter<Survey, BaseViewHolder>
                 ((NetworkStateViewHolder)holder).setRunnable(retry);
                 break;
             case HERO:
+                FeedbackMasterObject obj = new FeedbackMasterObject();
+                Runnable runnable = ()-> {
+                    setWelcomeRemoved(true);
+                    this.notifyItemRemoved(-1);
+                };
+                obj.setRunnable(runnable);
+                holder.bind(obj);
                 break;
             case SURVEY:
             default:
@@ -75,7 +87,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<Survey, BaseViewHolder>
    public int getItemViewType(int position) {
        if (hasExtraRow() && position == getItemCount() - 1) {
            return R.layout.try_again;
-       } else if(position == 0) {
+       } else if(position == 0 && !isWelcomeRemoved()) {
            return R.layout.welcome;
        } else {
            return R.layout.card_survey;
@@ -100,5 +112,21 @@ public class SurveyPagedAdapter extends PagedListAdapter<Survey, BaseViewHolder>
         } else if (hasExtraRow && previousState != newNetworkState) {
             notifyItemChanged(getItemCount() - 1);
         }
+    }
+
+    public boolean isHasAppRan() {
+        return hasAppRan;
+    }
+
+    public void setHasAppRan(boolean hasAppRan) {
+        this.hasAppRan = hasAppRan;
+    }
+
+    public boolean isWelcomeRemoved() {
+        return welcomeRemoved;
+    }
+
+    public void setWelcomeRemoved(boolean welcomeRemoved) {
+        this.welcomeRemoved = welcomeRemoved;
     }
 }

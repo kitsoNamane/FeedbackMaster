@@ -1,5 +1,6 @@
 package sdk.feedbackmaster.views.viewholders;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,14 @@ public class WelcomeViewHolder extends BaseViewHolder {
         super(view);
         setViewType(0);
         close = view.findViewById(R.id.close_btn);
+        close.setClickable(true);
     }
 
     @Override
     public void bind(FeedbackMasterObject obj) {
         close.setOnClickListener(v -> {
+            Log.d("FMDIGILAB", "Click Click Click");
+            obj.getRunnable().run();
         });
     }
 

@@ -37,14 +37,14 @@ public class NetworkStateViewHolder extends BaseViewHolder {
     }
 
     public void toggleVisibility(int VISIBILITY) {
-        if(VISIBILITY == View.INVISIBLE) {
+        if(VISIBILITY == View.GONE) {
             lottieProgressBar.setVisibility(View.VISIBLE);
-            wifi.setVisibility(View.INVISIBLE);
-            internetText.setVisibility(View.INVISIBLE);
-            retryBtn.setVisibility(View.INVISIBLE);
+            wifi.setVisibility(View.GONE);
+            internetText.setVisibility(View.GONE);
+            retryBtn.setVisibility(View.GONE);
 
         } else {
-            lottieProgressBar.setVisibility(View.INVISIBLE);
+            lottieProgressBar.setVisibility(View.GONE);
             wifi.setVisibility(View.VISIBLE);
             internetText.setVisibility(View.VISIBLE);
             retryBtn.setVisibility(View.VISIBLE);
@@ -59,7 +59,7 @@ public class NetworkStateViewHolder extends BaseViewHolder {
     public void bind(FeedbackMasterObject obj) {
         this.networkState = ((NetworkState)obj);
         retryBtn.setOnClickListener(v -> {
-            toggleVisibility(View.INVISIBLE);
+            toggleVisibility(View.GONE);
             Thread thread = new Thread(
                     retry
             );

@@ -9,6 +9,7 @@ import sdk.feedbackmaster.model.FeedbackMasterObject;
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
     private int viewType = 0;
 
+
     public BaseViewHolder(@NonNull View itemView) {
         super(itemView);
     }

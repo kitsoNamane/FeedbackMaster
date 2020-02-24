@@ -121,6 +121,7 @@ public class SurveysFragment extends Fragment {
                 pagedAdapter.notifyDataSetChanged();
 
                 Utils.initTutorial(getView());
+                pagedAdapter.setHasAppRan(MainActivity.appData.isHasAppRan());
             }
         });
 
