@@ -14,13 +14,54 @@ public class AppData implements Serializable {
     int id = Globals.CURRENT_USER_ID;
 
     @SerializedName("app_has_ran")
-    private boolean hasRan = false;
+    private boolean hasAppRan = false;
 
-    public boolean hasRan() {
-        return hasRan;
+    public boolean isHasAppRan() {
+        return hasAppRan;
     }
 
-    public void setHasRan(boolean hasRan) {
-        this.hasRan = hasRan;
+    public void setHasAppRan(boolean hasAppRan) {
+        this.hasAppRan = hasAppRan;
+    }
+
+    public boolean isSurveysTutComplete() {
+        return surveysTutComplete;
+    }
+
+    public void setSurveysTutComplete(boolean surveysTutComplete) {
+        this.surveysTutComplete = surveysTutComplete;
+    }
+
+    public boolean isBranchesTutComplete() {
+        return branchesTutComplete;
+    }
+
+    public void setBranchesTutComplete(boolean branchesTutComplete) {
+        this.branchesTutComplete = branchesTutComplete;
+    }
+
+    public boolean isQuestionnaireTutComplete() {
+        return questionnaireTutComplete;
+    }
+
+    public void setQuestionnaireTutComplete(boolean questionnaireTutComplete) {
+        this.questionnaireTutComplete = questionnaireTutComplete;
+    }
+
+    @SerializedName("app_surveys_tut_complete")
+    private boolean surveysTutComplete = false;
+
+    @SerializedName("app_branches_tut_complete")
+    private boolean branchesTutComplete = false;
+
+    @SerializedName("app_questionnaire_tut_complete")
+    private boolean questionnaireTutComplete = false;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

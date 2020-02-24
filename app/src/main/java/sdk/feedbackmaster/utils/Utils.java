@@ -12,7 +12,9 @@ import android.widget.PopupWindow;
 
 import com.google.android.material.textview.MaterialTextView;
 
+import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
+import sdk.feedbackmaster.controllers.TutorialsController;
 
 public class Utils {
 
@@ -44,9 +46,41 @@ public class Utils {
         return popupWindow;
     }
 
-    public static boolean checkAppHasRan(Context context) {
-        SharedPreferancesStorage storage = SharedPreferancesStorage.getInstance(context);
-        return storage.checkAppHasRan();
+    public static void initTutorial(View view) {
+        boolean runCurrentTutorial;
+        switch (view.getId()) {
+            case R.id.fragment_surveys:
+                runCurrentTutorial = MainActivity.appData.isSurveysTutComplete();
+                break;
+            case R.id.branches_departments:
+                runCurrentTutorial = MainActivity.appData.isBranchesTutComplete();
+                break;
+            case R.id.questionnaire:
+                runCurrentTutorial = MainActivity.appData.isQuestionnaireTutComplete();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + view.getId());
+        }
+
+        if(!runCurrentTutorial) {
+            switch (view.getId()) {
+                case R.id.fragment_surveys:
+                    MainActivity.appData.setSurveysTutComplete(true);
+                    break;
+                case R.id.branches_departments:
+                    MainActivity.appData.setBranchesTutComplete(true);
+                    break;
+                case R.id.questionnaire:
+                    MainActivity.appData.setQuestionnaireTutComplete(true);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + view.getId());
+            }
+
+            MainActivity.feedbackMasterDB.surveyDao().addDevice(MainActivity.appData);
+            TutorialsController tutorialsController = TutorialsController.getInstance();
+            tutorialsController.initTutorial(view);
+        }
     }
 
     public static void hideKeyboard(Activity activity) {

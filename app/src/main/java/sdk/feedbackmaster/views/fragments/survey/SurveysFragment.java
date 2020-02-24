@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
-import sdk.feedbackmaster.controllers.TutorialsController;
 import sdk.feedbackmaster.utils.Utils;
 import sdk.feedbackmaster.viewmodels.SurveyViewModel;
 import sdk.feedbackmaster.views.adapters.SurveyPagedAdapter;
@@ -121,12 +120,7 @@ public class SurveysFragment extends Fragment {
                 pagedAdapter.submitList(pagedList);
                 pagedAdapter.notifyDataSetChanged();
 
-                if(!MainActivity.appData.hasRan()) {
-                    MainActivity.appData.setHasRan(true);
-                    MainActivity.feedbackMasterDB.surveyDao().addDevice(MainActivity.appData);
-                    TutorialsController tutorialsController = TutorialsController.getInstance();
-                    tutorialsController.initTutorial(this.getView());
-                }
+                Utils.initTutorial(getView());
             }
         });
 

@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
@@ -22,10 +21,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
-import sdk.feedbackmaster.controllers.TutorialsController;
 import sdk.feedbackmaster.model.BranchDataItem;
 import sdk.feedbackmaster.model.ChildrenDataItem;
 import sdk.feedbackmaster.model.Survey;
+import sdk.feedbackmaster.utils.Utils;
 import sdk.feedbackmaster.viewmodels.QuestionnaireViewModel;
 
 /**
@@ -48,19 +47,14 @@ public class BranchesDepartmentsFragment extends Fragment {
     private String mParam2;
     private MaterialTextView company;
     private MaterialTextView survey;
-    private MaterialTextView numberOfQuestions;
-    private MaterialTextView numberOfRespondents;
-    private MaterialTextView expiryDate;
     private MaterialTextView categoryHelpText;
     private LinearLayout selectedCategories;
     private FlexboxLayout setSelectedCategories;
-    private Chip selectedChipItem;
     private MaterialButton selectedCategoryItem;
     private Survey item;
     private LayoutInflater layoutInflater;
-    private MaterialButton start;
+    private FloatingActionButton start;
     private MaterialButton toggleButton;
-    private FloatingActionButton continueBtn;
 
     private MaterialTextView businessIntro;
     private BranchesDepartmentsFragmentArgs branchesDepartmentsFragmentArgs;
@@ -150,9 +144,6 @@ public class BranchesDepartmentsFragment extends Fragment {
         company = view.findViewById(R.id.company_title);
         survey = view.findViewById(R.id.survey_title);
         categoryHelpText = view.findViewById(R.id.category_help_text);
-        numberOfQuestions = view.findViewById(R.id.number_of_questions);
-        numberOfRespondents = view.findViewById(R.id.number_of_respondents);
-        expiryDate = view.findViewById(R.id.expiry_date);
         layoutInflater = this.getLayoutInflater();
         selectedCategories = view.findViewById(R.id.selected_chip_group);
         setSelectedCategories = view.findViewById(R.id.chip_group);
@@ -177,8 +168,7 @@ public class BranchesDepartmentsFragment extends Fragment {
         businessReference = item.getBusiness().getBusinessData().getAlias();
         renderBranches();
 
-        TutorialsController tutorialsController = TutorialsController.getInstance();
-        tutorialsController.initTutorial(view);
+        Utils.initTutorial(view);
         return view;
     }
 

@@ -13,6 +13,7 @@ import android.widget.RatingBar;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -29,9 +30,9 @@ import sdk.feedbackmaster.Globals;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.controllers.QuestionController;
-import sdk.feedbackmaster.controllers.TutorialsController;
 import sdk.feedbackmaster.model.Answer;
 import sdk.feedbackmaster.model.AnswerData;
+import sdk.feedbackmaster.utils.Utils;
 
 
 /**
@@ -54,7 +55,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     private RatingBar ratingBar;
     private MaterialButtonToggleGroup multipleChoice;
     private LayoutInflater layoutInflater;
-    private MaterialButton nextQuestion;
+    private FloatingActionButton nextQuestion;
     private List<Answer> answers;
     private Answer answer;
     private AnswerData answerData;
@@ -135,7 +136,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             businessIntro.setVisibility(View.GONE);
         }
 
-        nextQuestion.setVisibility(View.GONE);
+        nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_close_black_24dp));
         layoutInflater = this.getLayoutInflater();
         answers = new ArrayList<>();
         answerData = new AnswerData();
@@ -165,7 +166,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
             questionController.nextQuestion();
             if(questionController.getIndex() == (questionController.getMaxQuestions() - 1)) {
-                nextQuestion.setText("Finish");
+                nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_forward_black_24dp));
             }
 
             if(questionController.getCurrentQuestion() == null && answers != null && answers.size() > 0) {
@@ -194,8 +195,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             }
         });
 
-        TutorialsController tutorialsController = TutorialsController.getInstance();
-        tutorialsController.initTutorial(view);
+        Utils.initTutorial(view);
         return view;
     }
 
@@ -269,6 +269,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                     int index = (int)(rating - 1);
                     if(index < 0) {
                         nextQuestion.setVisibility(View.GONE);
+                        nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_close_black_24dp));
                         return;
                     }
                     answer = new Answer();
@@ -312,8 +313,9 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     public void displayContinueButton(boolean isQuestionAnswered) {
         if(isQuestionAnswered) {
             nextQuestion.setVisibility(View.VISIBLE);
+            nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_forward_black_24dp));
         } else {
-            nextQuestion.setVisibility(View.GONE);
+            nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_close_black_24dp));
         }
 
 

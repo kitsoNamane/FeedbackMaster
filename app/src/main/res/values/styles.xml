@@ -58,6 +58,11 @@
        <item name="android:textColor">@color/text_selection</item>
     </style>
 
+    <style name="SelectionStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:windowBackground">@drawable/splash_screen_background</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+    </style>
+
     <style name="AppTheme.Launcher" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
