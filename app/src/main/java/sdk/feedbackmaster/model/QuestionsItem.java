@@ -16,6 +16,9 @@ public class QuestionsItem implements Serializable {
 	@Expose
 	private Answertype answertype;
 
+	@SerializedName("question_answered")
+	private boolean questionAnswered = false;
+
 	@SerializedName("answers")
 	@Expose
 	private List<AnswersItem> answers;
@@ -67,6 +70,14 @@ public class QuestionsItem implements Serializable {
 		return surveyQuestiontype;
 	}
 
+	public boolean isQuestionAnswered() {
+		return questionAnswered;
+	}
+
+	public void setQuestionAnswered(boolean questionAnswered) {
+		this.questionAnswered = questionAnswered;
+	}
+
 	@Override
  	public String toString(){
 		return 
@@ -75,6 +86,7 @@ public class QuestionsItem implements Serializable {
 			",answertype = '" + answertype + '\'' + 
 			",answers = '" + answers + '\'' + 
 			",caption = '" + caption + '\'' + 
+			",questionAnswered = '" + questionAnswered + '\'' +
 			",surveyQuestiontype = '" + surveyQuestiontype + '\'' +
 			"}";
 		}

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.room.Room;
 import sdk.feedbackmaster.model.AppData;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
         final BottomNavigationView navView = findViewById(R.id.nav_view);
 
         navView.setOnNavigationItemReselectedListener(item -> {
@@ -77,17 +79,22 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.signUpFragment:
                     navView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.GONE);
+                    toolbar.setNavigationIcon(null);
                     break;
-                case R.id.searchFragment:
-                case R.id.questionnaireCompletedFragment:
                 case R.id.questionFragment:
+                case R.id.questionnaireCompletedFragment:
+                    toolbar.setNavigationIcon(null);
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    getSupportActionBar().setHomeButtonEnabled(false);
+                case R.id.searchFragment:
+                case R.id.branchesDepartmentsFragment:
                 default:
                     navView.setVisibility(View.GONE);
                     toolbar.setVisibility(View.VISIBLE);
             }
         });
 
-        NavigationUI.setupActionBarWithNavController(this, navController);
+        NavigationUI.setupActionBarWithNavController(this, navController, new AppBarConfiguration.Builder(navController.getGraph()).build());
         NavigationUI.setupWithNavController(navView, navController);
     }
 

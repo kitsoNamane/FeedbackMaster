@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -153,6 +154,11 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         stopWatch.start();
 
         nextQuestion.setOnClickListener(v -> {
+            if(!questionController.getCurrentQuestion().isQuestionAnswered()) {
+                Toast.makeText(getContext(), "Answer Required", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             if(questionController.getCurrentQuestion().getSurveyQuestiontype().getRef().equals(Globals.OPEN_ENDED)) {
                 answer = new Answer();
                 answer.setQuestion(questionController.getCurrentQuestion().getRef());
@@ -163,6 +169,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 answer.setAnswerData(answerData);
                 answers.add(answer);
             }
+
 
             questionController.nextQuestion();
             if(questionController.getIndex() == (questionController.getMaxQuestions() - 1)) {
@@ -268,7 +275,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 ratingBar.setOnRatingBarChangeListener((_ratingBar, rating, fromUser) -> {
                     int index = (int)(rating - 1);
                     if(index < 0) {
-                        nextQuestion.setVisibility(View.GONE);
                         nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_close_black_24dp));
                         return;
                     }
@@ -312,13 +318,12 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
     public void displayContinueButton(boolean isQuestionAnswered) {
         if(isQuestionAnswered) {
-            nextQuestion.setVisibility(View.VISIBLE);
             nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_forward_black_24dp));
+            questionController.getCurrentQuestion().setQuestionAnswered(true);
         } else {
             nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_close_black_24dp));
+            questionController.getCurrentQuestion().setQuestionAnswered(false);
         }
-
-
     }
 
     @SuppressLint("ResourceType")

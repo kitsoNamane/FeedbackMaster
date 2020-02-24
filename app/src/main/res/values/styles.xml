@@ -3,6 +3,7 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
         <item name="textInputStyle">
             @style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
         </item>
