@@ -32,8 +32,9 @@ public class TutorialsController {
     private ImageView hintImage;
     private ChipGroup tutorialPages;
     private List<String> hintTexts;
-    TypedArray hintMessages;
-    TypedArray hintIcons;
+    private TypedArray hintMessages;
+    private TypedArray hintIcons;
+    private View other;
 
     private TutorialsController() {}
 
@@ -49,6 +50,7 @@ public class TutorialsController {
     public void initTutorial(View view) {
         tutorial = new Tutorial();
         parent = view.findViewById(R.id.tutorials);
+
         tutorialView = LayoutInflater.from(view.getContext()).inflate(R.layout.tutorial, parent);
 
         skip = tutorialView.findViewById(R.id.skip_tutorial);

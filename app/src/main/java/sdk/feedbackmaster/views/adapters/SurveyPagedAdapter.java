@@ -19,6 +19,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<Survey, BaseViewHolder>
     private static final int ERROR = 1;
     private static final int SURVEY = 2;
     Runnable retry;
+    private Runnable tutorials;
     private NetworkState networkState;
     private boolean hasAppRan;
     private boolean welcomeRemoved = false;
@@ -74,6 +75,7 @@ public class SurveyPagedAdapter extends PagedListAdapter<Survey, BaseViewHolder>
                 };
                 obj.setRunnable(runnable);
                 holder.bind(obj);
+                ((WelcomeViewHolder)holder).setTutorials(tutorials);
                 break;
             case SURVEY:
             default:
@@ -128,5 +130,13 @@ public class SurveyPagedAdapter extends PagedListAdapter<Survey, BaseViewHolder>
 
     public void setWelcomeRemoved(boolean welcomeRemoved) {
         this.welcomeRemoved = welcomeRemoved;
+    }
+
+    public Runnable getTutorials() {
+        return tutorials;
+    }
+
+    public void setTutorials(Runnable tutorials) {
+        this.tutorials = tutorials;
     }
 }

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
+import sdk.feedbackmaster.model.AppData;
 import sdk.feedbackmaster.utils.Utils;
 import sdk.feedbackmaster.viewmodels.ProfileViewModel;
 import sdk.feedbackmaster.viewmodels.SurveyViewModel;
@@ -114,6 +115,7 @@ public class SurveysFragment extends Fragment {
         surveyViewModel.getSurveyLiveData().observe(getViewLifecycleOwner(), pagedList->{
             if(pagedList != null) {
                 pagedAdapter.submitList(pagedList);
+                pagedAdapter.setTutorials(this::resetTutorials);
                 pagedAdapter.notifyDataSetChanged();
                 Utils.initTutorial(getView(), profileViewModel);
             }
@@ -164,5 +166,11 @@ public class SurveysFragment extends Fragment {
         if(!Utils.isOnline(context)) {
             MainActivity.navController.navigate(SurveysFragmentDirections.actionNetworkError());
         }
+    }
+
+    public void resetTutorials() {
+       AppData appData = new AppData();
+       profileViewModel.setAppData(appData);
+       Utils.initTutorial(getView(), profileViewModel);
     }
 }
