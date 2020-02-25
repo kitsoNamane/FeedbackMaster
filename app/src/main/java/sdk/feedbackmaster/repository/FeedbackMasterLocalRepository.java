@@ -39,8 +39,8 @@ public class FeedbackMasterLocalRepository {
     }
 
     public void addAppData(AppData appData) {
-        FeedbackMasterDatabase.databaseWriteExecutor.execute(() -> {
-            feedbackMasterDao.addDevice(appData);
-        });
+        //FeedbackMasterDatabase.databaseWriteExecutor.execute(() -> {
+        feedbackMasterDao.addDevice(appData);
+        //});
     }
 }

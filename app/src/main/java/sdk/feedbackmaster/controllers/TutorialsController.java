@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.model.Hint;
 import sdk.feedbackmaster.model.Tutorial;
@@ -26,6 +27,8 @@ public class TutorialsController {
     private static TutorialsController ourInstance;
     private View tutorialView;
     private FrameLayout parent;
+
+    private ConstraintLayout constraintLayout;
 
     private MaterialButton skip;
     private MaterialTextView hintText;
@@ -51,7 +54,13 @@ public class TutorialsController {
         tutorial = new Tutorial();
         parent = view.findViewById(R.id.tutorials);
 
+        for(int i = 0; i < ((FrameLayout)view).getChildCount(); i++) {
+            ((FrameLayout)view).getChildAt(i).setEnabled(false);
+        }
+
         tutorialView = LayoutInflater.from(view.getContext()).inflate(R.layout.tutorial, parent);
+        parent.setEnabled(true);
+        tutorialView.setEnabled(true);
 
         skip = tutorialView.findViewById(R.id.skip_tutorial);
         hintText =  tutorialView.findViewById(R.id.hint_text);
@@ -61,7 +70,12 @@ public class TutorialsController {
         hintMessages = view.getContext().getResources().obtainTypedArray(R.array.hint_text);
         hintTexts = Arrays.asList(view.getContext().getResources().getStringArray(R.array.hint_text));
         hintIcons = view.getContext().getResources().obtainTypedArray(R.array.hint_icons);
-        skip.setOnClickListener(v -> parent.removeAllViews());
+        skip.setOnClickListener(v -> {
+            for(int i = 0; i < ((FrameLayout)view).getChildCount(); i++) {
+                ((FrameLayout)view).getChildAt(i).setEnabled(true);
+            }
+            parent.removeAllViews();
+        });
         setTutorial(view.getId());
     }
 
