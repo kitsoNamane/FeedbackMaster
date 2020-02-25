@@ -35,6 +35,7 @@ import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.controllers.QuestionController;
 import sdk.feedbackmaster.model.Answer;
 import sdk.feedbackmaster.model.AnswerData;
+import sdk.feedbackmaster.model.Profile;
 import sdk.feedbackmaster.utils.Utils;
 import sdk.feedbackmaster.viewmodels.ProfileViewModel;
 
@@ -198,11 +199,12 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 MainActivity.questionnaireAnswer.removeNullAnswers();
                 MainActivity.questionnaireAnswer.showMe();
 
-                MainActivity.profile.setNumberOfSurveysCompleted(
+                Profile profile = profileViewModel.getProfile();
+                profile.setNumberOfSurveysCompleted(
                         profileViewModel.getProfile().getNumberOfSurveysCompleted() + 1
                 );
 
-                profileViewModel.addProfile(MainActivity.profile);
+                profileViewModel.addProfile(profile);
                 MainActivity.navController.navigate(
                         QuestionnaireFragmentDirections.actionCompleted(MainActivity.questionnaireAnswer)
                 );

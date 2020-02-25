@@ -1,6 +1,5 @@
 package sdk.feedbackmaster.views.viewholders;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +26,11 @@ public class WelcomeViewHolder extends BaseViewHolder {
     @Override
     public void bind(FeedbackMasterObject obj) {
         close.setOnClickListener(v -> {
-            Log.d("FMDIGILAB", "Click Click Click");
             obj.getRunnable().run();
         });
     }
 
     public void setTutorials(Runnable runnable) {
-        Log.d("AppData", "Click Click Click");
         tutorials.setOnClickListener(v -> {
             runnable.run();
         });
