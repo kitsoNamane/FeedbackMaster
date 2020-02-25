@@ -1,7 +1,5 @@
 package sdk.feedbackmaster.repository.remote_datasource.api;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
@@ -49,7 +47,6 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
             public void onResponse(Call<sdk.feedbackmaster.model.Response> call, Response<sdk.feedbackmaster.model.Response> response) {
                 if(response.isSuccessful() && response.body().isSuccess()) {
                     loadInitialCallback.onResult(response.body().getData().getSurveyList(), null, 2);
-                    Log.d("FMDIGILAB 13", response.body().getData().getSurveyList().toString());
                     initialLoading.postValue(NetworkState.LOADED);
                     networkState.postValue(NetworkState.LOADED);
                 } else {
@@ -81,7 +78,6 @@ public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer
                   if(response.isSuccessful()) {
                       //SystemClock.sleep(3000);
                       loadCallback.onResult(response.body().getData().getSurveyList(), loadParams.key + 1);
-                      Log.d("FMDIGILAB 13", response.body().getData().getSurveyList().toString());
                       networkState.postValue(NetworkState.LOADED);
                   } else {
                       networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));

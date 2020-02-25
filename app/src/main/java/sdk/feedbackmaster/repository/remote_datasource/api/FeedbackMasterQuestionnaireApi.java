@@ -1,7 +1,5 @@
 package sdk.feedbackmaster.repository.remote_datasource.api;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,12 +47,10 @@ public class FeedbackMasterQuestionnaireApi {
                 if(response.isSuccessful() && response.body().isSuccess()) {
                     answerResponse.postValue(response.body());
                     networkState.postValue(NetworkState.LOADED);
-                    Log.d("FMDIGILAB 11", response.body().toString());
                 } else {
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
                             response.body().getMessage().get(0).toString())
                     );
-                    Log.d("FMDIGILAB 11", response.body().toString());
                     answerResponse.postValue(response.body());
                     reload = () -> call.request();
                 }

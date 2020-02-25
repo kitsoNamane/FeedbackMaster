@@ -3,7 +3,6 @@ package sdk.feedbackmaster.views.fragments.survey;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -141,8 +140,6 @@ public class SurveysFragment extends Fragment {
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(
                     SurveysFragmentDirections.actionSignup()
             );
-        } else {
-            Log.d("AppData", "Profile Gender : "+profileViewModel.getProfile().getGender());
         }
 
         recyclerView = view.findViewById(R.id.survey_list);

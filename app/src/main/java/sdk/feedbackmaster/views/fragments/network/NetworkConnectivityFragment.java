@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.button.MaterialButton;
@@ -34,7 +33,6 @@ public class NetworkConnectivityFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    ProgressBar progressBar;
     LottieAnimationView lottieProgressBar;
     Handler handler = new Handler();
     Group group;

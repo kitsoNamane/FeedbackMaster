@@ -1,6 +1,5 @@
 package sdk.feedbackmaster.views.adapters;
 
-import android.util.Log;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -45,7 +44,6 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>{
     public  BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
             case R.layout.try_again:
-                Log.d("FMDIGILAB 13", "Creating Error Card ");
                 return NetworkStateViewHolder.create(parent);
             case R.layout.welcome:
                 return WelcomeViewHolder.create(parent);

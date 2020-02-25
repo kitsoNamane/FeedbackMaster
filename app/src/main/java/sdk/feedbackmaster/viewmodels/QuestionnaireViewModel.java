@@ -1,7 +1,5 @@
 package sdk.feedbackmaster.viewmodels;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -31,7 +29,6 @@ public class QuestionnaireViewModel extends ViewModel {
     public void getQuestionsFromServer(String surveyReference, String businessReference) {
         getQuestionsArgs.setValue(new GetQuestionArgs(surveyReference, businessReference));
         getNetworkArgs.setValue(getNetworkArgs.getValue()+1);
-        Log.d("FMDIGILAB 10", "surveyAlias : "+surveyReference+" businessAlias : "+businessReference);
         reload = () -> getQuestionsFromServer(surveyReference, businessReference);
     }
 

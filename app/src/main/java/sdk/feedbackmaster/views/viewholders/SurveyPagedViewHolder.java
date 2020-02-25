@@ -1,6 +1,5 @@
 package sdk.feedbackmaster.views.viewholders;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +61,6 @@ public class SurveyPagedViewHolder extends BaseViewHolder {
     public void gotoQuestionnaire(Survey item) {
         switch (viewId) {
             case R.id.search_result_list:
-                Log.d("FMDIGILAB 10", item.toString());
                 SearchSurveysFragmentDirections.ActionDepartments actionDepartments = SearchSurveysFragmentDirections.actionDepartments(
                         item, null, null, null);
                 MainActivity.navController.navigate(actionDepartments);

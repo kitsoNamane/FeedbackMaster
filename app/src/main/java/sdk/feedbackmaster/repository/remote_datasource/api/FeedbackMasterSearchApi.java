@@ -1,7 +1,5 @@
 package sdk.feedbackmaster.repository.remote_datasource.api;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,12 +36,10 @@ public class FeedbackMasterSearchApi {
                 if(response.isSuccessful() && response.body().isSuccess()) {
                     searchResponse.postValue(response.body());
                     networkState.postValue(NetworkState.LOADED);
-                    Log.d("FMDIGILAB 12", response.body().toString());
                 } else {
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
                             response.body().getMessage().get(0).toString())
                     );
-                    Log.d("FMDIGILAB 12", response.body().toString());
                     searchResponse.postValue(response.body());
                     reload = () -> call.request();
                 }
@@ -53,7 +49,6 @@ public class FeedbackMasterSearchApi {
             public void onFailure(Call<SearchResponse> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
                 searchResponse.postValue(null);
-                Log.d("FMDIGILAB 12", "Exception"+throwable.getMessage());
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 reload = () -> call.request();
             }

@@ -1,7 +1,6 @@
 package sdk.feedbackmaster.viewmodels;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 import sdk.feedbackmaster.model.AppData;
@@ -20,7 +19,6 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void setAppData(AppData appData) {
-        Log.d("AppData", "Adding AppData");
         feedbackMasterLocalRepository.addAppData(appData);
     }
 

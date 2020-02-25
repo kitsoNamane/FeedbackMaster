@@ -2,7 +2,6 @@ package sdk.feedbackmaster.views.fragments.questionnaire;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,7 +106,6 @@ public class QuestionnaireCompletedFragment extends Fragment implements Material
             } else if(answerResponse.isSuccess() == false) {
                 //setVisibility(View.INVISIBLE);
                 delayedDialogBox(answerResponse);
-                Log.d("FMDIGILAB 2", answerResponse.getMessage().toString());
             } else {
                 Profile profile = profileViewModel.getProfile();
                 profile.setNumberOfSurveysCompleted(
