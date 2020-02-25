@@ -13,16 +13,13 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.room.Room;
 import sdk.feedbackmaster.model.AppData;
-import sdk.feedbackmaster.model.FeedbackMasterDB;
 import sdk.feedbackmaster.model.Profile;
 import sdk.feedbackmaster.model.QuestionnaireAnswer;
-import sdk.feedbackmaster.repository.FeedbackMasterSurveyApiService;
-import sdk.feedbackmaster.repository.factories.FeedbackMasterSurveyServiceFactory;
+import sdk.feedbackmaster.repository.remote_datasource.FeedbackMasterSurveyApiService;
+import sdk.feedbackmaster.repository.remote_datasource.factories.FeedbackMasterSurveyServiceFactory;
 
 public class MainActivity extends AppCompatActivity {
-    public static FeedbackMasterDB feedbackMasterDB;
     public static NavController navController;
     public static Profile profile;
     public static AppData appData;
@@ -38,21 +35,6 @@ public class MainActivity extends AppCompatActivity {
         String androidId = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.ANDROID_ID
         );
-
-        feedbackMasterDB = Room.databaseBuilder(getApplicationContext(), FeedbackMasterDB.class, "userdb")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries().build();
-
-        profile = feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
-        appData = feedbackMasterDB.surveyDao().getAppData(Globals.CURRENT_USER_ID);
-
-        if(profile == null) {
-            profile = new Profile();
-        }
-
-        if(appData == null) {
-            appData = new AppData();
-        }
 
         if(questionnaireAnswer == null) {
             questionnaireAnswer = new QuestionnaireAnswer();

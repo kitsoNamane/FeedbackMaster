@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
@@ -13,10 +12,12 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.model.Profile;
 import sdk.feedbackmaster.utils.Utils;
+import sdk.feedbackmaster.viewmodels.ProfileViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +42,10 @@ public class SignUpFragment extends Fragment {
     private Chip female;
     private Chip genderId;
     private String genderState;
-
+    private ProfileViewModel profileViewModel;
+    private Profile profile = new Profile();
+    TextInputEditText phoneInput;
+    MaterialButton continueBtn;
     //private OnFragmentInteractionListener mListener;
 
     public SignUpFragment() {
@@ -73,27 +77,14 @@ public class SignUpFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        //profile = MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID);
-        if(MainActivity.profile == null) {
-            MainActivity.profile = new Profile();
-        }
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_signup, container, false);
-
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Sign Up");
-        final TextInputEditText phoneInput = view.findViewById(R.id.phone_input);
-        MaterialButton continueBtn = view.findViewById(R.id.continue_btn);
-        ageInput = view.findViewById(R.id.age_input);
-        gender = view.findViewById(R.id.gender_input);
-        male = gender.findViewById(R.id.male);
-        female = gender.findViewById(R.id.female);
-
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        profileViewModel = new ViewModelProvider(requireActivity()).get(ProfileViewModel.class);
+        profileViewModel.init(getContext());
         continueBtn.setOnClickListener(v -> {
             // validate input
             if(signupPhone(phoneInput)) {
@@ -105,15 +96,30 @@ public class SignUpFragment extends Fragment {
                 signup(ageInput, gender);
             }
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_signup, container, false);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Sign Up");
+        phoneInput = view.findViewById(R.id.phone_input);
+        continueBtn = view.findViewById(R.id.continue_btn);
+        ageInput = view.findViewById(R.id.age_input);
+        gender = view.findViewById(R.id.gender_input);
+        male = gender.findViewById(R.id.male);
+        female = gender.findViewById(R.id.female);
         return view;
     }
 
     public boolean signupPhone(TextInputEditText textInputEditText) {
         String phone = textInputEditText.getText().toString().trim();
-        Toast.makeText(this.getContext(), "Phone :"+phone+" "+ phone.length(), Toast.LENGTH_LONG).show();
         if(!phone.isEmpty()==true && phone.length()==8) {
             try {
-                MainActivity.profile.setPhone(new Integer(phone));
+                profile.setPhone(new Integer(phone));
             } catch (Exception e) {
                 textInputEditText.setError("Number Invalid");
                 e.printStackTrace();
@@ -131,7 +137,7 @@ public class SignUpFragment extends Fragment {
         boolean isGenderValid = false;
         if(!age.isEmpty()) {
             try {
-                MainActivity.profile.setAge(new Integer(age));
+                profile.setAge(new Integer(age));
             } catch (Exception e) {
                 textInputEditText.setError("Age Invalid");
                 e.printStackTrace();
@@ -148,7 +154,7 @@ public class SignUpFragment extends Fragment {
             //genderState = genderId.getChipText().toString();
             genderState = genderId.getText().toString();
             try{
-                MainActivity.profile.setGender(genderState);
+                profile.setGender(genderState);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -163,10 +169,8 @@ public class SignUpFragment extends Fragment {
         }
 
         if(isAgeValid == true && isGenderValid == true) {
-            MainActivity.profile.setProfile(true);
-            //Globals.exec.execute(()->{
-            MainActivity.feedbackMasterDB.surveyDao().addProfile(MainActivity.profile);
-            //});
+            profile.setProfile(true);
+            profileViewModel.addProfile(profile);
         }
         // Binary End-Gate guarantees that we'll get the right results nomatter the combinations
         return isAgeValid && isGenderValid;

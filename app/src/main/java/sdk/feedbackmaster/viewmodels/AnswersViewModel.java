@@ -8,7 +8,7 @@ import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.model.AnswerResponse;
 import sdk.feedbackmaster.model.NetworkState;
 import sdk.feedbackmaster.model.QuestionnaireAnswer;
-import sdk.feedbackmaster.repository.api.FeedbackMasterQuestionnaireApi;
+import sdk.feedbackmaster.repository.remote_datasource.api.FeedbackMasterQuestionnaireApi;
 
 public class AnswersViewModel extends ViewModel {
     public Runnable reload;

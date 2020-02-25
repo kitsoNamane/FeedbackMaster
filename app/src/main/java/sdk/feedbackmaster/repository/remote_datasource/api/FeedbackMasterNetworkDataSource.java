@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.repository.api;
+package sdk.feedbackmaster.repository.remote_datasource.api;
 
 import android.util.Log;
 
@@ -11,7 +11,7 @@ import retrofit2.Response;
 import sdk.feedbackmaster.Globals;
 import sdk.feedbackmaster.model.NetworkState;
 import sdk.feedbackmaster.model.Survey;
-import sdk.feedbackmaster.repository.FeedbackMasterSurveyApiService;
+import sdk.feedbackmaster.repository.remote_datasource.FeedbackMasterSurveyApiService;
 
 public class FeedbackMasterNetworkDataSource extends PageKeyedDataSource<Integer, Survey> {
     private static final String TAG = FeedbackMasterNetworkDataSource.class.getSimpleName();

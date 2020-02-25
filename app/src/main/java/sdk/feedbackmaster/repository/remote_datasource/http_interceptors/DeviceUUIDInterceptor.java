@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.repository.http_interceptors;
+package sdk.feedbackmaster.repository.remote_datasource.http_interceptors;
 
 import java.io.IOException;
 

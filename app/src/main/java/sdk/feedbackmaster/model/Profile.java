@@ -15,6 +15,9 @@ public class Profile implements Serializable {
     @ColumnInfo(name = "phone_number")
     private int phone;
 
+    @ColumnInfo(name = "total_wins")
+    private int totalWins;
+
     @ColumnInfo(name = "profile_set")
     private boolean profile = false;
 
@@ -30,18 +33,23 @@ public class Profile implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+
     public void setPhone(int phone) {
         this.phone = phone;
     }
+
     public void setGender(String gender) {
         this.gender = gender;
     }
+
     public void setAge(int age) {
         this.age = age;
     }
+
     public void setProfile(boolean profile) {
         this.profile = profile;
     }
+
     public void setNumberOfSurveysCompleted(int numberOfSurveysCompleted) {
         this.numberOfSurveysCompleted = numberOfSurveysCompleted;
     }
@@ -53,16 +61,28 @@ public class Profile implements Serializable {
     public int getPhone() {
         return this.phone;
     }
+
     public boolean getProfile() {
         return this.profile;
     }
+
     public int getId() {
         return this.id;
     }
+
     public String getGender() {
         return this.gender;
     }
+
     public int getAge() {
         return this.age;
+    }
+
+    public int getTotalWins() {
+        return totalWins;
+    }
+
+    public void setTotalWins(int totalWins) {
+        this.totalWins = totalWins;
     }
 }

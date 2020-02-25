@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.model.NetworkState;
 import sdk.feedbackmaster.model.SearchResponse;
-import sdk.feedbackmaster.repository.api.FeedbackMasterSearchApi;
+import sdk.feedbackmaster.repository.remote_datasource.api.FeedbackMasterSearchApi;
 
 public class SearchViewModel extends ViewModel {
     private Runnable reload;

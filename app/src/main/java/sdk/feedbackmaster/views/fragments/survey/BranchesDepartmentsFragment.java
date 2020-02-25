@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.button.MaterialButton;
@@ -25,6 +24,7 @@ import sdk.feedbackmaster.model.BranchDataItem;
 import sdk.feedbackmaster.model.ChildrenDataItem;
 import sdk.feedbackmaster.model.Survey;
 import sdk.feedbackmaster.utils.Utils;
+import sdk.feedbackmaster.viewmodels.ProfileViewModel;
 import sdk.feedbackmaster.viewmodels.QuestionnaireViewModel;
 
 /**
@@ -151,9 +151,6 @@ public class BranchesDepartmentsFragment extends Fragment {
         start = view.findViewById(R.id.start_survey);
         item = branchesDepartmentsFragmentArgs.getCurrentSurvey();
 
-        if(getChildFragmentManager().getFragments().size() > 0) {
-            Toast.makeText(this.getContext(), "More Children", Toast.LENGTH_SHORT).show();
-        }
 
         survey.setText(this.item.getName());
         company.setText(this.item.getBusiness().getBusinessData().getName());
@@ -168,7 +165,9 @@ public class BranchesDepartmentsFragment extends Fragment {
         businessReference = item.getBusiness().getBusinessData().getAlias();
         renderBranches();
 
-        Utils.initTutorial(view);
+        ProfileViewModel profileViewModel = new ViewModelProvider(requireActivity()).get(ProfileViewModel.class);
+        profileViewModel.init(getContext());
+        Utils.initTutorial(view, profileViewModel);
         return view;
     }
 

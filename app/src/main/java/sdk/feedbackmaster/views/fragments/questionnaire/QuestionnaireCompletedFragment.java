@@ -26,6 +26,7 @@ import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.model.AnswerResponse;
 import sdk.feedbackmaster.viewmodels.AnswersViewModel;
+import sdk.feedbackmaster.viewmodels.ProfileViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,6 +50,7 @@ public class QuestionnaireCompletedFragment extends Fragment implements Material
     FlexboxLayout sendAsAnonymous;
     Handler handler = new Handler();
     View trophy;
+    private ProfileViewModel profileViewModel;
     private AnswersViewModel answersViewModel;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -133,6 +135,8 @@ public class QuestionnaireCompletedFragment extends Fragment implements Material
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Upload Answers");
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(null);
+        profileViewModel = new ViewModelProvider(requireActivity()).get(ProfileViewModel.class);
+        profileViewModel.init(getContext());
 
         goHome = view.findViewById(R.id.go_home_text);
         uploadingAnswers = view.findViewById(R.id.uploading_answers);
@@ -150,10 +154,14 @@ public class QuestionnaireCompletedFragment extends Fragment implements Material
 
         completedSurveys.setText(
                 String.format(Locale.getDefault(), "%d",
-                        MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getNumberOfSurveysCompleted()
+                        profileViewModel.getProfile().getNumberOfSurveysCompleted()
                 )
         );
-        totalWins.setText("0");
+
+        totalWins.setText(String.format(Locale.getDefault(), "%d",
+                profileViewModel.getProfile().getTotalWins()
+
+        ));
         goHome.setOnClickListener(v -> Navigation.findNavController(v).navigate(QuestionnaireCompletedFragmentDirections.actionHome()));
 
         sendAsAnonymous.setVisibility(View.VISIBLE);
@@ -249,6 +257,12 @@ public class QuestionnaireCompletedFragment extends Fragment implements Material
             answersViewModel.sendAnswers(MainActivity.questionnaireAnswer);
         } else {
             // add profile info
+            MainActivity.questionnaireAnswer.setMobileNumber(
+                    String.format(
+                            Locale.getDefault(), "%d", profileViewModel.getProfile().getPhone()
+                    )
+            );
+
             answersViewModel.sendAnswers(MainActivity.questionnaireAnswer);
         }
         sendAsAnonymous.setVisibility(View.INVISIBLE);

@@ -12,7 +12,7 @@ import androidx.paging.PagedList;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.model.NetworkState;
 import sdk.feedbackmaster.model.Survey;
-import sdk.feedbackmaster.repository.factories.FeedbackMasterNetworkDataFactory;
+import sdk.feedbackmaster.repository.remote_datasource.factories.FeedbackMasterNetworkDataFactory;
 
 
 public class SurveyViewModel extends ViewModel {

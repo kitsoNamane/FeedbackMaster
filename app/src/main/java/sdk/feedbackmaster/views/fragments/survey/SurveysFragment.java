@@ -3,6 +3,7 @@ package sdk.feedbackmaster.views.fragments.survey;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,9 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.chip.Chip;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -23,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.utils.Utils;
+import sdk.feedbackmaster.viewmodels.ProfileViewModel;
 import sdk.feedbackmaster.viewmodels.SurveyViewModel;
 import sdk.feedbackmaster.views.adapters.SurveyPagedAdapter;
 
@@ -42,8 +41,7 @@ public class SurveysFragment extends Fragment {
     private RecyclerView.LayoutManager layoutManager;
     private SurveyViewModel surveyViewModel;
     private SurveyPagedAdapter pagedAdapter;
-    private static MaterialCardView reloadCard;
-    private Chip reloadChip;
+    private ProfileViewModel profileViewModel;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -84,8 +82,6 @@ public class SurveysFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        //Toolbar toolbar = (Toolbar) this.getActivity().findViewById(R.id.toolbar);
-        //toolbar.inflateMenu(R.menu.topbar_with_search);
         super.onCreateOptionsMenu(menu, menuInflater);
         getActivity().getMenuInflater().inflate(R.menu.topbar_with_search, menu);
         MenuItem search = menu.getItem(menu.size() - 1);
@@ -119,9 +115,7 @@ public class SurveysFragment extends Fragment {
             if(pagedList != null) {
                 pagedAdapter.submitList(pagedList);
                 pagedAdapter.notifyDataSetChanged();
-
-                Utils.initTutorial(getView());
-                pagedAdapter.setHasAppRan(MainActivity.appData.isHasAppRan());
+                Utils.initTutorial(getView(), profileViewModel);
             }
         });
 
@@ -133,14 +127,20 @@ public class SurveysFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_surveys, container, false);
+        profileViewModel = new ViewModelProvider(requireActivity()).get(ProfileViewModel.class);
+        profileViewModel.init(getContext());
+
         setHasOptionsMenu(true);
+
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Surveys List");
 
-        if(MainActivity.profile.getPhone() == 0) {
+        if(profileViewModel.getProfile() == null) {
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(
                     SurveysFragmentDirections.actionSignup()
             );
+        } else {
+            Log.d("AppData", "Profile Gender : "+profileViewModel.getProfile().getGender());
         }
 
         recyclerView = view.findViewById(R.id.survey_list);

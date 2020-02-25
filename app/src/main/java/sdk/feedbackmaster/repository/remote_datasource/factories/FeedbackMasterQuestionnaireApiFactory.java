@@ -1,8 +1,8 @@
-package sdk.feedbackmaster.repository.factories;
+package sdk.feedbackmaster.repository.remote_datasource.factories;
 
 import androidx.lifecycle.MutableLiveData;
-import sdk.feedbackmaster.repository.FeedbackMasterSurveyApiService;
-import sdk.feedbackmaster.repository.api.FeedbackMasterQuestionnaireApi;
+import sdk.feedbackmaster.repository.remote_datasource.FeedbackMasterSurveyApiService;
+import sdk.feedbackmaster.repository.remote_datasource.api.FeedbackMasterQuestionnaireApi;
 
 public class FeedbackMasterQuestionnaireApiFactory {
 

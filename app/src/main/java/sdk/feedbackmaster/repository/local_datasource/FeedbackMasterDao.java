@@ -1,9 +1,11 @@
-package sdk.feedbackmaster.model;
+package sdk.feedbackmaster.repository.local_datasource;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import sdk.feedbackmaster.model.AppData;
+import sdk.feedbackmaster.model.Profile;
 
 @Dao
 public interface FeedbackMasterDao {

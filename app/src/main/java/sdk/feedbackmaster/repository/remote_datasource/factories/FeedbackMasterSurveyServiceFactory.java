@@ -1,13 +1,13 @@
-package sdk.feedbackmaster.repository.factories;
+package sdk.feedbackmaster.repository.remote_datasource.factories;
 
 import android.content.Context;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import sdk.feedbackmaster.repository.FeedbackMasterSurveyApiService;
-import sdk.feedbackmaster.repository.http_interceptors.ConnectivityInterceptor;
-import sdk.feedbackmaster.repository.http_interceptors.DeviceUUIDInterceptor;
+import sdk.feedbackmaster.repository.remote_datasource.FeedbackMasterSurveyApiService;
+import sdk.feedbackmaster.repository.remote_datasource.http_interceptors.ConnectivityInterceptor;
+import sdk.feedbackmaster.repository.remote_datasource.http_interceptors.DeviceUUIDInterceptor;
 
 public class FeedbackMasterSurveyServiceFactory {
     public static FeedbackMasterSurveyApiService getService(String device_uuid, Context context) {

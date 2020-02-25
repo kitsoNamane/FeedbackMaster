@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.repository;
+package sdk.feedbackmaster.repository.remote_datasource;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

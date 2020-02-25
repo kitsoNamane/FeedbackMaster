@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.repository.api;
+package sdk.feedbackmaster.repository.remote_datasource.api;
 
 import android.util.Log;
 
@@ -8,7 +8,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import sdk.feedbackmaster.model.NetworkState;
 import sdk.feedbackmaster.model.SearchResponse;
-import sdk.feedbackmaster.repository.FeedbackMasterSurveyApiService;
+import sdk.feedbackmaster.repository.remote_datasource.FeedbackMasterSurveyApiService;
 
 public class FeedbackMasterSearchApi {
     private static FeedbackMasterSearchApi instance;

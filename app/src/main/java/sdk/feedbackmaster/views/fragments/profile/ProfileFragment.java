@@ -10,12 +10,13 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import sdk.feedbackmaster.Globals;
-import sdk.feedbackmaster.MainActivity;
+import androidx.lifecycle.ViewModelProvider;
 import sdk.feedbackmaster.R;
+import sdk.feedbackmaster.viewmodels.ProfileViewModel;
 
 
 /**
@@ -36,6 +37,7 @@ public class ProfileFragment extends Fragment {
     MaterialTextView completedSurveys;
     MaterialTextView totalWins;
     MaterialButton editUser;
+    private ProfileViewModel profileViewModel;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -76,6 +78,13 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        profileViewModel = new ViewModelProvider(requireActivity()).get(ProfileViewModel.class);
+        profileViewModel.init(getContext());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -86,20 +95,21 @@ public class ProfileFragment extends Fragment {
         editUser = view.findViewById(R.id.edit_profile);
         viewAge = view.findViewById(R.id.age_input);
         viewGender = view.findViewById(R.id.gender_view);
-        viewPhone.setText(Integer.toString(MainActivity.profile.getPhone()));
-        viewAge.setText(Integer.toString(MainActivity.profile.getAge()));
-        viewGender.setText(MainActivity.profile.getGender());
+
+        viewPhone.setText(String.format(Locale.getDefault(), "%d", profileViewModel.getProfile().getPhone()));
+        viewAge.setText(String.format(Locale.getDefault(), "%d", profileViewModel.getProfile().getAge()));
+        viewGender.setText(profileViewModel.getProfile().getGender());
 
         completedSurveys = view.findViewById(R.id.surveys_completed);
         totalWins = view.findViewById(R.id.total_wins);
 
         completedSurveys.setText(
                 String.format(Locale.getDefault(),"%d",
-                        MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getNumberOfSurveysCompleted()
+                        Objects.requireNonNull(profileViewModel.getProfile().getNumberOfSurveysCompleted())
                 )
         );
-        totalWins.setText("0");
 
+        totalWins.setText("0");
         editUser.setOnClickListener(v -> Toast.makeText(getContext(), "Go to edit page", Toast.LENGTH_LONG).show());
         return view;
     }

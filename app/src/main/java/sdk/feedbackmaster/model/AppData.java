@@ -8,13 +8,22 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import sdk.feedbackmaster.Globals;
 
-@Entity(tableName = "app_data")
+@Entity(tableName="app_data")
 public class AppData implements Serializable {
     @PrimaryKey(autoGenerate = false)
     int id = Globals.CURRENT_USER_ID;
 
     @SerializedName("app_has_ran")
     private boolean hasAppRan = false;
+
+    @SerializedName("app_surveys_tut_complete")
+    private boolean surveysTutComplete = false;
+
+    @SerializedName("app_branches_tut_complete")
+    private boolean branchesTutComplete = false;
+
+    @SerializedName("app_questionnaire_tut_complete")
+    private boolean questionnaireTutComplete = false;
 
     public boolean isHasAppRan() {
         return hasAppRan;
@@ -47,15 +56,6 @@ public class AppData implements Serializable {
     public void setQuestionnaireTutComplete(boolean questionnaireTutComplete) {
         this.questionnaireTutComplete = questionnaireTutComplete;
     }
-
-    @SerializedName("app_surveys_tut_complete")
-    private boolean surveysTutComplete = false;
-
-    @SerializedName("app_branches_tut_complete")
-    private boolean branchesTutComplete = false;
-
-    @SerializedName("app_questionnaire_tut_complete")
-    private boolean questionnaireTutComplete = false;
 
     public int getId() {
         return id;

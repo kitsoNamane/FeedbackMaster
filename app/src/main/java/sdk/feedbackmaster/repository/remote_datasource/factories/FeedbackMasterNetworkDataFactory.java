@@ -1,11 +1,11 @@
-package sdk.feedbackmaster.repository.factories;
+package sdk.feedbackmaster.repository.remote_datasource.factories;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 import sdk.feedbackmaster.model.Survey;
-import sdk.feedbackmaster.repository.FeedbackMasterSurveyApiService;
-import sdk.feedbackmaster.repository.api.FeedbackMasterNetworkDataSource;
+import sdk.feedbackmaster.repository.remote_datasource.FeedbackMasterSurveyApiService;
+import sdk.feedbackmaster.repository.remote_datasource.api.FeedbackMasterNetworkDataSource;
 
 
 public class FeedbackMasterNetworkDataFactory extends DataSource.Factory<Integer, Survey> {

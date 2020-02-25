@@ -1,4 +1,4 @@
-package sdk.feedbackmaster.repository.api;
+package sdk.feedbackmaster.repository.remote_datasource.api;
 
 import android.util.Log;
 
@@ -11,7 +11,7 @@ import sdk.feedbackmaster.model.NetworkState;
 import sdk.feedbackmaster.model.QuestionResponse;
 import sdk.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.feedbackmaster.model.Result;
-import sdk.feedbackmaster.repository.FeedbackMasterSurveyApiService;
+import sdk.feedbackmaster.repository.remote_datasource.FeedbackMasterSurveyApiService;
 
 public class FeedbackMasterQuestionnaireApi {
 

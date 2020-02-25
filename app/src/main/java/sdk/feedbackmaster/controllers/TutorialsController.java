@@ -2,9 +2,7 @@ package sdk.feedbackmaster.controllers;
 
 import android.annotation.SuppressLint;
 import android.content.res.TypedArray;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -34,7 +32,6 @@ public class TutorialsController {
     private ImageView hintImage;
     private ChipGroup tutorialPages;
     private List<String> hintTexts;
-    //private List<Drawable> hintIcons;
     TypedArray hintMessages;
     TypedArray hintIcons;
 
@@ -53,27 +50,6 @@ public class TutorialsController {
         tutorial = new Tutorial();
         parent = view.findViewById(R.id.tutorials);
         tutorialView = LayoutInflater.from(view.getContext()).inflate(R.layout.tutorial, parent);
-
-        view.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                return false;
-            }
-        });
-
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
-
-        tutorialView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
 
         skip = tutorialView.findViewById(R.id.skip_tutorial);
         hintText =  tutorialView.findViewById(R.id.hint_text);

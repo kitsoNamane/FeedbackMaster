@@ -28,6 +28,7 @@ import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import sdk.feedbackmaster.Globals;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
@@ -35,6 +36,7 @@ import sdk.feedbackmaster.controllers.QuestionController;
 import sdk.feedbackmaster.model.Answer;
 import sdk.feedbackmaster.model.AnswerData;
 import sdk.feedbackmaster.utils.Utils;
+import sdk.feedbackmaster.viewmodels.ProfileViewModel;
 
 
 /**
@@ -72,6 +74,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     private MaterialTextView business;
     private MaterialTextView surveryTitle;
     private MaterialTextView businessIntro;
+    private ProfileViewModel profileViewModel;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -120,7 +123,8 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Questionnaire");
         Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(null);
-
+        profileViewModel = new ViewModelProvider(requireActivity()).get(ProfileViewModel.class);
+        profileViewModel.init(getContext());
         questionView = view.findViewById(R.id.question_showcase);
         business = view.findViewById(R.id.company_title);
         businessIntro = view.findViewById(R.id.intro);
@@ -184,19 +188,21 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 end_date = dateFormat.format(c.getTime());
                 MainActivity.questionnaireAnswer.setAnswers(answers);
                 MainActivity.questionnaireAnswer.setTimer(getTimer(stopWatch.getText().toString()));
+                /**
                 MainActivity.questionnaireAnswer.setMobileNumber(
                        Integer.toString(MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getPhone())
                 );
+                 */
                 MainActivity.questionnaireAnswer.setStartDate(start_date);
                 MainActivity.questionnaireAnswer.setEndDate(end_date);
                 MainActivity.questionnaireAnswer.removeNullAnswers();
                 MainActivity.questionnaireAnswer.showMe();
 
                 MainActivity.profile.setNumberOfSurveysCompleted(
-                        MainActivity.profile.getNumberOfSurveysCompleted() + 1
+                        profileViewModel.getProfile().getNumberOfSurveysCompleted() + 1
                 );
 
-                MainActivity.feedbackMasterDB.surveyDao().addProfile(MainActivity.profile);
+                profileViewModel.addProfile(MainActivity.profile);
                 MainActivity.navController.navigate(
                         QuestionnaireFragmentDirections.actionCompleted(MainActivity.questionnaireAnswer)
                 );
@@ -205,7 +211,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             }
         });
 
-        Utils.initTutorial(view);
+        Utils.initTutorial(view, profileViewModel);
         return view;
     }
 
