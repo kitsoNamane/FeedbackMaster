@@ -16,6 +16,7 @@ public class WelcomeViewHolder extends BaseViewHolder {
         super(view);
         setViewType(0);
         close = view.findViewById(R.id.close_btn);
+        close.setVisibility(View.GONE);
         close.setClickable(true);
     }
 

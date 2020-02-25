@@ -17,6 +17,7 @@ import java.util.Locale;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -130,6 +131,8 @@ public class QuestionnaireCompletedFragment extends Fragment implements Material
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Upload Answers");
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(null);
 
         goHome = view.findViewById(R.id.go_home_text);
         uploadingAnswers = view.findViewById(R.id.uploading_answers);

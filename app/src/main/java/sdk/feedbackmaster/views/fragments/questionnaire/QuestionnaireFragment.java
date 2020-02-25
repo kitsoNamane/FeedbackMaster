@@ -26,6 +26,7 @@ import java.util.Locale;
 
 import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import sdk.feedbackmaster.Globals;
 import sdk.feedbackmaster.MainActivity;
@@ -117,6 +118,8 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Feedback Master");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setSubtitle("Questionnaire");
+        Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(null);
 
         questionView = view.findViewById(R.id.question_showcase);
         business = view.findViewById(R.id.company_title);

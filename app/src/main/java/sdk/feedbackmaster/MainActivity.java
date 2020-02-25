@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -64,9 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
         feedbackMasterSurveyApiService = FeedbackMasterSurveyServiceFactory.getService(androidId, this);
 
-        final MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
         final BottomNavigationView navView = findViewById(R.id.nav_view);
 
         navView.setOnNavigationItemReselectedListener(item -> {
@@ -83,9 +82,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.questionFragment:
                 case R.id.questionnaireCompletedFragment:
-                    toolbar.setNavigationIcon(null);
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                    getSupportActionBar().setHomeButtonEnabled(false);
                 case R.id.searchFragment:
                 case R.id.branchesDepartmentsFragment:
                 default:
