@@ -35,7 +35,6 @@ import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.controllers.QuestionController;
 import sdk.feedbackmaster.model.Answer;
 import sdk.feedbackmaster.model.AnswerData;
-import sdk.feedbackmaster.model.Profile;
 import sdk.feedbackmaster.utils.Utils;
 import sdk.feedbackmaster.viewmodels.ProfileViewModel;
 
@@ -171,13 +170,10 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 answer = new Answer();
                 answer.setQuestion(questionController.getCurrentQuestion().getRef());
                 answerData = new AnswerData();
-                //answerData.setRef("");
                 answerData.setText(shortAnswer.getText().toString());
-                //answerData.setListItem("");
                 answer.setAnswerData(answerData);
                 answers.add(answer);
             }
-
 
             questionController.nextQuestion();
             if(questionController.getIndex() == (questionController.getMaxQuestions() - 1)) {
@@ -189,22 +185,13 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 end_date = dateFormat.format(c.getTime());
                 MainActivity.questionnaireAnswer.setAnswers(answers);
                 MainActivity.questionnaireAnswer.setTimer(getTimer(stopWatch.getText().toString()));
-                /**
-                MainActivity.questionnaireAnswer.setMobileNumber(
-                       Integer.toString(MainActivity.feedbackMasterDB.surveyDao().getProfile(Globals.CURRENT_USER_ID).getPhone())
-                );
-                 */
+
                 MainActivity.questionnaireAnswer.setStartDate(start_date);
                 MainActivity.questionnaireAnswer.setEndDate(end_date);
                 MainActivity.questionnaireAnswer.removeNullAnswers();
                 MainActivity.questionnaireAnswer.showMe();
 
-                Profile profile = profileViewModel.getProfile();
-                profile.setNumberOfSurveysCompleted(
-                        profileViewModel.getProfile().getNumberOfSurveysCompleted() + 1
-                );
 
-                profileViewModel.addProfile(profile);
                 MainActivity.navController.navigate(
                         QuestionnaireFragmentDirections.actionCompleted(MainActivity.questionnaireAnswer)
                 );

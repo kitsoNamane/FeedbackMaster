@@ -25,6 +25,7 @@ import sdk.feedbackmaster.Globals;
 import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.model.AnswerResponse;
+import sdk.feedbackmaster.model.Profile;
 import sdk.feedbackmaster.viewmodels.AnswersViewModel;
 import sdk.feedbackmaster.viewmodels.ProfileViewModel;
 
@@ -104,10 +105,15 @@ public class QuestionnaireCompletedFragment extends Fragment implements Material
             if(answerResponse == null) {
                 // prompt reload button
             } else if(answerResponse.isSuccess() == false) {
-                setVisibility(View.INVISIBLE);
+                //setVisibility(View.INVISIBLE);
                 delayedDialogBox(answerResponse);
                 Log.d("FMDIGILAB 2", answerResponse.getMessage().toString());
             } else {
+                Profile profile = profileViewModel.getProfile();
+                profile.setNumberOfSurveysCompleted(
+                        profileViewModel.getProfile().getNumberOfSurveysCompleted() + 1
+                );
+                profileViewModel.addProfile(profile);
                 sendAsAnonymous.setVisibility(View.INVISIBLE);
                 setVisibility(View.VISIBLE);
                 showProgressBar(View.INVISIBLE);

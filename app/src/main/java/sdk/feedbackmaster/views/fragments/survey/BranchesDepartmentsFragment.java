@@ -186,7 +186,7 @@ public class BranchesDepartmentsFragment extends Fragment {
                         categoryHelpText.setText("Press continue to start survey");
                         start.setVisibility(View.VISIBLE);
                     }
-                    BranchesDepartmentsFragment.this.renderDepartments(child);
+                    renderDepartments(child);
                 });
                 setSelectedCategories.addView(toggleButton);
             }
@@ -202,7 +202,6 @@ public class BranchesDepartmentsFragment extends Fragment {
         selectedCategoryItem.setText(btn.getText());
         selectedCategoryItem.setOnClickListener(v -> {
             selectedCategories.removeAllViews();
-            start.setVisibility(View.GONE);
             setSelectedCategories.removeAllViews();
             categoryHelpText.setText(BranchesDepartmentsFragment.this.getResources().getString(R.string.select_categories));
             BranchesDepartmentsFragment.this.renderBranches();
@@ -232,7 +231,6 @@ public class BranchesDepartmentsFragment extends Fragment {
                     selectedCategoryItem.setOnClickListener(v1 -> {
                         selectedCategories.removeView(v1);
                         categoryHelpText.setText("Do you want to give feedback to the following:");
-                        start.setVisibility(View.GONE);
                         renderDepartments(childObj);
                     });
                     selectedCategories.addView(selectedCategoryItem);
