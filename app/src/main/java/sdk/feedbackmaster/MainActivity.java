@@ -105,12 +105,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.questionFragment:
                 AlertDialog alertDialog = new MaterialAlertDialogBuilder(
                         this, R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
-                        .setCancelable(false)
                         .setMessage("Please complete answering this survey")
-                        .setNegativeButton("", ((dialog, which) -> {
+                        .setPositiveButton("Continue", (dialog, which) -> {
                             dialog.cancel();
-                        }))
-                        .create();
+                        }).create();
                 alertDialog.setCanceledOnTouchOutside(true);
                 alertDialog.show();
                 Log.d("FMDIGILAB", "Never go back");
