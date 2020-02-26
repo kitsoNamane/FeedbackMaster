@@ -12,6 +12,9 @@ public class QuestionsItem implements Serializable {
 	@SerializedName("ref")
 	private String ref;
 
+	@SerializedName("skipable")
+	private int skipable ;
+
 	@SerializedName("answertype")
 	@Expose
 	private Answertype answertype;
@@ -78,16 +81,26 @@ public class QuestionsItem implements Serializable {
 		this.questionAnswered = questionAnswered;
 	}
 
+	public int getSkipable() {
+		return skipable;
+	}
+
+	public void setSkipable(int skipable) {
+		this.skipable = skipable;
+	}
+
 	@Override
  	public String toString(){
 		return 
-			"QuestionsItem{" + 
-			"ref = '" + ref + '\'' + 
-			",answertype = '" + answertype + '\'' + 
+			"QuestionsItem{" +
+			"ref = '" + ref + '\'' +
+			",skipable = '" + skipable + '\'' +
+			",answertype = '" + answertype + '\'' +
 			",answers = '" + answers + '\'' + 
 			",caption = '" + caption + '\'' + 
 			",questionAnswered = '" + questionAnswered + '\'' +
 			",surveyQuestiontype = '" + surveyQuestiontype + '\'' +
 			"}";
 		}
+
 }

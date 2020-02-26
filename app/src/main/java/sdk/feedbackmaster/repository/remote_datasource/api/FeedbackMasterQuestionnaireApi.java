@@ -1,5 +1,7 @@
 package sdk.feedbackmaster.repository.remote_datasource.api;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +50,7 @@ public class FeedbackMasterQuestionnaireApi {
                     answerResponse.postValue(response.body());
                     networkState.postValue(NetworkState.LOADED);
                 } else {
+                    Log.d("FMDIGILAB", response.body().toString());
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
                             response.body().getMessage().get(0).toString())
                     );
@@ -94,6 +97,7 @@ public class FeedbackMasterQuestionnaireApi {
                     networkState.postValue(NetworkState.LOADED);
                     questionnaire.postValue(response.body().getResult());
                 } else {
+                    Log.d("FMDIGILAB", response.body().toString());
                     networkState.postValue(new NetworkState(NetworkState.Status.FAILED,
                             response.body().getMessage().get(0).toString())
                     );
@@ -105,6 +109,7 @@ public class FeedbackMasterQuestionnaireApi {
             @Override
             public void onFailure(Call<QuestionResponse> call, Throwable throwable) {
                 String errorMessage = throwable == null ? "unknown error" : throwable.getMessage();
+                Log.d("FMDIGILAB", errorMessage);
                 questionnaire.postValue(null);
                 networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 reload = () -> call.request();

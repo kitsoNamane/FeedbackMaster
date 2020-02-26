@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     private MaterialButtonToggleGroup multipleChoice;
     private LayoutInflater layoutInflater;
     private ExtendedFloatingActionButton nextQuestion;
+    private ExtendedFloatingActionButton skipQuestion;
     private List<Answer> answers;
     private Answer answer;
     private AnswerData answerData;
@@ -131,6 +133,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         surveryTitle = view.findViewById(R.id.survey_title);
         questionTitle = view.findViewById(R.id.question_title);
         nextQuestion = view.findViewById(R.id.next_question);
+        skipQuestion = view.findViewById(R.id.skip_question);
         questionId = view.findViewById(R.id.question_id);
         stopWatch = view.findViewById(R.id.stop_watch);
 
@@ -144,8 +147,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             businessIntro.setVisibility(View.GONE);
         }
 
-        nextQuestion.setIcon(getResources().getDrawable(R.drawable.ic_009_question));
-        nextQuestion.setIconGravity(MaterialButton.ICON_GRAVITY_END);
         layoutInflater = this.getLayoutInflater();
         answers = new ArrayList<>();
         answerData = new AnswerData();
@@ -157,6 +158,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         );
 
         questionTitle.setText(questionController.nextQuestion().getCaption());
+        Log.d("FMDIGILAB", questionController.getCurrentQuestion().toString());
         renderQuestion();
         start_date = dateFormat.format(c.getTime());
         stopWatch.start();
@@ -177,8 +179,8 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             }
 
             questionController.nextQuestion();
+            Log.d("FMDIGILAB", questionController.getCurrentQuestion().toString());
             if(questionController.getIndex() == (questionController.getMaxQuestions() - 1)) {
-                nextQuestion.setIcon(getResources().getDrawable(R.drawable.ic_arrow_forward_black_24dp));
                 nextQuestion.setText("continue");
             }
 
@@ -223,6 +225,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         //View view = questionNav.findViewById(R.id.dummy);
         displayContinueButton(false);
         questionTitle.setText(questionController.getCurrentQuestion().getCaption());
+        showSkipButton();
         questionId.setText(
                 String.format(
                         Locale.getDefault()," %d / %d", questionController.getIndex()+1,
@@ -276,7 +279,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 ratingBar.setOnRatingBarChangeListener((_ratingBar, rating, fromUser) -> {
                     int index = (int)(rating - 1);
                     if(index < 0) {
-                        nextQuestion.setIcon(getResources().getDrawable(R.drawable.ic_009_question));
                         nextQuestion.setText("answer required");
                         return;
                     }
@@ -320,11 +322,9 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
     public void displayContinueButton(boolean isQuestionAnswered) {
         if(isQuestionAnswered) {
-            nextQuestion.setIcon(getResources().getDrawable(R.drawable.ic_arrow_forward_black_24dp));
             nextQuestion.setText("continue");
             questionController.getCurrentQuestion().setQuestionAnswered(true);
         } else {
-            nextQuestion.setIcon(getResources().getDrawable(R.drawable.ic_009_question));
             nextQuestion.setText("answer required");
             questionController.getCurrentQuestion().setQuestionAnswered(false);
         }
@@ -355,6 +355,15 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             displayContinueButton(true);
         } else {
             displayContinueButton(false);
+        }
+    }
+
+    public void showSkipButton() {
+        Log.d("FMDIGILAB", "Skipping Question");
+        if(questionController.getCurrentQuestion().getSkipable() == 1) {
+            skipQuestion.setVisibility(View.VISIBLE);
+        } else {
+            skipQuestion.setVisibility(View.GONE);
         }
     }
 }
