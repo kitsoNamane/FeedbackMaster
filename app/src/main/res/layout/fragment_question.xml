@@ -9,12 +9,17 @@
     android:orientation="vertical"
     tools:context=".views.fragments.questionnaire.QuestionnaireFragment">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/next_question"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        app:iconTint="@color/colorSurface"
+        app:icon="@drawable/ic_009_question"
+        android:text="answer required"
+        android:textColorHint="@color/colorSurface"
+        android:textColor="@color/colorSurface"
         android:layout_marginRight="24dp"
         android:layout_marginBottom="24dp"
         android:elevation="4dp"
@@ -38,6 +43,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"

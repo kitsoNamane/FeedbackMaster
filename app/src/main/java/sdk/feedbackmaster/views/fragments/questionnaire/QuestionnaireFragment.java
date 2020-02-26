@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -59,7 +59,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     private RatingBar ratingBar;
     private MaterialButtonToggleGroup multipleChoice;
     private LayoutInflater layoutInflater;
-    private FloatingActionButton nextQuestion;
+    private ExtendedFloatingActionButton nextQuestion;
     private List<Answer> answers;
     private Answer answer;
     private AnswerData answerData;
@@ -144,7 +144,8 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             businessIntro.setVisibility(View.GONE);
         }
 
-        nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_close_black_24dp));
+        nextQuestion.setIcon(getResources().getDrawable(R.drawable.ic_009_question));
+        nextQuestion.setIconGravity(MaterialButton.ICON_GRAVITY_END);
         layoutInflater = this.getLayoutInflater();
         answers = new ArrayList<>();
         answerData = new AnswerData();
@@ -162,7 +163,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
         nextQuestion.setOnClickListener(v -> {
             if(!questionController.getCurrentQuestion().isQuestionAnswered()) {
-                Toast.makeText(getContext(), "Answer Required", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Answer the question above to continue", Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -177,8 +178,10 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
             questionController.nextQuestion();
             if(questionController.getIndex() == (questionController.getMaxQuestions() - 1)) {
-                nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_forward_black_24dp));
+                nextQuestion.setIcon(getResources().getDrawable(R.drawable.ic_arrow_forward_black_24dp));
+                nextQuestion.setText("continue");
             }
+
 
             if(questionController.getCurrentQuestion() == null && answers != null && answers.size() > 0) {
                 stopWatch.stop();
@@ -273,7 +276,8 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 ratingBar.setOnRatingBarChangeListener((_ratingBar, rating, fromUser) -> {
                     int index = (int)(rating - 1);
                     if(index < 0) {
-                        nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_close_black_24dp));
+                        nextQuestion.setIcon(getResources().getDrawable(R.drawable.ic_009_question));
+                        nextQuestion.setText("answer required");
                         return;
                     }
                     answer = new Answer();
@@ -316,10 +320,12 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
     public void displayContinueButton(boolean isQuestionAnswered) {
         if(isQuestionAnswered) {
-            nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_forward_black_24dp));
+            nextQuestion.setIcon(getResources().getDrawable(R.drawable.ic_arrow_forward_black_24dp));
+            nextQuestion.setText("continue");
             questionController.getCurrentQuestion().setQuestionAnswered(true);
         } else {
-            nextQuestion.setImageDrawable(getResources().getDrawable(R.drawable.ic_close_black_24dp));
+            nextQuestion.setIcon(getResources().getDrawable(R.drawable.ic_009_question));
+            nextQuestion.setText("answer required");
             questionController.getCurrentQuestion().setQuestionAnswered(false);
         }
     }
