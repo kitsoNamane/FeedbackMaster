@@ -386,4 +386,8 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             skipQuestion.setVisibility(View.GONE);
         }
     }
+
+    public void pleaseCompleteSurvey() {
+        Snackbar.make(getView(), "Please finish this survey first", Snackbar.LENGTH_LONG).show();
+    }
 }

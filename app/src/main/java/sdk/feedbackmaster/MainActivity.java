@@ -2,15 +2,16 @@ package sdk.feedbackmaster;
 
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -98,12 +99,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment f = getSupportFragmentManager().findFragmentById(R.id.questionFragment);
+        //Fragment f = getSupportFragmentManager().findFragmentById(R.id.questionnaire);
+        Log.d("FMDIGILAB", "BackPressed");
         switch (navController.getCurrentDestination().getId()) {
             case R.id.questionFragment:
-                Snackbar.make(f.getView(), "Please finish this survey first", Snackbar.LENGTH_LONG).show();
+                AlertDialog alertDialog = new MaterialAlertDialogBuilder(
+                        this, R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+                        .setCancelable(false)
+                        .setMessage("Please complete answering this survey")
+                        .setNegativeButton("", ((dialog, which) -> {
+                            dialog.cancel();
+                        }))
+                        .create();
+                alertDialog.setCanceledOnTouchOutside(true);
+                alertDialog.show();
+                Log.d("FMDIGILAB", "Never go back");
                 break;
             default:
+                Log.d("FMDIGILAB", "Call Super");
                 super.onBackPressed();
         }
     }
