@@ -168,7 +168,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
         nextQuestion.setOnClickListener(v -> {
             if(!questionController.getCurrentQuestion().isQuestionAnswered()) {
-                //Toast.makeText(getContext(), "Answer the question above to continue", Toast.LENGTH_LONG).show();
                 Snackbar.make(v, "Answer the question above to continue", Snackbar.LENGTH_LONG).show();
                 return;
             }
@@ -276,7 +275,11 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        displayContinueButton(true);
+                        if(s.length() <= 0) {
+                            displayContinueButton(false);
+                        } else {
+                            displayContinueButton(true);
+                        }
                     }
                 });
 
@@ -297,6 +300,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                     int index = (int)(rating - 1);
                     if(index < 0) {
                         nextQuestion.setText("answer required");
+                        displayContinueButton(false);
                         return;
                     }
                     answer = new Answer();

@@ -5,10 +5,12 @@ import android.provider.Settings;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -93,4 +95,17 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         Utils.hideKeyboard(this);
     }
+
+    @Override
+    public void onBackPressed() {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.questionFragment);
+        switch (navController.getCurrentDestination().getId()) {
+            case R.id.questionFragment:
+                Snackbar.make(f.getView(), "Please finish this survey first", Snackbar.LENGTH_LONG).show();
+                break;
+            default:
+                super.onBackPressed();
+        }
+    }
+
 }
