@@ -158,10 +158,13 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         );
 
         questionTitle.setText(questionController.nextQuestion().getCaption());
-        Log.d("FMDIGILAB", questionController.getCurrentQuestion().toString());
         renderQuestion();
         start_date = dateFormat.format(c.getTime());
         stopWatch.start();
+
+        skipQuestion.setOnClickListener(v -> {
+            getNextQuestion();
+        });
 
         nextQuestion.setOnClickListener(v -> {
             if(!questionController.getCurrentQuestion().isQuestionAnswered()) {
@@ -177,36 +180,33 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                 answer.setAnswerData(answerData);
                 answers.add(answer);
             }
-
-            questionController.nextQuestion();
-            Log.d("FMDIGILAB", questionController.getCurrentQuestion().toString());
-            if(questionController.getIndex() == (questionController.getMaxQuestions() - 1)) {
-                nextQuestion.setText("continue");
-            }
-
-
-            if(questionController.getCurrentQuestion() == null && answers != null && answers.size() > 0) {
-                stopWatch.stop();
-                end_date = dateFormat.format(c.getTime());
-                MainActivity.questionnaireAnswer.setAnswers(answers);
-                MainActivity.questionnaireAnswer.setTimer(getTimer(stopWatch.getText().toString()));
-
-                MainActivity.questionnaireAnswer.setStartDate(start_date);
-                MainActivity.questionnaireAnswer.setEndDate(end_date);
-                MainActivity.questionnaireAnswer.removeNullAnswers();
-                MainActivity.questionnaireAnswer.showMe();
-
-
-                MainActivity.navController.navigate(
-                        QuestionnaireFragmentDirections.actionCompleted(MainActivity.questionnaireAnswer)
-                );
-            } else if (questionController.getCurrentQuestion() != null) {
-                renderQuestion();
-            }
+            getNextQuestion();
         });
 
         Utils.initTutorial(view, profileViewModel);
         return view;
+    }
+
+    public void getNextQuestion() {
+        questionController.nextQuestion();
+
+        if(questionController.getCurrentQuestion() == null && answers != null && answers.size() > 0) {
+            stopWatch.stop();
+            end_date = dateFormat.format(c.getTime());
+            MainActivity.questionnaireAnswer.setAnswers(answers);
+            MainActivity.questionnaireAnswer.setTimer(getTimer(stopWatch.getText().toString()));
+
+            MainActivity.questionnaireAnswer.setStartDate(start_date);
+            MainActivity.questionnaireAnswer.setEndDate(end_date);
+            MainActivity.questionnaireAnswer.removeNullAnswers();
+            MainActivity.questionnaireAnswer.showMe();
+
+            MainActivity.navController.navigate(
+                    QuestionnaireFragmentDirections.actionCompleted(MainActivity.questionnaireAnswer)
+            );
+        } else if (questionController.getCurrentQuestion() != null) {
+            renderQuestion();
+        }
     }
 
     public int getTimer(String timer) {
@@ -231,6 +231,13 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
                         Locale.getDefault()," %d / %d", questionController.getIndex()+1,
                         questionController.getMaxQuestions()
         ));
+
+        Log.d("FMDIGILAB", questionController.getCurrentQuestion().toString());
+
+        if(questionController.getIndex() == (questionController.getMaxQuestions() - 1)) {
+            nextQuestion.setText("continue");
+        }
+
         switch(questionController.getCurrentQuestion().getSurveyQuestiontype().getRef()){
             case Globals.SINGLE_SELECT:
             case Globals.TRUE_OR_FALSE:
@@ -359,7 +366,6 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     }
 
     public void showSkipButton() {
-        Log.d("FMDIGILAB", "Skipping Question");
         if(questionController.getCurrentQuestion().getSkipable() == 1) {
             skipQuestion.setVisibility(View.VISIBLE);
         } else {
