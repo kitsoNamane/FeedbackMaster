@@ -18,6 +18,7 @@ import sdk.feedbackmaster.model.Profile;
 import sdk.feedbackmaster.model.QuestionnaireAnswer;
 import sdk.feedbackmaster.repository.remote_datasource.FeedbackMasterSurveyApiService;
 import sdk.feedbackmaster.repository.remote_datasource.factories.FeedbackMasterSurveyServiceFactory;
+import sdk.feedbackmaster.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
     public static NavController navController;
@@ -79,5 +80,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(navController, (DrawerLayout) null);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Utils.hideKeyboard(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Utils.hideKeyboard(this);
     }
 }

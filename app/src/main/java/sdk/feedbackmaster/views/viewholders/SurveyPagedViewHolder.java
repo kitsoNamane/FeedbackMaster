@@ -1,5 +1,6 @@
 package sdk.feedbackmaster.views.viewholders;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import sdk.feedbackmaster.MainActivity;
 import sdk.feedbackmaster.R;
 import sdk.feedbackmaster.model.FeedbackMasterObject;
 import sdk.feedbackmaster.model.Survey;
+import sdk.feedbackmaster.utils.Utils;
 import sdk.feedbackmaster.views.fragments.survey.SearchSurveysFragmentDirections;
 import sdk.feedbackmaster.views.fragments.survey.SurveysFragmentDirections;
 
@@ -46,7 +48,10 @@ public class SurveyPagedViewHolder extends BaseViewHolder {
         numberOfRespondents.setText(String.format(Locale.getDefault(),"%d", ((Survey)obj).getEntries().getTotal()));
         numberOfQuestions.setText(String.format(Locale.getDefault(),"%d", ((Survey)obj).getTotal().getQuestions()));
 
-        this.cardView.setOnClickListener(v -> gotoQuestionnaire(((Survey)obj)));
+        this.cardView.setOnClickListener(v -> {
+            Utils.hideKeyboard((Activity)v.getContext());
+            gotoQuestionnaire(((Survey) obj));
+        });
     }
 
 

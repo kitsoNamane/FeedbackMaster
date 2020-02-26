@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/questionnaire"
     android:layout_width="match_parent"
-    android:background="@color/colorSurface"
     android:layout_height="match_parent"
+    android:background="@color/colorSurface"
     android:orientation="vertical"
     tools:context=".views.fragments.questionnaire.QuestionnaireFragment">
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/skip_question"
-        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
-        android:layout_marginLeft="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="18dp"
         android:elevation="4dp"
         android:text="skip question"
         android:textColor="@color/colorSurface"
@@ -25,25 +24,23 @@
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/next_question"
-        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="18dp"
         android:elevation="4dp"
         android:text="answer required"
         android:textColor="@color/colorSurface"
         android:textColorHint="@color/colorSurface"
         android:textSize="10sp"
-        android:tint="@color/colorAccent"
-        app:backgroundTint="@color/colorAccent"
-        app:iconTint="@color/colorSurface" />
+        app:backgroundTint="@color/colorAccent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="top">
+        android:layout_gravity="top"
+        android:layout_marginBottom="72dp">
 
         <include
             android:id="@+id/include"
@@ -153,4 +150,4 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         android:background="@color/colorTransparent" />
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

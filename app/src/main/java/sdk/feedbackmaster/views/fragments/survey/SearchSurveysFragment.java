@@ -109,8 +109,11 @@ public class SearchSurveysFragment extends Fragment {
 
         textInputLayout.setStartIconOnClickListener(v -> {
             SurveysFragment.hideKeyboard(getActivity());
+            Utils.hideKeyboard(getActivity());
             MainActivity.navController.navigateUp();
         });
+
+        Utils.showKeyboard(searchKeyword);
 
         searchKeyword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -185,4 +188,9 @@ public class SearchSurveysFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Utils.hideKeyboard(getActivity());
+    }
 }

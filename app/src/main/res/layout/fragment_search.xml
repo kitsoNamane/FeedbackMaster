@@ -11,49 +11,51 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <LinearLayout
-        android:id="@+id/textInputLayoutParent"
-        android:layout_width="match_parent"
-        android:background="@color/colorPrimaryButton"
-        android:backgroundTint="@color/colorPrimaryButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
+        <LinearLayout
+            android:id="@+id/textInputLayoutParent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
+            android:background="@color/colorPrimaryButton"
+            android:backgroundTint="@color/colorPrimaryButton"
             android:focusable="true"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/colorAccent"
-            app:endIconCheckable="true"
-            app:endIconTint="@color/colorAccent"
-            app:endIconDrawable="@drawable/ic_close_red_50_24dp"
-            app:endIconMode="clear_text"
-            app:helperTextEnabled="false"
-            app:helperTextTextColor="#D50000"
-            app:hintTextColor="@color/colorTextColor"
-            app:startIconCheckable="true"
-            app:startIconTint="@color/colorAccent"
-            app:startIconDrawable="@drawable/ic_arrow_back_red_50_24dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/search_keyword"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorTransparent"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
                 android:focusable="true"
-                android:textColor="@color/colorTextColor" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/colorAccent"
+                app:endIconCheckable="true"
+                app:endIconDrawable="@drawable/ic_close_red_50_24dp"
+                app:endIconMode="clear_text"
+                app:endIconTint="@color/colorAccent"
+                app:helperTextEnabled="false"
+                app:helperTextTextColor="#D50000"
+                app:hintTextColor="@color/colorTextColor"
+                app:startIconCheckable="true"
+                app:startIconDrawable="@drawable/ic_arrow_back_red_50_24dp"
+                app:startIconTint="@color/colorAccent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_keyword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorTransparent"
+                    android:focusable="true"
+                    android:textColor="@color/colorTextColor" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
     <ProgressBar
         android:id="@+id/search_progress_bar"

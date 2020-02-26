@@ -56,6 +56,10 @@ public class QuestionController {
         return questions;
     }
 
+    public QuestionsItem getQuestion(int index) {
+        return this.questions.get(index);
+    }
+
     public QuestionsItem nextQuestion() {
         this.index += 1;
         if(this.index < this.maxQuestions) {

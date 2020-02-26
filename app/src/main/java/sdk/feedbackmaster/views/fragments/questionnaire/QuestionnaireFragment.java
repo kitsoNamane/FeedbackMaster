@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.RatingBar;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -168,7 +168,8 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
 
         nextQuestion.setOnClickListener(v -> {
             if(!questionController.getCurrentQuestion().isQuestionAnswered()) {
-                Toast.makeText(getContext(), "Answer the question above to continue", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), "Answer the question above to continue", Toast.LENGTH_LONG).show();
+                Snackbar.make(v, "Answer the question above to continue", Snackbar.LENGTH_LONG).show();
                 return;
             }
 
@@ -188,7 +189,15 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
     }
 
     public void getNextQuestion() {
+
+        if(questionController.getQuestion(questionController.getIndex())
+                .getSurveyQuestiontype().getRef().equals(Globals.OPEN_ENDED)
+        ) {
+            Utils.hideKeyboard(getActivity());
+        }
+
         questionController.nextQuestion();
+
 
         if(questionController.getCurrentQuestion() == null && answers != null && answers.size() > 0) {
             stopWatch.stop();
@@ -255,6 +264,7 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
             case Globals.OPEN_ENDED:
                 questionContent = setQuestionContent(R.layout.short_answer);
                 shortAnswer = questionContent.findViewById(R.id.short_answer);
+                Utils.showKeyboard(shortAnswer);
                 shortAnswer.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
