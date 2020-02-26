@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public class BranchesDepartmentsFragment extends Fragment {
     private MaterialButton selectedCategoryItem;
     private Survey item;
     private LayoutInflater layoutInflater;
-    private FloatingActionButton start;
+    private ExtendedFloatingActionButton start;
     private MaterialButton toggleButton;
 
     private MaterialTextView businessIntro;
