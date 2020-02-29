@@ -127,6 +127,22 @@ public class QuestionnaireCompletedFragment extends Fragment implements Material
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        
+         // This callback will only be called when MyFragment is at least Started.
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Handle the back button event
+                
+                AlertDialog alertDialog = new MaterialAlertDialogBuilder(
+                   this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+                   .setMessage("You already completed a questionnaire")
+                   .setPositiveButton("Continue", (dialog, which) -> { 
+                       dialog.cancel();           
+                   }).show();
+            }
+        });
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);    
     }
 
     @Override
