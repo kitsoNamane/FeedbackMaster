@@ -113,6 +113,20 @@ public class QuestionnaireFragment extends Fragment implements MaterialButtonTog
         // Get value passed to this fragment using safeargs
         questionFragmentArgs = QuestionnaireFragmentArgs.fromBundle(getArguments());
         questionController = QuestionController.getInstance();
+        
+         // This callback will only be called when MyFragment is at least Started.
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                AlertDialog alertDialog = new MaterialAlertDialogBuilder(
+                   this.getContext(), R.style.ThemeOverlay_MaterialComponents_Dialog_Alert)
+                   .setMessage("Please complete this questionnaire first")
+                   .setPositiveButton("Continue Questionnaire", (dialog, which) -> {
+                       dialog.cancel();
+                   }).show();
+            }
+        });
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     @Override
